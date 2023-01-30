@@ -16,6 +16,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.codestack.deepsense.R
 import com.codestack.deepsense.ui.theme.DeepSenseTheme
 
@@ -55,10 +57,10 @@ fun SignUpButton(
 
 
 @Composable
-fun TopNavi() {
+fun TopNavi(navController: NavHostController) {
     Row(horizontalArrangement = Arrangement.SpaceBetween) {
         // Back button
-        OutlinedButton(onClick = { /*TODO*/ }) {
+        OutlinedButton(onClick = { navController.popBackStack() }) {
             Icon(
                 Icons.Filled.ArrowBack,
                 contentDescription = "Back",
@@ -155,7 +157,7 @@ fun PasswordTextField(
 
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(navController: NavHostController) {
     var signUpClicked by remember { mutableStateOf(false) }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -177,7 +179,7 @@ fun SignUpScreen() {
                 .fillMaxSize()
         ) {
             // top navigation bar
-            TopNavi()
+            TopNavi(navController)
 
             Column(
                 Modifier.fillMaxHeight(),
@@ -275,6 +277,6 @@ fun isEmailValid(email: String): Boolean {
 @Composable
 fun SignUpScreenPreview() {
     DeepSenseTheme {
-        SignUpScreen()
+        SignUpScreen(navController = rememberNavController())
     }
 }
