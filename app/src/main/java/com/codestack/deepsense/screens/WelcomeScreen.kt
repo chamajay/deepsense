@@ -19,11 +19,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.codestack.deepsense.navigation.Screens
 import com.codestack.deepsense.ui.theme.DeepSenseTheme
 import kotlinx.coroutines.delay
 
 @Composable
-fun WelcomeContent() {
+fun WelcomeContent(navController: NavHostController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(top = 10.dp)
@@ -47,7 +50,7 @@ fun WelcomeContent() {
         }
         Button(
             colors = ButtonDefaults.buttonColors(),
-            onClick = { /*TODO*/ }
+            onClick = { navController.navigate(Screens.SignUp.route) }
         ) {
             Text(
                 text = "Start",
@@ -126,7 +129,7 @@ fun FactsContent() {
 
 
 @Composable
-fun WelcomeScreen() {
+fun WelcomeScreen(navController: NavHostController) {
     Surface (
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -136,7 +139,7 @@ fun WelcomeScreen() {
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Spacer(modifier = Modifier.height(15.dp))
-            WelcomeContent()
+            WelcomeContent(navController)
             FactsContent()
         }
     }
@@ -147,6 +150,6 @@ fun WelcomeScreen() {
 @Composable
 fun WelcomeScreenPreview() {
     DeepSenseTheme {
-        WelcomeScreen()
+        WelcomeScreen(navController = rememberNavController())
     }
 }
