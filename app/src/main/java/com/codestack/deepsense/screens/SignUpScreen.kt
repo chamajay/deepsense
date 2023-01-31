@@ -7,6 +7,7 @@ import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -158,10 +159,10 @@ fun PasswordTextField(
 
 @Composable
 fun SignUpScreen(navController: NavHostController) {
-    var signUpClicked by remember { mutableStateOf(false) }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var emailInvalid by remember { mutableStateOf(false) }
+    var signUpClicked by rememberSaveable { mutableStateOf(false) }
+    var email by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var emailInvalid by rememberSaveable { mutableStateOf(false) }
 
     Surface {
         // top progress bar
