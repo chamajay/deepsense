@@ -274,9 +274,10 @@ fun SignUpScreen(
                                 passwordEmpty = true
                             } else {
                                 signUpClicked = !signUpClicked
-//                            viewModel.onSignUpClick()
+                                viewModel.onSignUpClick()
                             }
-                        }
+                        },
+                        enabled = !signUpClicked
                     ) {
                         Text(
                             modifier = Modifier.padding(0.dp, 5.dp),
