@@ -1,6 +1,6 @@
 package com.codestack.deepsense.screens.signup
 
-import androidx.compose.foundation.background
+import android.util.Patterns
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -22,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.codestack.deepsense.R
-import com.codestack.deepsense.screens.signup.SignUpViewModel
 import com.codestack.deepsense.ui.theme.DeepSenseTheme
 
 @Composable
@@ -137,6 +136,7 @@ fun EmailTextField(
 fun PasswordTextField(
     password: String,
     onPasswordChange: (String) -> Unit,
+    isEmpty: Boolean = false,
     isSigningUp: Boolean = false
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
@@ -161,6 +161,7 @@ fun PasswordTextField(
                 )
             }
         },
+        isError = isEmpty,
         enabled = !isSigningUp
     )
 }
@@ -174,9 +175,8 @@ fun SignUpScreen(
     val uiState by viewModel.uiState
 
     var signUpClicked by rememberSaveable { mutableStateOf(false) }
-//    var email by rememberSaveable { mutableStateOf("") }
-//    var password by rememberSaveable { mutableStateOf("") }
     var emailInvalid by rememberSaveable { mutableStateOf(false) }
+    var passwordEmpty by rememberSaveable { mutableStateOf(false) }
 
 
     Surface {
@@ -241,7 +241,10 @@ fun SignUpScreen(
                     Row {
                         EmailTextField(
                             email = uiState.email,
-                            onEmailChanged = viewModel::onEmailChange,
+                            onEmailChanged = { newEmail ->
+                                viewModel.onEmailChange(newEmail)
+                                emailInvalid = false
+                            },
                             isInvalid = emailInvalid,
                             isSigningUp = signUpClicked
                         )
@@ -250,7 +253,11 @@ fun SignUpScreen(
                     Row {
                         PasswordTextField(
                             password = uiState.password,
-                            onPasswordChange = viewModel::onPasswordChange,
+                            onPasswordChange = { newPassword ->
+                                viewModel.onPasswordChange(newPassword)
+                                passwordEmpty = false
+                            },
+                            isEmpty = passwordEmpty,
                             isSigningUp = signUpClicked
                         )
                     }
@@ -261,8 +268,14 @@ fun SignUpScreen(
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
-                            signUpClicked = !signUpClicked
+                            if (!isEmailValid(uiState.email)) {
+                                emailInvalid = true
+                            } else if (uiState.password.isEmpty()) {
+                                passwordEmpty = true
+                            } else {
+                                signUpClicked = !signUpClicked
 //                            viewModel.onSignUpClick()
+                            }
                         }
                     ) {
                         Text(
@@ -279,7 +292,8 @@ fun SignUpScreen(
 
 
 fun isEmailValid(email: String): Boolean {
-    return email.matches(Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}\$"))
+//    return email.matches(Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}\$"))
+    return Patterns.EMAIL_ADDRESS.matcher(email).matches()
 }
 
 
