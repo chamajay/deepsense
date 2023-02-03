@@ -1,5 +1,6 @@
-package com.codestack.deepsense.screens
+package com.codestack.deepsense.screens.signup
 
+import android.util.Patterns
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -17,6 +18,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.codestack.deepsense.R
@@ -28,6 +30,7 @@ fun SignUpButton(
     text: String = "Sign Up with Google",
     textClicked: String = "Signing Up with Google",
     icon: Int = R.drawable.ic_google_logo,
+    isSigningUp: Boolean = false,
     onClick: () -> Unit,
 ) {
     var clicked by remember { mutableStateOf(false) }
@@ -36,9 +39,10 @@ fun SignUpButton(
             onClick()
             clicked = !clicked
         },
+        enabled = !isSigningUp,
         modifier = modifier
             .fillMaxWidth()
-            .padding(40.dp, 10.dp),
+            .padding(40.dp, 10.dp)
     ) {
         Icon(
             modifier = modifier.size(24.dp),
@@ -111,7 +115,8 @@ fun MyDivider(text: String = "OR") {
 fun EmailTextField(
     email: String,
     onEmailChanged: (String) -> Unit,
-    isInvalid: Boolean = false
+    isInvalid: Boolean = false,
+    isSigningUp: Boolean = false
 ) {
     OutlinedTextField(
         value = email,
@@ -121,7 +126,8 @@ fun EmailTextField(
         label = { Text(text = "Email") },
         singleLine = true,
         shape = MaterialTheme.shapes.medium,
-        isError = isInvalid
+        isError = isInvalid,
+        enabled = !isSigningUp
     )
 }
 
@@ -129,7 +135,9 @@ fun EmailTextField(
 @Composable
 fun PasswordTextField(
     password: String,
-    onPasswordChange: (String) -> Unit
+    onPasswordChange: (String) -> Unit,
+    isEmpty: Boolean = false,
+    isSigningUp: Boolean = false
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
     OutlinedTextField(
@@ -152,17 +160,24 @@ fun PasswordTextField(
                     contentDescription = "visibility"
                 )
             }
-        }
+        },
+        isError = isEmpty,
+        enabled = !isSigningUp
     )
 }
 
 
 @Composable
-fun SignUpScreen(navController: NavHostController) {
+fun SignUpScreen(
+    navController: NavHostController,
+    viewModel: SignUpViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState
+
     var signUpClicked by rememberSaveable { mutableStateOf(false) }
-    var email by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
     var emailInvalid by rememberSaveable { mutableStateOf(false) }
+    var passwordEmpty by rememberSaveable { mutableStateOf(false) }
+
 
     Surface {
         // top progress bar
@@ -203,6 +218,7 @@ fun SignUpScreen(navController: NavHostController) {
                         SignUpButton(
                             text = "Sign up with Google",
                             textClicked = "Signing up with Google",
+                            isSigningUp = signUpClicked,
                             onClick = { signUpClicked = !signUpClicked }
                         )
                     }
@@ -211,6 +227,7 @@ fun SignUpScreen(navController: NavHostController) {
                             text = "Sign up with Facebook",
                             textClicked = "Signing up with Facebook",
                             icon = R.drawable.ic_facebook_logo_circle,
+                            isSigningUp = signUpClicked,
                             onClick = { signUpClicked = !signUpClicked }
                         )
                     }
@@ -223,23 +240,26 @@ fun SignUpScreen(navController: NavHostController) {
                 Column {
                     Row {
                         EmailTextField(
-                            email = email,
+                            email = uiState.email,
                             onEmailChanged = { newEmail ->
-                                run {
-                                    if (emailInvalid) {
-                                        emailInvalid = false
-                                    }
-                                    email = newEmail
-                                }
+                                viewModel.onEmailChange(newEmail)
+                                emailInvalid = false
                             },
-                            isInvalid = emailInvalid
+                            isInvalid = emailInvalid,
+                            isSigningUp = signUpClicked
                         )
                     }
                     Spacer(modifier = Modifier.height(15.dp))
                     Row {
                         PasswordTextField(
-                            password = password,
-                            onPasswordChange = { newPassword -> password = newPassword })
+                            password = uiState.password,
+                            onPasswordChange = { newPassword ->
+                                viewModel.onPasswordChange(newPassword)
+                                passwordEmpty = false
+                            },
+                            isEmpty = passwordEmpty,
+                            isSigningUp = signUpClicked
+                        )
                     }
                 }
 
@@ -248,13 +268,16 @@ fun SignUpScreen(navController: NavHostController) {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
-                            if (isEmailValid(email)) {
-                                emailInvalid = false
-                                signUpClicked = !signUpClicked
-                            } else {
+                            if (!isEmailValid(uiState.email)) {
                                 emailInvalid = true
+                            } else if (uiState.password.isEmpty()) {
+                                passwordEmpty = true
+                            } else {
+                                signUpClicked = !signUpClicked
+                                viewModel.onSignUpClick()
                             }
                         },
+                        enabled = !signUpClicked
                     ) {
                         Text(
                             modifier = Modifier.padding(0.dp, 5.dp),
@@ -270,7 +293,8 @@ fun SignUpScreen(navController: NavHostController) {
 
 
 fun isEmailValid(email: String): Boolean {
-    return email.matches(Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}\$"))
+//    return email.matches(Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}\$"))
+    return Patterns.EMAIL_ADDRESS.matcher(email).matches()
 }
 
 
