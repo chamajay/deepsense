@@ -23,6 +23,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.codestack.deepsense.R
 import com.codestack.deepsense.ui.theme.DeepSenseTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun SignUpButton(
@@ -274,7 +276,7 @@ fun SignUpScreen(
                                 passwordEmpty = true
                             } else {
                                 signUpClicked = !signUpClicked
-                                viewModel.onSignUpClick()
+                                viewModel.onSignUpClick(navController)
                             }
                         },
                         enabled = !signUpClicked
@@ -298,10 +300,10 @@ fun isEmailValid(email: String): Boolean {
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun SignUpScreenPreview() {
-    DeepSenseTheme {
-        SignUpScreen(navController = rememberNavController())
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun SignUpScreenPreview() {
+//    DeepSenseTheme {
+//        SignUpScreen(navController = rememberNavController())
+//    }
+//}
