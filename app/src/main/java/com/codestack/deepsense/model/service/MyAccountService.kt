@@ -4,7 +4,10 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.material3.Snackbar
 import com.codestack.deepsense.model.User
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -18,6 +21,9 @@ class MyAccountService @Inject constructor(private val auth: FirebaseAuth): Acco
 
     override val hasUser: Boolean
         get() = auth.currentUser != null
+
+    override val user: FirebaseUser?
+        get() = auth.currentUser
 
     override val currentUser: Flow<User>
         get() = callbackFlow {
@@ -53,7 +59,6 @@ class MyAccountService @Inject constructor(private val auth: FirebaseAuth): Acco
     }
 
     override suspend fun linkAccount(email: String, password: String) {
-
     }
 
     override suspend fun deleteAccount() {
