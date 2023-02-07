@@ -40,14 +40,7 @@ class MyAccountService @Inject constructor(private val auth: FirebaseAuth): Acco
     }
 
     override suspend fun createEmailAccount(email: String, password: String) {
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Log.d("signup", "success")
-            } else {
-                // Authentication failed
-                Log.d("signup", "failed")
-            }
-        }
+        auth.createUserWithEmailAndPassword(email, password).await()
     }
 
     override suspend fun sendRecoveryEmail(email: String) {
