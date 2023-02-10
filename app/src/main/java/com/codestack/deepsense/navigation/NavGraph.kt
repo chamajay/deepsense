@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.codestack.deepsense.screens.signup.SignUpScreen
 import com.codestack.deepsense.screens.WelcomeScreen
+import com.codestack.deepsense.screens.activity.ActivityScreen
 
 @Composable
 fun SetupNavGraph(
@@ -13,7 +14,7 @@ fun SetupNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screens.Welcome.route
+        startDestination = Screens.Activity.route
     ) {
         composable(
             route = Screens.Welcome.route
@@ -24,6 +25,12 @@ fun SetupNavGraph(
             route = Screens.SignUp.route
         ) {
             SignUpScreen(navController)
+        }
+
+        composable(
+            route = Screens.Activity.route
+        ) {
+            ActivityScreen()
         }
     }
 }
