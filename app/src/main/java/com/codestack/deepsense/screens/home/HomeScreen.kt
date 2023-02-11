@@ -2,6 +2,8 @@ package com.codestack.deepsense.screens.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.*
@@ -262,6 +264,7 @@ fun HomeScreen(
                     modifier = Modifier
                         .padding(15.dp, 0.dp)
                         .fillMaxHeight()
+                        .verticalScroll(rememberScrollState())
                 ) {
                     Row {
                         Greeting()
