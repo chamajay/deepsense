@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.codestack.deepsense.R
+import com.codestack.deepsense.navigation.Screens
 import com.codestack.deepsense.ui.theme.DeepSenseTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -79,7 +80,7 @@ fun TopNavi(navController: NavHostController) {
 
         // Skip button
         OutlinedButton(
-            onClick = { /*TODO*/ }
+            onClick = { navController.navigate(Screens.Home.route) }
         ) {
             Text(text = "Skip")
         }
