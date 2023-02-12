@@ -2,11 +2,8 @@ package com.codestack.deepsense.screens.activity
 
 
 import android.content.res.Configuration
-import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -119,25 +116,28 @@ fun LinearProgressIndicator() {
 
     Column(horizontalAlignment = Alignment.CenterHorizontally)
     {
-        Row() {
-
-            LinearProgressIndicator(progress = 0.2f)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "Joy", modifier = Modifier.weight(2f))
+            LinearProgressIndicator(progress = 0.2f, modifier = Modifier.weight(7f))
         }
-        Spacer(Modifier.height(30.dp))
+        Spacer(Modifier.height(15.dp))
 
-        Row() {
-            LinearProgressIndicator(progress = 0.5f)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "Sad", modifier = Modifier.weight(2f))
+            LinearProgressIndicator(progress = 0.5f, modifier = Modifier.weight(7f))
         }
 
-        Spacer(Modifier.height(30.dp))
+        Spacer(Modifier.height(15.dp))
 
-        Row() {
-            LinearProgressIndicator(progress = 0.7f)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "Neutral", modifier = Modifier.weight(2f))
+            LinearProgressIndicator(progress = 0.7f, modifier = Modifier.weight(7f))
         }
-        Spacer(Modifier.height(30.dp))
+        Spacer(Modifier.height(15.dp))
 
-        Row() {
-            LinearProgressIndicator(progress = 0.9f)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "Joy", modifier = Modifier.weight(2f))
+            LinearProgressIndicator(progress = 0.9f, modifier = Modifier.weight(7f))
         }
 
     }
