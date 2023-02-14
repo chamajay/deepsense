@@ -7,6 +7,9 @@ import androidx.navigation.compose.composable
 import com.codestack.deepsense.screens.signup.SignUpScreen
 import com.codestack.deepsense.screens.WelcomeScreen
 import com.codestack.deepsense.screens.aboutus.AboutUsScreen
+import com.codestack.deepsense.screens.activity.ActivityScreen
+import com.codestack.deepsense.screens.home.HomeScreen
+import com.codestack.deepsense.screens.login.LoginScreen
 
 @Composable
 fun SetupNavGraph(
@@ -25,6 +28,22 @@ fun SetupNavGraph(
             route = Screens.SignUp.route
         ) {
             SignUpScreen(navController)
+        }
+
+        composable(
+            route = Screens.Home.route
+        ) {
+            HomeScreen()
+        }
+        composable(
+            route = Screens.Activity.route
+        ) {
+            ActivityScreen()
+        }
+        composable(
+            route = Screens.Login.route
+        ) {
+            LoginScreen()
         }
         composable(
             route = Screens.AboutUs.route
