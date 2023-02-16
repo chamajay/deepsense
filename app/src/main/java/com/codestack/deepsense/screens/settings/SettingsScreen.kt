@@ -3,30 +3,30 @@ package com.codestack.deepsense.screens.settings
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.codestack.deepsense.R
 
 
 @Composable
 fun SettingsScreen() {
-    Column {
-       // HeaderText()
-        ProfileUI()
-        AccountUI()
-        GeneralUI()
-        SupportUI()
-
+    LazyColumn (){
+        // HeaderText()
+        item { ProfileUI() }
+        item { AccountUI() }
+        item { GeneralUI() }
+        item { SupportUI() }
     }
 }
+
 
 
 
@@ -54,46 +54,54 @@ fun GeneralUI() {
             modifier = Modifier.padding(vertical = 8.dp)
         )
         GeneralItems(
-            icon = Icons.Filled.ArrowForward,
-            mainText = "Customize",
+            icon=R.drawable.settings_account_box_48px,
+            mainText = "Customize ",
             subText = "Customize your app",
-            onClick = {}
+            onClick = {},
         )
         GeneralItems(
-            icon = Icons.Filled.ArrowForward,
-            mainText = "Emergency contact",
+            icon=R.drawable.contact_emergency_48px,
+            mainText = "Emergency Contact",
             subText = "******",
             onClick = {}
         )
         GeneralItems(
-            icon = Icons.Filled.ArrowForward,
+            icon=R.drawable.backup_48px,
             mainText = "Backup data",
             subText = "*****",
-            onClick = {}
-        )
+            onClick = {},
+
+            )
         GeneralItems(
-            icon = Icons.Filled.ArrowForward,
+            icon=R.drawable.ios_share_48px,
             mainText = "Export mood data",
             subText = "*****",
-            onClick = {}
+            onClick = {},
         )
     }
 }
 
+
+
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GeneralItems(
-    icon: ImageVector,
+    icon: Int,
     mainText: String,
     subText: String,
     onClick: () -> Unit
 ) {
     Card(
-
+        onClick = {
+            onClick()
+        },
 
         modifier = Modifier
             .padding(bottom = 8.dp)
             .fillMaxWidth(),
+
 
         ) {
         Row(
@@ -106,14 +114,15 @@ fun GeneralItems(
                 Box(
                     modifier = Modifier
                         .size(34.dp)
-                        //.clip(shape = Shapes.medium)
-                        //.background(Color.White)
+                    //.clip(shape = Shapes.medium)
+                    //.background(Color.White)
                 ) {
                     Icon(
-                        icon,
+                        painterResource(id = icon),
                         contentDescription = "",
                         tint = Color.Unspecified,
                         modifier = Modifier.padding(8.dp)
+
 
                     )
                 }
@@ -136,8 +145,17 @@ fun GeneralItems(
                     )
                 }
             }
+            Row(verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+
+            ) {
+
+            }
             Icon(
-                Icons.Filled.ArrowForward,
+                painter=painterResource(id =R.drawable.arrow_forward_ios_48px),
                 contentDescription = "",
                 modifier = Modifier.size(16.dp)
             )
@@ -153,7 +171,7 @@ fun GeneralItems(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountItems(
-    icon:ImageVector,
+    icon:Int,
     mainText: String,
     subText: String,
     onClick: () -> Unit
@@ -161,6 +179,9 @@ fun AccountItems(
 
 
     Card(
+        onClick = {
+            onClick()
+        },
 
 
         modifier = Modifier
@@ -182,8 +203,8 @@ fun AccountItems(
                     //.background(Color.White)
                 ) {
                     Icon(
-                        icon,
-                        contentDescription = "",
+                        painterResource(id = icon),
+                        contentDescription="",
                         tint = Color.Unspecified,
                         modifier = Modifier.padding(8.dp)
 
@@ -208,8 +229,17 @@ fun AccountItems(
                     )
                 }
             }
+            Row(verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+
+            ) {
+
+            }
             Icon(
-                Icons.Filled.ArrowForward,
+                painter=painterResource(id =R.drawable.arrow_forward_ios_48px),
                 contentDescription = "",
                 modifier = Modifier.size(16.dp)
             )
@@ -236,13 +266,13 @@ fun AccountUI() {
             modifier = Modifier.padding(vertical = 8.dp)
         )
         AccountItems(
-            icon = Icons.Filled.ArrowForward,
+            icon=R.drawable.edit_48px,
             mainText = "Edit Account",
             subText = "*****",
             onClick = {}
         )
         AccountItems(
-            icon = Icons.Filled.ArrowForward,
+            icon=R.drawable.delete_48px,
             mainText = "Delete/Deactivate Account",
             subText = "*****",
             onClick = {}
@@ -303,11 +333,20 @@ fun ProfileItems() {
 
                 }
             }
+            Row(verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+
+            ) {
+
+            }
 
             Image(
-                Icons.Filled.ArrowForward,
-                contentDescription = "",
-                modifier = Modifier.height(120.dp)
+                painter = painterResource( R.drawable.account_circle_48px),
+                contentDescription ="",
+                modifier =Modifier.height(120.dp)
 
             )
         }
@@ -334,7 +373,7 @@ fun ProfileUI() {
         ProfileItems()
     }
 
-        
+
 }
 
 @Composable
@@ -352,13 +391,13 @@ fun SupportUI() {
             modifier = Modifier.padding(vertical = 8.dp)
         )
         SupportItems(
-            icon = Icons.Filled.ArrowForward,
+            icon=R.drawable.rate_review_48px,
             mainText = "Feedback",
             subText = "*****",
             onClick = {}
         )
         SupportItems(
-            icon = Icons.Filled.ArrowForward,
+            icon=R.drawable.group_48px,
             mainText = "About Us",
             subText = "*****",
             onClick = {}
@@ -369,13 +408,13 @@ fun SupportUI() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SupportItems
-            ( icon:ImageVector,
-                  mainText: String,
-                  subText: String,
-                  onClick: () -> Unit
+            ( icon:Int,
+              mainText: String,
+              subText: String,
+              onClick: () -> Unit
 ) {
     Card(
-
+        onClick = {},
 
         modifier = Modifier
             .padding(bottom = 8.dp)
@@ -396,7 +435,7 @@ fun SupportItems
                     //.background(Color.White)
                 ) {
                     Icon(
-                        icon,
+                        painterResource(id = icon),
                         contentDescription = "",
                         tint = Color.Unspecified,
                         modifier = Modifier.padding(8.dp)
@@ -422,20 +461,23 @@ fun SupportItems
                     )
                 }
             }
+            Row(verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+
+            ) {
+
+            }
             Icon(
-                Icons.Filled.ArrowForward,
+                painter=painterResource(id =R.drawable.arrow_forward_ios_48px),
                 contentDescription = "",
                 modifier = Modifier.size(16.dp)
+
             )
         }
     }
 
 
 }
-
-
-
-
-
-
-
