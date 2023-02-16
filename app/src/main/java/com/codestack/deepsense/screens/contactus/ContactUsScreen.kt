@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.codestack.deepsense.R
-import com.codestack.deepsense.screens.aboutus.AboutUsScreen
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,16 +24,14 @@ fun ContactUsScreen() {
             .padding(16.dp)
             .fillMaxHeight()
 
-    )
-
-    {
+    ){
         Text(text = "Contact Us", fontWeight = FontWeight.Bold, fontSize = 24.sp)
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
-        Card(Modifier.size(width = 350.dp, height = 140.dp)){
+        Card(Modifier.size(width = 350.dp, height = 140.dp)) {
             Spacer(modifier = Modifier.height(20.dp))
 
-            Row(verticalAlignment = Alignment.CenterVertically){
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Spacer(modifier = Modifier.width(20.dp))
                 Icon(
                     painter = painterResource(R.drawable.mail_48px),
@@ -50,7 +48,7 @@ fun ContactUsScreen() {
             }
             Spacer(modifier = Modifier.height(20.dp))
             Spacer(modifier = Modifier.width(20.dp))
-            Row(verticalAlignment = Alignment.CenterVertically){
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Spacer(modifier = Modifier.width(20.dp))
                 Icon(
                     painter = painterResource(R.drawable.call_48px),
@@ -68,10 +66,11 @@ fun ContactUsScreen() {
         }
         Spacer(modifier = Modifier.height(40.dp))
 
-        Card(Modifier.size(width = 350.dp, height = 400.dp)){
+        Card(Modifier.size(width = 350.dp, height = 400.dp)) {
+            Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = "Please fill out the form below to contact us.",
+                text = "   Please fill out the form below to contact us.",
             )
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -99,8 +98,8 @@ fun ContactUsScreen() {
                 Text("Send Email")
             }
         }
-    }
 
+    }
 }
 
 @Preview
