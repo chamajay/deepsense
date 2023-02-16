@@ -1,6 +1,5 @@
 package com.codestack.deepsense.screens.aboutus
 
-import android.graphics.Color
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -64,7 +63,7 @@ fun AboutUsScreen() {
                                 )
                         )
                         Text(
-                            text = " R. M. C. S. Jayasena ",
+                            text = " Chamath Jayasena ",
                         )
                     }}
 
@@ -85,7 +84,7 @@ fun AboutUsScreen() {
                             )
                     )
                     Text(
-                        text = " R.A.Kumudu Wijewardhana ",
+                        text = " Kumudu Wijewardhana ",
                     )
                 } }
 
@@ -104,7 +103,7 @@ fun AboutUsScreen() {
                             )
                     )
                     Text(
-                        text = " U.G.T.Thakshali ",
+                        text = " Thimasha Thakshali ",
                         textAlign = TextAlign.Right
                     )
                 }}
@@ -126,7 +125,7 @@ fun AboutUsScreen() {
                             )
                     )
                     Text(
-                        text = " M.R.M. Perera ",
+                        text = " Ruwindi Perera ",
                         textAlign = TextAlign.Right
                     )
                 }}
@@ -146,7 +145,7 @@ fun AboutUsScreen() {
                             )
                     )
                     Text(
-                        text = " S.C Dissanayake ",
+                        text = " Sahan Dissanayake ",
                         textAlign = TextAlign.Right
                     )
                 }}
