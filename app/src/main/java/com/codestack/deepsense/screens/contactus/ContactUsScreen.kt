@@ -25,8 +25,21 @@ fun ContactUsScreen() {
             .fillMaxHeight()
 
     ){
-        Text(text = "Contact Us", fontWeight = FontWeight.Bold, fontSize = 24.sp)
-        Spacer(modifier = Modifier.height(30.dp))
+        Row{
+            Icon(
+                painter = painterResource(R.drawable.arrow_back_48px),
+                "back arrow",
+                modifier = Modifier
+                    .size(40.dp)
+            )
+            Spacer(modifier = Modifier.width(60.dp))
+
+            Text(text = "Contact Us",
+                fontWeight = FontWeight.Bold,
+                fontSize = 30.sp)
+            Spacer(modifier = Modifier.height(70.dp))
+        }
+
 
         Card(Modifier.size(width = 350.dp, height = 140.dp)) {
             Spacer(modifier = Modifier.height(20.dp))

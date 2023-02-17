@@ -13,22 +13,30 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.codestack.deepsense.R
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutUsScreen() {
+
     Surface{
         Column(modifier=Modifier.fillMaxHeight()) {
 
+
             Row {
-                Spacer(modifier = Modifier.width(10.dp))
+                Icon(
+                    painter = painterResource(R.drawable.arrow_back_48px),
+                    "back arrow",
+                    modifier = Modifier
+                        .size(40.dp)
+                )
+                Spacer(modifier = Modifier.width(65.dp))
                 Text(
                     "About us",
                     fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.headlineLarge
+                    fontSize = 30.sp
                 )
                 Spacer(modifier = Modifier.height(10.dp))
             }
@@ -41,7 +49,7 @@ fun AboutUsScreen() {
                 )
 
             }
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(5.dp))
                 Spacer(modifier = Modifier.height(10.dp))
                 Row {
                     Spacer(modifier = Modifier.width(10.dp))
