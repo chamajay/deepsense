@@ -8,6 +8,7 @@ import com.codestack.deepsense.screens.signup.SignUpScreen
 import com.codestack.deepsense.screens.WelcomeScreen
 import com.codestack.deepsense.screens.aboutus.AboutUsScreen
 import com.codestack.deepsense.screens.activity.ActivityScreen
+import com.codestack.deepsense.screens.contactus.ContactUsScreen
 import com.codestack.deepsense.screens.home.HomeScreen
 import com.codestack.deepsense.screens.login.LoginScreen
 
@@ -17,7 +18,7 @@ fun SetupNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screens.AboutUs.route
+        startDestination = Screens.ContactUs.route
     ) {
         composable(
             route = Screens.Welcome.route
@@ -49,6 +50,11 @@ fun SetupNavGraph(
             route = Screens.AboutUs.route
         ) {
             AboutUsScreen()
+        }
+        composable(
+            route = Screens.ContactUs.route
+        ) {
+            ContactUsScreen()
         }
     }
 }
