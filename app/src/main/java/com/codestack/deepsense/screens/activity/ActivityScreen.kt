@@ -4,6 +4,10 @@ package com.codestack.deepsense.screens.activity
 import android.content.res.Configuration
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,9 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,8 +34,6 @@ import com.codestack.deepsense.ui.theme.DeepSenseTheme
 
 import java.util.*
 
-@Composable
-fun ActivityScreen() {
 
     val moodList = arrayOf("Joy", "Suicidal", "Sadness", "Admiration", "Neutral")
     val moodStatusList = arrayOf(
@@ -48,6 +48,17 @@ fun ActivityScreen() {
     val allValues = arrayOf(moodStatusList, moodList, percentageList)
 
     val valueLength = moodList.size + moodStatusList.size + percentageList.size
+
+// progress indicator values
+
+val mood = arrayOf("Joy","Sad","Neutral", "Admire")
+val percentage = arrayOf("56","64","21","89")
+
+
+@Composable
+fun ActivityScreen() {
+
+
     Log.d("Total length : ", valueLength.toString())
 
 
@@ -93,17 +104,6 @@ fun ActivityScreen() {
                         percentage = percentageList[index],
                     )
 
-//                                for(i in 0..allValues.size){
-//                                    ActivityCard(
-//
-//                                        moodStatus = allValues[0][index],
-//                                        emotion = allValues[1][index],
-//                                        percentage = allValues[2][index],
-//                                    )
-//                                }
-
-
-                    //ActivityCard("Good things are coming my way","Admiration","85")
                 }
             }
         }
@@ -111,34 +111,65 @@ fun ActivityScreen() {
 }
 
 
+//@Composable
+//fun LinearProgressIndicator() {
+//
+//
+//
+//    Column(horizontalAlignment = Alignment.CenterHorizontally)
+//    {
+//        Row(verticalAlignment = Alignment.CenterVertically) {
+//            Text(text = "Joy", modifier = Modifier.weight(2f))
+//            LinearProgressIndicator(progress = 0.2f, modifier = Modifier.weight(7f))
+//        }
+//        Spacer(Modifier.height(15.dp))
+//
+//        Row(verticalAlignment = Alignment.CenterVertically) {
+//            Text(text = "Sad", modifier = Modifier.weight(2f))
+//            LinearProgressIndicator(progress = 0.5f, modifier = Modifier.weight(7f))
+//        }
+//
+//        Spacer(Modifier.height(15.dp))
+//
+//        Row(verticalAlignment = Alignment.CenterVertically) {
+//            Text(text = "Neutral", modifier = Modifier.weight(2f))
+//            LinearProgressIndicator(progress = 0.7f, modifier = Modifier.weight(7f))
+//        }
+//        Spacer(Modifier.height(15.dp))
+//
+//        Row(verticalAlignment = Alignment.CenterVertically) {
+//            Text(text = "Joy", modifier = Modifier.weight(2f))
+//            LinearProgressIndicator(progress = 0.9f, modifier = Modifier.weight(7f))
+//        }
+//
+//    }
+//}
+
 @Composable
-fun LinearProgressIndicator() {
+fun LinearProgressIndicator(mood: String, percentage: Float) {
+    var progress by remember { mutableStateOf(0.1f) }
+    val size by animateFloatAsState(
+        targetValue = progress,
+        tween(durationMillis = 1000, delayMillis = 200, easing = LinearOutSlowInEasing))
 
     Column(horizontalAlignment = Alignment.CenterHorizontally)
     {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Joy", modifier = Modifier.weight(2f))
-            LinearProgressIndicator(progress = 0.2f, modifier = Modifier.weight(7f))
+            Text(text = mood, modifier = Modifier
+                .weight(2.5f)
+                .padding(end = 2.dp), fontSize = 12.sp)
+            LinearProgressIndicator(progress = size, modifier = Modifier.weight(7f))
+
+            LaunchedEffect(key1 = true){
+                progress = percentage/100
+            }
+
+
+            Text(text = percentage.toString().substringBefore(".")+"%" ,modifier = Modifier
+                .weight(2f)
+                .padding(start = 15.dp), fontSize = 12.sp)
         }
         Spacer(Modifier.height(15.dp))
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Sad", modifier = Modifier.weight(2f))
-            LinearProgressIndicator(progress = 0.5f, modifier = Modifier.weight(7f))
-        }
-
-        Spacer(Modifier.height(15.dp))
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Neutral", modifier = Modifier.weight(2f))
-            LinearProgressIndicator(progress = 0.7f, modifier = Modifier.weight(7f))
-        }
-        Spacer(Modifier.height(15.dp))
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Joy", modifier = Modifier.weight(2f))
-            LinearProgressIndicator(progress = 0.9f, modifier = Modifier.weight(7f))
-        }
 
     }
 }
@@ -149,7 +180,8 @@ fun CustomPopUpDialog(onDismiss: () -> Unit, title: String, desc: String) {
     Dialog(onDismissRequest = onDismiss) {
         Box(
             modifier = Modifier
-                .height(560.dp)
+                .height(520.dp)
+
         ) {
             Column(modifier = Modifier)
             {
@@ -159,15 +191,18 @@ fun CustomPopUpDialog(onDismiss: () -> Unit, title: String, desc: String) {
                         .height(390.dp)
                         .background(
                             color = MaterialTheme.colorScheme.onPrimary,
-                            shape = RoundedCornerShape(25.dp, 10.dp, 25.dp, 10.dp)
+                            //shape = RoundedCornerShape(25.dp, 10.dp, 25.dp, 10.dp)
+                            shape = RoundedCornerShape(10.dp)
+
                         )
                 ) {
                     Column(
-                        modifier = Modifier.padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        modifier = Modifier.padding(16.dp).fillMaxHeight(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceEvenly
                     )
                     {
-                        Spacer(modifier = Modifier.height(24.dp))
+                        //Spacer(modifier = Modifier.height(24.dp))
                         Text(
                             text = title,
                             textAlign = TextAlign.Center,
@@ -182,16 +217,46 @@ fun CustomPopUpDialog(onDismiss: () -> Unit, title: String, desc: String) {
                             text = desc,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
-                                .padding(top = 10.dp, start = 25.dp, end = 25.dp)
+                                .padding(top = 10.dp, start = 10.dp, end = 10.dp)
                                 .fillMaxWidth(),
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
                         )
-                        Spacer(modifier = Modifier.height(24.dp))
+                        Spacer(modifier = Modifier.height(10.dp))
 
-                        LinearProgressIndicator()
+                        LazyColumn(
+                            contentPadding = PaddingValues(10.dp),
 
-                        Spacer(modifier = Modifier.height(24.dp))
+                            )
+                        {
+                            itemsIndexed(items = mood) { index, item ->
+
+                                Log.d("Current item : ", item)
+                                Log.d("CurrentIndex : ", index.toString())
+
+                                LinearProgressIndicator(
+                                    mood = mood[index],
+                                    percentage = percentage[index].toFloat()
+                                )
+
+                            }
+//                            item{
+//                                Spacer(modifier = Modifier.height(24.dp))
+//                                Button(
+//                                    onClick = onDismiss,
+//                                    modifier = Modifier
+//                                        .fillMaxWidth()
+//                                        .clip(RoundedCornerShape(5.dp))
+//                                ) {
+//                                    Text(
+//                                        text = "Close",
+//                                        color = Color.White
+//                                    )
+//                                }
+//                            }
+
+                        }
+                        //Spacer(modifier = Modifier.height(24.dp))
                         Button(
                             onClick = onDismiss,
                             modifier = Modifier
@@ -203,6 +268,7 @@ fun CustomPopUpDialog(onDismiss: () -> Unit, title: String, desc: String) {
                                 color = Color.White
                             )
                         }
+
                     }
                 }
             }
@@ -253,7 +319,8 @@ fun ActivityCard(moodStatus: String, emotion: String, percentage: String) {
                     SuggestionChip(
                         onClick = { /* Do something! */ },
                         label = { Text(text = emotion, textAlign = TextAlign.Center) },
-                        modifier = Modifier.weight(2f)
+
+                       // modifier = Modifier.weight(3f)
 
                     )
                     //Spacer(modifier = Modifier.padding(10.dp))
@@ -404,11 +471,12 @@ fun DefaultView() {
 //        }
 
         //ActivityCard(moodStatus = "I feel lucky to have a friend like you", "Joy","76")
+        LinearProgressIndicator("Neutral",0.4f)
 
-        CustomPopUpDialog(
-            onDismiss = {},
-            "Mood status",
-            "Dialog description will be visible here, Some long text should be there"
-        )
+//        CustomPopUpDialog(
+//            onDismiss = {},
+//            "Mood status",
+//            "Dialog description will be visible here, Some long text should be there"
+//        )
     }
 }
