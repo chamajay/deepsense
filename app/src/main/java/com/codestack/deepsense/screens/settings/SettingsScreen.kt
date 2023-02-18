@@ -13,17 +13,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.codestack.deepsense.R
+import com.codestack.deepsense.navigation.Screens
 
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(navController: NavHostController) {
     LazyColumn (){
         // HeaderText()
         item { ProfileUI() }
         item { AccountUI() }
         item { GeneralUI() }
-        item { SupportUI() }
+        item { SupportUI(navController) }
     }
 }
 
@@ -34,7 +37,7 @@ fun SettingsScreen() {
 @Preview(showBackground =true)
 @Composable
 fun SettingsScreenPreview() {
-    SettingsScreen()
+    SettingsScreen(navController = rememberNavController())
 }
 
 
@@ -377,7 +380,7 @@ fun ProfileUI() {
 }
 
 @Composable
-fun SupportUI() {
+fun SupportUI(navController: NavHostController) {
     Column(
         modifier = Modifier
             .padding(horizontal = 14.dp)
@@ -394,13 +397,13 @@ fun SupportUI() {
             icon=R.drawable.rate_review_48px,
             mainText = "Feedback",
             subText = "*****",
-            onClick = {}
+            onClick = { navController.navigate(Screens.ContactUs.route) }
         )
         SupportItems(
             icon=R.drawable.group_48px,
             mainText = "About Us",
             subText = "*****",
-            onClick = {}
+            onClick = { navController.navigate(Screens.AboutUs.route) }
         )
     }
 }
@@ -414,7 +417,7 @@ fun SupportItems
               onClick: () -> Unit
 ) {
     Card(
-        onClick = {},
+        onClick = onClick,
 
         modifier = Modifier
             .padding(bottom = 8.dp)
