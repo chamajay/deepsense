@@ -16,7 +16,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.codestack.deepsense.R
+import com.codestack.deepsense.navigation.Screens
 
 
 @Composable
@@ -38,7 +41,7 @@ fun TopTabRow() {
 }
 
 @Composable
-fun Greeting() {
+fun Greeting(navController: NavHostController) {
     val user = "Chamath"
     Row(
         modifier = Modifier
@@ -56,7 +59,7 @@ fun Greeting() {
             Text(text = "!", fontSize = MaterialTheme.typography.headlineSmall.fontSize)
         }
         IconButton(
-            onClick = { /*TODO*/ }
+            onClick = { navController.navigate(Screens.Settings.route)  }
         ) {
             Icon(
                 Icons.Outlined.AccountCircle,
@@ -253,7 +256,7 @@ fun BottomNavigationBar() {
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-//    navController: NavHostController
+    navController: NavHostController
 ) {
     Scaffold(
         topBar = { TopTabRow() },
@@ -267,7 +270,7 @@ fun HomeScreen(
                         .verticalScroll(rememberScrollState())
                 ) {
                     Row {
-                        Greeting()
+                        Greeting(navController)
                     }
                     Row {
                         Mood()
@@ -288,5 +291,5 @@ fun HomeScreen(
 @Composable
 @Preview
 fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(navController = rememberNavController())
 }

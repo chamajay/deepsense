@@ -34,7 +34,7 @@ fun SetupNavGraph(
         composable(
             route = Screens.Home.route
         ) {
-            HomeScreen()
+            HomeScreen(navController = navController)
         }
         composable(
             route = Screens.Activity.route
@@ -59,7 +59,7 @@ fun SetupNavGraph(
         composable(
             route = Screens.Settings.route
         ) {
-            SettingsScreen()
+            SettingsScreen(navController)
         }
     }
 }
