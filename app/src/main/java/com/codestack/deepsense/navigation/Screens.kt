@@ -9,5 +9,7 @@ sealed class Screens(val route: String) {
     object AboutUs: Screens(route = "aboutus_screen")
     object ContactUs: Screens(route = "contactus_screen")
 
+    object Settings: Screens(route = "settings_screen")
+
 }
 
