@@ -50,7 +50,7 @@ fun WelcomeContent(navController: NavHostController) {
         }
         Button(
             colors = ButtonDefaults.buttonColors(),
-            onClick = { navController.navigate(Screens.SignUp.route) }
+            onClick = { navController.navigate(Screens.Login.route) }
         ) {
             Text(
                 text = "Start",

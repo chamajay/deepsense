@@ -27,11 +27,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.codestack.deepsense.R
+import com.codestack.deepsense.navigation.Screens
 
 @Composable
 
-fun LoginScreen() {
+fun LoginScreen(navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -57,8 +59,14 @@ fun LoginScreen() {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.End,
     ) {
-
-        OutlinedButton(onClick = {/*TODO*/ }) {
+        OutlinedButton(onClick = {
+            navController.navigate(Screens.Home.route) {
+                popUpTo(navController.graph.id) {
+                    inclusive = true
+                }
+            }
+        }
+        ) {
             Text(text = "Skip", letterSpacing = 1.sp)
             Spacer(modifier = Modifier.width(5.dp))
             Icon(imageVector = Icons.Default.ArrowForward, contentDescription = null)
@@ -73,8 +81,7 @@ fun LoginScreen() {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start,
     ) {
-
-        IconButton(onClick = {/*TODO*/ }) {
+        IconButton(onClick = { navController.popBackStack() }) {
             Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
         }
     }
@@ -302,7 +309,7 @@ fun LoginScreen() {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .clickable { MutableInteractionSource() }
+//                .clickable { MutableInteractionSource() }
                 .defaultMinSize(minWidth = 1.dp, minHeight = 1.dp),
         )
         {
@@ -317,16 +324,13 @@ fun LoginScreen() {
 
             TextButton(
                 onClick = { /*TODO*/ },
-
-
                 ) {
                 Text(
                     "Register",
                     fontWeight = FontWeight.Medium,
                     fontSize = 15.sp,
                     color = Color.Gray,
-                    //modifier = Modifier.clickable { MutableInteractionSource() }.defaultMinSize(minWidth = 0.dp, minHeight = 0.dp),
-
+                    modifier = Modifier.clickable { navController.navigate(Screens.SignUp.route) },
                 )
             }
         }

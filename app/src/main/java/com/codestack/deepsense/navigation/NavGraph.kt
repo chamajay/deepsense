@@ -19,7 +19,7 @@ fun SetupNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screens.Settings.route
+        startDestination = Screens.Welcome.route
     ) {
         composable(
             route = Screens.Welcome.route
@@ -31,11 +31,10 @@ fun SetupNavGraph(
         ) {
             SignUpScreen(navController)
         }
-
         composable(
             route = Screens.Home.route
         ) {
-            HomeScreen()
+            HomeScreen(navController = navController)
         }
         composable(
             route = Screens.Activity.route
@@ -45,7 +44,7 @@ fun SetupNavGraph(
         composable(
             route = Screens.Login.route
         ) {
-            LoginScreen()
+            LoginScreen(navController)
         }
         composable(
             route = Screens.AboutUs.route
@@ -60,7 +59,7 @@ fun SetupNavGraph(
         composable(
             route = Screens.Settings.route
         ) {
-            SettingsScreen()
+            SettingsScreen(navController)
         }
     }
 }
