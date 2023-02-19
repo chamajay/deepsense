@@ -59,7 +59,14 @@ fun LoginScreen(navController: NavHostController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.End,
     ) {
-        OutlinedButton(onClick = { navController.navigate(Screens.Home.route) }) {
+        OutlinedButton(onClick = {
+            navController.navigate(Screens.Home.route) {
+                popUpTo(navController.graph.id) {
+                    inclusive = true
+                }
+            }
+        }
+        ) {
             Text(text = "Skip", letterSpacing = 1.sp)
             Spacer(modifier = Modifier.width(5.dp))
             Icon(imageVector = Icons.Default.ArrowForward, contentDescription = null)
