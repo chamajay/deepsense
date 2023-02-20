@@ -13,11 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.codestack.deepsense.R
 import com.codestack.deepsense.navigation.Screens
 
@@ -59,7 +57,7 @@ fun Greeting(navController: NavHostController) {
             Text(text = "!", fontSize = MaterialTheme.typography.headlineSmall.fontSize)
         }
         IconButton(
-            onClick = { navController.navigate(Screens.Settings.route)  }
+            onClick = { navController.navigate(Screens.Settings.route) }
         ) {
             Icon(
                 Icons.Outlined.AccountCircle,
@@ -133,12 +131,6 @@ fun MoodPercentage(
     }
 }
 
-//@Composable
-//@Preview
-//fun MoodPercentagePreview() {
-//    MoodPercentage("Happy", 75)
-//}
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -158,7 +150,7 @@ fun MoodToday() {
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
-                ) {
+            ) {
                 MoodPercentage(mood = "Happy", percentage = 30)
                 MoodPercentage(mood = "Sad", percentage = 50)
                 MoodPercentage(mood = "Angry", percentage = 15)
@@ -200,96 +192,43 @@ fun MentalHealth() {
     }
 }
 
-@Composable
-fun BottomNavigationBar() {
-    var selectedItem by remember { mutableStateOf(1) }
-    NavigationBar {
-        NavigationBarItem(
-            icon = {
-                val id =
-                    if (selectedItem == 0) R.drawable.ic_leaderboard_filled else R.drawable.ic_leaderboard_outlined
-                Icon(
-                    painterResource(id = id),
-                    contentDescription = "Activity",
-                    modifier = Modifier.size(24.dp)
-                )
-            },
-            label = { Text("Activity") },
-            selected = selectedItem == 0,
-            onClick = { selectedItem = 0 },
-            interactionSource = NoRippleInteractionSource()
-        )
-        NavigationBarItem(
-            icon = {
-                val id =
-                    if (selectedItem == 1) R.drawable.ic_home_filled else R.drawable.ic_home_outlined
-                Icon(
-                    painterResource(id = id),
-                    contentDescription = "Suggestions",
-                    modifier = Modifier.size(24.dp)
-                )
-            },
-            label = { Text("Home") },
-            selected = selectedItem == 1,
-            onClick = { selectedItem = 1 },
-            interactionSource = NoRippleInteractionSource()
-        )
-        NavigationBarItem(
-            icon = {
-                val id =
-                    if (selectedItem == 2) R.drawable.ic_spa_filled else R.drawable.ic_spa_outlined
-                Icon(
-                    painterResource(id = id),
-                    contentDescription = "Suggestions",
-                    modifier = Modifier.size(24.dp)
-                )
-            },
-            label = { Text("Suggestions") },
-            selected = selectedItem == 2,
-            onClick = { selectedItem = 2 },
-            interactionSource = NoRippleInteractionSource()
-        )
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    navController: NavHostController
+    navController: NavHostController,
+    paddingValues: PaddingValues
 ) {
-    Scaffold(
-        topBar = { TopTabRow() },
-        content = {contentPadding ->
-            Box(Modifier.padding(contentPadding)) {
-                Column(
-                    verticalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier
-                        .padding(15.dp, 0.dp)
-                        .fillMaxHeight()
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    Row {
-                        Greeting(navController)
-                    }
-                    Row {
-                        Mood()
-                    }
-                    Row {
-                        MoodToday()
-                    }
-                    Row {
-                        MentalHealth()
-                    }
-                }
+    Box(modifier = Modifier.padding(paddingValues)) {
+        Column(
+            verticalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .padding(15.dp, 0.dp)
+                .fillMaxHeight()
+                .verticalScroll(rememberScrollState())
+        ) {
+            Row {
+                Greeting(navController)
             }
-        },
-        bottomBar = { BottomNavigationBar() }
-    )
+            Row {
+                TopTabRow()
+            }
+            Row {
+                Mood()
+            }
+            Row {
+                MoodToday()
+            }
+            Row {
+                MentalHealth()
+            }
+        }
+    }
 }
 
-@Composable
-@Preview
-fun HomeScreenPreview() {
-    HomeScreen(navController = rememberNavController())
-}
+
+//@Composable
+//@Preview
+//fun HomeScreenPreview() {
+//    HomeScreen(navController = rememberNavController())
+//}
