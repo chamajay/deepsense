@@ -60,7 +60,7 @@ fun LoginScreen(navController: NavHostController) {
         horizontalAlignment = Alignment.End,
     ) {
         OutlinedButton(onClick = {
-            navController.navigate(Screens.Home.route) {
+            navController.navigate(Screens.Main.route) {
                 popUpTo(navController.graph.id) {
                     inclusive = true
                 }
