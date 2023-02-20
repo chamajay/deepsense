@@ -197,31 +197,28 @@ fun MentalHealth() {
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navController: NavHostController,
-    paddingValues: PaddingValues
 ) {
-    Box(modifier = Modifier.padding(paddingValues)) {
-        Column(
-            verticalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier
-                .padding(15.dp, 0.dp)
-                .fillMaxHeight()
-                .verticalScroll(rememberScrollState())
-        ) {
-            Row {
-                Greeting(navController)
-            }
-            Row {
-                TopTabRow()
-            }
-            Row {
-                Mood()
-            }
-            Row {
-                MoodToday()
-            }
-            Row {
-                MentalHealth()
-            }
+    Column(
+        verticalArrangement = Arrangement.SpaceEvenly,
+        modifier = Modifier
+            .padding(15.dp, 0.dp)
+            .fillMaxHeight()
+            .verticalScroll(rememberScrollState())
+    ) {
+        Row {
+            Greeting(navController)
+        }
+        Row {
+            TopTabRow()
+        }
+        Row {
+            Mood()
+        }
+        Row {
+            MoodToday()
+        }
+        Row {
+            MentalHealth()
         }
     }
 }

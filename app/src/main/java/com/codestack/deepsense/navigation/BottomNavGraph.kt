@@ -13,7 +13,6 @@ import com.codestack.deepsense.screens.home.HomeScreen
 fun BottomNavGraph(
     navController: NavHostController,
     bottomNavController: NavHostController,
-    paddingValues: PaddingValues
 ) {
     NavHost(
         navController = bottomNavController,
@@ -22,7 +21,7 @@ fun BottomNavGraph(
         composable(
             route = BottomBarScreen.Home.route
         ) {
-            HomeScreen(navController = navController, paddingValues = paddingValues)
+            HomeScreen(navController = navController)
         }
         composable(
             route = BottomBarScreen.Activity.route
