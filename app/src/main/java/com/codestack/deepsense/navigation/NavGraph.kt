@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.codestack.deepsense.screens.MainScreen
 import com.codestack.deepsense.screens.signup.SignUpScreen
 import com.codestack.deepsense.screens.WelcomeScreen
 import com.codestack.deepsense.screens.aboutus.AboutUsScreen
@@ -31,11 +32,11 @@ fun SetupNavGraph(
         ) {
             SignUpScreen(navController)
         }
-        composable(
-            route = Screens.Home.route
-        ) {
-            HomeScreen(navController = navController)
-        }
+//        composable(
+//            route = Screens.Home.route
+//        ) {
+//            HomeScreen(navController = navController, paddingValues = )
+//        }
         composable(
             route = Screens.Activity.route
         ) {
@@ -60,6 +61,11 @@ fun SetupNavGraph(
             route = Screens.Settings.route
         ) {
             SettingsScreen(navController)
+        }
+        composable(
+            route = Screens.Main.route
+        ) {
+            MainScreen(navController)
         }
     }
 }
