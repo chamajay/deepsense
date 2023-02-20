@@ -19,18 +19,60 @@ import androidx.navigation.compose.rememberNavController
 import com.codestack.deepsense.R
 
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
+    navController: NavHostController,
+) {
+    Column(
+//        verticalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxHeight()
+    ) {
+        TopTabRow()
+        Row(modifier = Modifier
+            .weight(1f)
+            .padding(15.dp, 0.dp)) {
+            Column(
+                verticalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Row {
+                    Mood()
+                }
+                Row {
+                    MoodToday()
+                }
+                Row {
+                    MentalHealth()
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+@Preview
+fun HomeScreenPreview() {
+    HomeScreen(navController = rememberNavController())
+}
+
 @Composable
 fun TopTabRow() {
     var selectedIndex by rememberSaveable { mutableStateOf(0) }
     val titles = listOf("Day", "Week", "Month")
-    Row {
+    Row() {
         TabRow(selectedTabIndex = selectedIndex) {
             titles.forEachIndexed { index, title ->
                 Tab(
                     selected = selectedIndex == index,
                     onClick = { selectedIndex = index },
                     interactionSource = NoRippleInteractionSource(),
-                    text = { Text(text = title, maxLines = 2, overflow = TextOverflow.Ellipsis) }
+                    text = { Text(text = title, maxLines = 2, overflow = TextOverflow.Ellipsis) },
                 )
             }
         }
@@ -161,37 +203,3 @@ fun MentalHealth() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel(),
-    navController: NavHostController,
-) {
-    Column(
-        verticalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier
-            .padding(15.dp, 0.dp)
-            .fillMaxHeight()
-            .verticalScroll(rememberScrollState())
-    ) {
-        Row {
-            TopTabRow()
-        }
-        Row {
-            Mood()
-        }
-        Row {
-            MoodToday()
-        }
-        Row {
-            MentalHealth()
-        }
-    }
-}
-
-
-@Composable
-@Preview
-fun HomeScreenPreview() {
-    HomeScreen(navController = rememberNavController())
-}
