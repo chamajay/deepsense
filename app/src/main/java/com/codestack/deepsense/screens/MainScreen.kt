@@ -16,6 +16,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.codestack.deepsense.components.MainTopAppBar
 import com.codestack.deepsense.navigation.BottomBarScreen
 import com.codestack.deepsense.navigation.BottomNavGraph
 import com.codestack.deepsense.screens.home.NoRippleInteractionSource
@@ -27,6 +28,7 @@ fun MainScreen(
 ) {
     val bottomNavController = rememberNavController()
     Scaffold(
+        topBar = { MainTopAppBar(navController = navController) },
         bottomBar = { BottomBar(navController = bottomNavController) }
     ) {
         Box(modifier = Modifier.padding(it)) {
