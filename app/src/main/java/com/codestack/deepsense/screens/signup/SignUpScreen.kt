@@ -81,7 +81,7 @@ fun TopNavi(navController: NavHostController) {
         // Skip button
         OutlinedButton(
             onClick = {
-                navController.navigate(Screens.Home.route) {
+                navController.navigate(Screens.Main.route) {
                     popUpTo(navController.graph.id) {
                         inclusive = true
                     }
