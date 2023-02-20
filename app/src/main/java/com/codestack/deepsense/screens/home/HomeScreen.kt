@@ -4,8 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -13,11 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.codestack.deepsense.R
-import com.codestack.deepsense.navigation.Screens
 
 
 @Composable
@@ -34,36 +33,6 @@ fun TopTabRow() {
                     text = { Text(text = title, maxLines = 2, overflow = TextOverflow.Ellipsis) }
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun Greeting(navController: NavHostController) {
-    val user = "Chamath"
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row() {
-            Text(text = "Hello ", fontSize = MaterialTheme.typography.headlineSmall.fontSize)
-            Text(
-                text = user,
-                fontSize = MaterialTheme.typography.headlineSmall.fontSize,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(text = "!", fontSize = MaterialTheme.typography.headlineSmall.fontSize)
-        }
-        IconButton(
-            onClick = { navController.navigate(Screens.Settings.route) }
-        ) {
-            Icon(
-                Icons.Outlined.AccountCircle,
-                contentDescription = "Profile Button",
-                modifier = Modifier.size(30.dp)
-            )
         }
     }
 }
@@ -206,9 +175,6 @@ fun HomeScreen(
             .verticalScroll(rememberScrollState())
     ) {
         Row {
-            Greeting(navController)
-        }
-        Row {
             TopTabRow()
         }
         Row {
@@ -224,8 +190,8 @@ fun HomeScreen(
 }
 
 
-//@Composable
-//@Preview
-//fun HomeScreenPreview() {
-//    HomeScreen(navController = rememberNavController())
-//}
+@Composable
+@Preview
+fun HomeScreenPreview() {
+    HomeScreen(navController = rememberNavController())
+}
