@@ -1,4 +1,4 @@
-package com.codestack.deepsense.screens
+package com.codestack.deepsense.screens.welcome
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -50,7 +50,7 @@ fun WelcomeContent(navController: NavHostController) {
         }
         Button(
             colors = ButtonDefaults.buttonColors(),
-            onClick = { navController.navigate(Screens.Login.route) }
+            onClick = { navController.navigate(Screens.Signin.route) }
         ) {
             Text(
                 text = "Start",

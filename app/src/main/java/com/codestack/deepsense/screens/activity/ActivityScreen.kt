@@ -4,7 +4,6 @@ package com.codestack.deepsense.screens.activity
 import android.content.res.Configuration
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -13,8 +12,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -68,14 +65,15 @@ fun ActivityScreen() {
     ) {
         //modifier = Modifier.scrollable(state =scrollState,orientation = Orientation.Horizontal )
         Column(Modifier.fillMaxSize()) {
-            TopBar(title = "Activity page", imageVector = Icons.Default.AccountCircle)
-            Spacer(modifier = Modifier.padding(15.dp))
-            MoodScoreSection()
-            MoodTitle(percentage = "85")
+//            TopBar(title = "Activity page", imageVector = Icons.Default.AccountCircle)
+           Spacer(modifier = Modifier.padding(15.dp))
+//            MoodScoreSection()
+//            MoodTitle(percentage = "85")
+
 
             Text(
                 text = "Your typing activity",
-                modifier = Modifier.padding(20.dp),
+                modifier = Modifier.padding(start = 25.dp, bottom = 20.dp),
                 fontSize = 20.sp
             )
 
@@ -87,7 +85,7 @@ fun ActivityScreen() {
 //                        }
 
             LazyColumn(
-                contentPadding = PaddingValues(10.dp),
+               // contentPadding = PaddingValues(10.dp),
 
                 )
             {
@@ -111,39 +109,7 @@ fun ActivityScreen() {
 }
 
 
-//@Composable
-//fun LinearProgressIndicator() {
-//
-//
-//
-//    Column(horizontalAlignment = Alignment.CenterHorizontally)
-//    {
-//        Row(verticalAlignment = Alignment.CenterVertically) {
-//            Text(text = "Joy", modifier = Modifier.weight(2f))
-//            LinearProgressIndicator(progress = 0.2f, modifier = Modifier.weight(7f))
-//        }
-//        Spacer(Modifier.height(15.dp))
-//
-//        Row(verticalAlignment = Alignment.CenterVertically) {
-//            Text(text = "Sad", modifier = Modifier.weight(2f))
-//            LinearProgressIndicator(progress = 0.5f, modifier = Modifier.weight(7f))
-//        }
-//
-//        Spacer(Modifier.height(15.dp))
-//
-//        Row(verticalAlignment = Alignment.CenterVertically) {
-//            Text(text = "Neutral", modifier = Modifier.weight(2f))
-//            LinearProgressIndicator(progress = 0.7f, modifier = Modifier.weight(7f))
-//        }
-//        Spacer(Modifier.height(15.dp))
-//
-//        Row(verticalAlignment = Alignment.CenterVertically) {
-//            Text(text = "Joy", modifier = Modifier.weight(2f))
-//            LinearProgressIndicator(progress = 0.9f, modifier = Modifier.weight(7f))
-//        }
-//
-//    }
-//}
+
 
 @Composable
 fun LinearProgressIndicator(mood: String, percentage: Float) {
@@ -177,10 +143,19 @@ fun LinearProgressIndicator(mood: String, percentage: Float) {
 @Composable
 fun CustomPopUpDialog(onDismiss: () -> Unit, title: String, desc: String) {
 
+    // added a column to check whether dialog is centering
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
     Dialog(onDismissRequest = onDismiss) {
         Box(
             modifier = Modifier
-                .height(520.dp)
+                .height(520.dp).fillMaxSize(),
+
+
 
         ) {
             Column(modifier = Modifier)
@@ -197,7 +172,9 @@ fun CustomPopUpDialog(onDismiss: () -> Unit, title: String, desc: String) {
                         )
                 ) {
                     Column(
-                        modifier = Modifier.padding(16.dp).fillMaxHeight(),
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxHeight(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.SpaceEvenly
                     )
@@ -273,6 +250,7 @@ fun CustomPopUpDialog(onDismiss: () -> Unit, title: String, desc: String) {
                 }
             }
         }
+    }
     }
 }
 

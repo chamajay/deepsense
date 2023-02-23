@@ -5,11 +5,13 @@ sealed class Screens(val route: String) {
     object SignUp: Screens(route = "signup_screen")
     object Home: Screens(route = "home_screen")
     object Activity: Screens(route = "activity_screen")
-    object Login: Screens(route = "login_screen")
+    object Signin: Screens(route = "sign_in_screen")
     object AboutUs: Screens(route = "aboutus_screen")
     object ContactUs: Screens(route = "contactus_screen")
     object Settings: Screens(route = "settings_screen")
     object Main: Screens(route = "main_screen")
+
+
 
 
 }
