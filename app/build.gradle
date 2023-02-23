@@ -73,6 +73,10 @@ dependencies {
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.44"
 
+    // Accompanist
+    implementation "com.google.accompanist:accompanist-pager:0.25.0" // Pager
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.25.0" // Pager Indicators
+
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:31.0.0')
     // Declare the dependency for the Firebase Authentication library
