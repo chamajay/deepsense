@@ -21,11 +21,11 @@ fun SignUpButton(
     isSigningUp: Boolean = false,
     onClick: () -> Unit,
 ) {
-    var clicked by remember { mutableStateOf(false) }
+//    var clicked by remember { mutableStateOf(false) }
     OutlinedButton(
         onClick = {
             onClick()
-            clicked = !clicked
+//            clicked = !clicked
         },
         enabled = !isSigningUp,
         modifier = modifier
@@ -40,7 +40,7 @@ fun SignUpButton(
         )
         Spacer(modifier = Modifier.width(20.dp))
         Text(
-            text = if (clicked) textClicked else text,
+            text = if (isSigningUp) textClicked else text,
             modifier = Modifier.padding(0.dp, 5.dp),
             color = MaterialTheme.colorScheme.secondary
         )

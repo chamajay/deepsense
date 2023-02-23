@@ -32,11 +32,11 @@ fun SetupNavGraph(
         ) {
             SignUpScreen(navController)
         }
-//        composable(
-//            route = Screens.Home.route
-//        ) {
-//            HomeScreen(navController = navController, paddingValues = )
-//        }
+        composable(
+            route = Screens.Home.route
+        ) {
+            HomeScreen()
+        }
         composable(
             route = Screens.Activity.route
         ) {

@@ -29,9 +29,9 @@ fun SignUpScreen(
     val uiState by viewModel.uiState
 
     var signUpClicked by rememberSaveable { mutableStateOf(false) }
+    var facebookSignUpClicked by rememberSaveable { mutableStateOf(false) }
     var emailInvalid by rememberSaveable { mutableStateOf(false) }
     var passwordEmpty by rememberSaveable { mutableStateOf(false) }
-
 
     Surface {
         // top progress bar
@@ -81,8 +81,8 @@ fun SignUpScreen(
                             text = "Sign up with Facebook",
                             textClicked = "Signing up with Facebook",
                             icon = R.drawable.ic_facebook_logo_circle,
-                            isSigningUp = signUpClicked,
-                            onClick = { signUpClicked = !signUpClicked }
+                            isSigningUp = facebookSignUpClicked,
+                            onClick = { facebookSignUpClicked = !facebookSignUpClicked }
                         )
                     }
                 }
@@ -142,6 +142,10 @@ fun SignUpScreen(
                 }
             }
         }
+    }
+
+    if (facebookSignUpClicked) {
+        FeatureIncomingDialog { facebookSignUpClicked = false }
     }
 }
 
