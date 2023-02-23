@@ -32,7 +32,7 @@ import com.codestack.deepsense.navigation.Screens
 
 @Composable
 
-fun LoginScreen(navController: NavHostController) {
+fun SignInScreen(navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
