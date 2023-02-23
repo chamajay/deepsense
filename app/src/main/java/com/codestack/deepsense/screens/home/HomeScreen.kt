@@ -63,10 +63,11 @@ fun TabsRow(
     }
 }
 
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun TabsContent(tabs: List<TabItem>, pagerState: PagerState) {
-    HorizontalPager(state = pagerState, count = tabs.size) { page ->
+    HorizontalPager(state = pagerState, count = tabs.size, userScrollEnabled = false) { page ->
         tabs[page].screen()
     }
 }
