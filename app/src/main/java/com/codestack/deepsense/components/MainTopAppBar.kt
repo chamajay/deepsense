@@ -1,6 +1,9 @@
 package com.codestack.deepsense.components
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.Icon
@@ -23,27 +26,38 @@ fun MainTopAppBar(
 ) {
     val user = "Chamath"
     Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .fillMaxWidth().padding(24.dp, 15.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+            .fillMaxWidth()
+            .padding(18.dp, 10.dp)
     ) {
-        Row() {
-            Text(text = "Hello ", fontSize = MaterialTheme.typography.headlineSmall.fontSize)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+            .padding(6.dp)
+            .weight(1f)
+        ) {
+            Text(
+                text = "Hello ",
+                fontSize = MaterialTheme.typography.headlineSmall.fontSize
+            )
             Text(
                 text = user,
                 fontSize = MaterialTheme.typography.headlineSmall.fontSize,
                 color = MaterialTheme.colorScheme.primary
             )
-            Text(text = "!", fontSize = MaterialTheme.typography.headlineSmall.fontSize)
+            Text(
+                text = "!",
+                fontSize = MaterialTheme.typography.headlineSmall.fontSize
+            )
         }
         IconButton(
-            onClick = { navController.navigate(Screens.Settings.route) }
+            onClick = { navController.navigate(Screens.Settings.route) },
         ) {
             Icon(
                 Icons.Outlined.AccountCircle,
                 contentDescription = "Profile Button",
-                modifier = Modifier.size(30.dp)
+                modifier = Modifier.size(32.dp)
             )
         }
     }
