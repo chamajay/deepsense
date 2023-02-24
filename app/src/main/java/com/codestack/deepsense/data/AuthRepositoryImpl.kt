@@ -25,7 +25,9 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 
-// adapted from - https://github.com/alexmamo/FirebaseSignInWithGoogle
+// adapted from -
+// https://github.com/alexmamo/FirebaseSignInWithGoogle,
+// https://github.com/alexmamo/FirebaseSignInWithEmailAndPassword
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,

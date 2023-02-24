@@ -9,6 +9,9 @@ typealias SignInWithGoogleResponse = Response<Boolean>
 typealias SignUpResponse = Response<Boolean>
 typealias SignInResponse = Response<Boolean>
 
+// adapted from -
+// https://github.com/alexmamo/FirebaseSignInWithGoogle,
+// https://github.com/alexmamo/FirebaseSignInWithEmailAndPassword
 interface AuthRepository {
     val isUserAuthenticatedInFirebase: Boolean
 

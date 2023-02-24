@@ -9,6 +9,7 @@ import com.codestack.deepsense.domain.model.Response.Loading
 import com.codestack.deepsense.domain.model.Response.Success
 import com.codestack.deepsense.domain.model.Response.Failure
 
+// adapted from - https://github.com/alexmamo/FirebaseSignInWithEmailAndPassword
 @Composable
 fun EmailSignUp(
     viewModel: SignUpViewModel = hiltViewModel(),

@@ -10,6 +10,7 @@ import com.codestack.deepsense.domain.model.Response.Loading
 import com.codestack.deepsense.domain.model.Response.Failure
 import com.google.android.gms.auth.api.identity.BeginSignInResult
 
+// adapted from - https://github.com/alexmamo/FirebaseSignInWithGoogle
 @Composable
 fun OneTapSignIn(
     viewModel: SignUpViewModel = hiltViewModel(),
