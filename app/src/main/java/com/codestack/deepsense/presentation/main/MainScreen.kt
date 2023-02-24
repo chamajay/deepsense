@@ -19,7 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.codestack.deepsense.components.MainTopAppBar
 import com.codestack.deepsense.navigation.BottomBarScreen
 import com.codestack.deepsense.navigation.BottomNavGraph
-import com.codestack.deepsense.screens.home.NoRippleInteractionSource
+import com.codestack.deepsense.presentation.home.NoRippleInteractionSource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

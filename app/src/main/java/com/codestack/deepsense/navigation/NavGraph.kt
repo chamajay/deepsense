@@ -5,15 +5,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.codestack.deepsense.screens.MainScreen
-import com.codestack.deepsense.screens.signup.SignUpScreen
-import com.codestack.deepsense.screens.welcome.WelcomeScreen
-import com.codestack.deepsense.screens.aboutus.AboutUsScreen
-import com.codestack.deepsense.screens.activity.ActivityScreen
-import com.codestack.deepsense.screens.contactus.ContactUsScreen
-import com.codestack.deepsense.screens.home.HomeScreen
+import com.codestack.deepsense.presentation.signup.SignUpScreen
+import com.codestack.deepsense.presentation.welcome.WelcomeScreen
+import com.codestack.deepsense.presentation.aboutus.AboutUsScreen
+import com.codestack.deepsense.presentation.activity.ActivityScreen
+import com.codestack.deepsense.presentation.contactus.ContactUsScreen
+import com.codestack.deepsense.presentation.home.HomeScreen
 
-import com.codestack.deepsense.screens.settings.SettingsScreen
-import com.codestack.deepsense.screens.signin.SignInScreen
+import com.codestack.deepsense.presentation.settings.SettingsScreen
+import com.codestack.deepsense.presentation.signin.SignInScreen
 
 @Composable
 fun SetupNavGraph(

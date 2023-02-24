@@ -1,4 +1,4 @@
-package com.codestack.deepsense.screens.aboutus
+package com.codestack.deepsense.presentation.aboutus
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape

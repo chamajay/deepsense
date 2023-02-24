@@ -11,9 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DeepSense"
         tools:targetApi="31"
-        android:name = ".DeepSenseHiltApp">
+        android:name = ".DeepSenseApp">
         <activity
-            android:name=".MainActivity"
+            android:name=".presentation.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.DeepSense">
             <intent-filter>

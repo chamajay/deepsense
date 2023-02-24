@@ -1,4 +1,4 @@
-package com.codestack.deepsense.screens.home
+package com.codestack.deepsense.presentation.home
 
 import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource

@@ -1,16 +1,13 @@
-package com.codestack.deepsense.screens.signup
+package com.codestack.deepsense.presentation.signup
 
-import android.util.Patterns
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.codestack.deepsense.model.service.AccountService
 import com.codestack.deepsense.navigation.Screens
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
-import kotlin.coroutines.suspendCoroutine
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(

@@ -1,4 +1,4 @@
-package com.codestack.deepsense.screens.contactus
+package com.codestack.deepsense.presentation.contactus
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape

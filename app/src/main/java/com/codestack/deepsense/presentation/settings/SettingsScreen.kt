@@ -1,4 +1,4 @@
-package com.codestack.deepsense.screens.settings
+package com.codestack.deepsense.presentation.settings
 
 
 import androidx.compose.foundation.Image

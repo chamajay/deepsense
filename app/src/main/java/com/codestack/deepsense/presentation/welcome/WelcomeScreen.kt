@@ -1,4 +1,4 @@
-package com.codestack.deepsense.screens.welcome
+package com.codestack.deepsense.presentation.welcome
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
