@@ -1,6 +1,10 @@
 package com.codestack.deepsense.presentation.signup
 
+import android.app.Activity.RESULT_OK
 import android.util.Patterns
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -18,7 +22,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.codestack.deepsense.R
 import com.codestack.deepsense.components.*
+import com.codestack.deepsense.navigation.Screens
 import com.codestack.deepsense.ui.theme.DeepSenseTheme
+import com.google.android.gms.auth.api.identity.BeginSignInResult
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.GoogleAuthProvider.getCredential
 
 
 @Composable
@@ -26,7 +34,7 @@ fun SignUpScreen(
     navController: NavHostController,
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState
+//    val uiState by viewModel.uiState
 
     var signUpClicked by rememberSaveable { mutableStateOf(false) }
     var facebookSignUpClicked by rememberSaveable { mutableStateOf(false) }
@@ -73,7 +81,10 @@ fun SignUpScreen(
                             text = "Sign up with Google",
                             textClicked = "Signing up with Google",
                             isSigningUp = signUpClicked,
-                            onClick = { signUpClicked = !signUpClicked }
+                            onClick = {
+                                signUpClicked = !signUpClicked
+                                viewModel.oneTapSignUp()
+                            }
                         )
                     }
                     Row {
@@ -94,7 +105,7 @@ fun SignUpScreen(
                 Column {
                     Row {
                         EmailTextField(
-                            email = uiState.email,
+                            email = viewModel.email,
                             onEmailChanged = { newEmail ->
                                 viewModel.onEmailChange(newEmail)
                                 emailInvalid = false
@@ -106,7 +117,7 @@ fun SignUpScreen(
                     Spacer(modifier = Modifier.height(15.dp))
                     Row {
                         PasswordTextField(
-                            password = uiState.password,
+                            password = viewModel.password,
                             onPasswordChange = { newPassword ->
                                 viewModel.onPasswordChange(newPassword)
                                 passwordEmpty = false
@@ -122,13 +133,13 @@ fun SignUpScreen(
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
-                            if (!isEmailValid(uiState.email)) {
+                            if (!isEmailValid(viewModel.email)) {
                                 emailInvalid = true
-                            } else if (uiState.password.isEmpty()) {
+                            } else if (viewModel.password.isEmpty()) {
                                 passwordEmpty = true
                             } else {
                                 signUpClicked = !signUpClicked
-                                viewModel.onSignUpClick(navController)
+//                                viewModel.onSignUpClick(navController)
                             }
                         },
                         enabled = !signUpClicked
@@ -147,6 +158,45 @@ fun SignUpScreen(
     if (facebookSignUpClicked) {
         FeatureIncomingDialog { facebookSignUpClicked = false }
     }
+
+    // Google one tap sign in
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            try {
+                val credentials = viewModel.oneTapClient.getSignInCredentialFromIntent(result.data)
+                val googleIdToken = credentials.googleIdToken
+                val googleCredentials = getCredential(googleIdToken, null)
+                if (signUpClicked) {
+                    viewModel.signInWithGoogle(googleCredentials)
+                }
+            } catch (it: ApiException) {
+                print(it)
+            }
+        }
+    }
+
+    fun launch(signInResult: BeginSignInResult) {
+        val intent = IntentSenderRequest.Builder(signInResult.pendingIntent.intentSender).build()
+        launcher.launch(intent)
+    }
+
+    OneTapSignIn(
+        launch = {
+            launch(it)
+        }
+    )
+
+    SignInWithGoogle(
+        navigateToHomeScreen = { signedIn ->
+            if (signedIn) {
+                navController.navigate(Screens.Main.route) {
+                    popUpTo(navController.graph.id) {
+                        inclusive = true
+                    }
+                }
+            }
+        }
+    )
 }
 
 

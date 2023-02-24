@@ -1,42 +1,58 @@
 package com.codestack.deepsense.presentation.signup
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavHostController
-import com.codestack.deepsense.model.service.AccountService
-import com.codestack.deepsense.navigation.Screens
+import androidx.lifecycle.viewModelScope
+import com.codestack.deepsense.domain.model.Response.Loading
+import com.codestack.deepsense.domain.model.Response.Success
+import com.codestack.deepsense.domain.repository.AuthRepository
+import com.codestack.deepsense.domain.repository.OneTapSignInResponse
+import com.codestack.deepsense.domain.repository.SignInWithGoogleResponse
+import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.firebase.auth.AuthCredential
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val accountService: AccountService,
+    private val repo: AuthRepository,
+    val oneTapClient: SignInClient
 ) : ViewModel() {
-    var uiState = mutableStateOf(SignUpUiState())
+
+    var email by mutableStateOf("")
+    var password by mutableStateOf("")
+
+    var oneTapSignInResponse by mutableStateOf<OneTapSignInResponse>(Success(null))
         private set
 
-    private val email
-        get() = uiState.value.email
-    private val password
-        get() = uiState.value.password
+    var signInWithGoogleResponse by mutableStateOf<SignInWithGoogleResponse>(Success(false))
+        private set
 
-    private val signUpClicked
-        get() = uiState.value.signUpClicked
+    // one tap sign in
+    fun oneTapSignIn() = viewModelScope.launch {
+        oneTapSignInResponse = Loading
+        oneTapSignInResponse = repo.oneTapSignInWithGoogle()
+    }
+
+    // one tap sign up
+    fun oneTapSignUp() = viewModelScope.launch {
+        oneTapSignInResponse = Loading
+        oneTapSignInResponse = repo.oneTapSignUpWithGoogle()
+    }
+
+    fun signInWithGoogle(googleCredential: AuthCredential) = viewModelScope.launch {
+        oneTapSignInResponse = Loading
+        signInWithGoogleResponse = repo.firebaseSignInWithGoogle(googleCredential)
+    }
 
     fun onEmailChange(newValue: String) {
-        uiState.value = uiState.value.copy(email = newValue)
+        email = newValue
     }
 
     fun onPasswordChange(newValue: String) {
-        uiState.value = uiState.value.copy(password = newValue)
-    }
-
-    fun onSignUpClick(navController: NavHostController) {
-        runBlocking {
-            accountService.createEmailAccount(email, password)
-            navController.navigate(Screens.Home.route)
-//            accountService.authenticate("hehe@gmail.com", "123456")
-        }
+        password = newValue
     }
 }
