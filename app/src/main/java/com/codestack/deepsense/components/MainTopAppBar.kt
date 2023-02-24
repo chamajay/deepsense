@@ -1,5 +1,6 @@
 package com.codestack.deepsense.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -27,6 +28,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.codestack.deepsense.core.Constants.TAG
 import com.codestack.deepsense.navigation.Screens
 import com.codestack.deepsense.presentation.shared.ProfileViewModel
 import com.codestack.deepsense.ui.theme.DeepSenseTheme
@@ -55,7 +57,7 @@ fun MainTopAppBar(
             IconButton(
                 onClick = { navController.navigate(Screens.Settings.route) }
             ) {
-                if (viewModel.isUserAuthenticated) {
+                if (viewModel.photoUrl != "null") {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(viewModel.photoUrl)

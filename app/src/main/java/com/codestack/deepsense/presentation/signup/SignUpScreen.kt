@@ -6,9 +6,13 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.internal.enableLiveLiterals
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -34,12 +38,13 @@ fun SignUpScreen(
     navController: NavHostController,
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
-//    val uiState by viewModel.uiState
 
     var signUpClicked by rememberSaveable { mutableStateOf(false) }
     var facebookSignUpClicked by rememberSaveable { mutableStateOf(false) }
     var emailInvalid by rememberSaveable { mutableStateOf(false) }
     var passwordEmpty by rememberSaveable { mutableStateOf(false) }
+    var nameEmpty by rememberSaveable { mutableStateOf(false) }
+
 
     Surface {
         // top progress bar
@@ -104,6 +109,28 @@ fun SignUpScreen(
                 // Email signup
                 Column {
                     Row {
+                        OutlinedTextField(
+                            value = viewModel.name,
+                            onValueChange = { newName ->
+                                viewModel.onNameChange(newName)
+                                nameEmpty = false
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Outlined.Person,
+                                    contentDescription = null
+                                )
+                            },
+                            label = { Text(text = "Name") },
+                            singleLine = true,
+                            shape = MaterialTheme.shapes.medium,
+                            isError = nameEmpty,
+                            enabled = !signUpClicked
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(15.dp))
+                    Row {
                         EmailTextField(
                             email = viewModel.email,
                             onEmailChanged = { newEmail ->
@@ -133,13 +160,15 @@ fun SignUpScreen(
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
-                            if (!isEmailValid(viewModel.email)) {
+                            if (viewModel.name.isEmpty()) {
+                                nameEmpty = true
+                            } else if (!isEmailValid(viewModel.email)) {
                                 emailInvalid = true
                             } else if (viewModel.password.isEmpty()) {
                                 passwordEmpty = true
                             } else {
                                 signUpClicked = !signUpClicked
-//                                viewModel.onSignUpClick(navController)
+                                viewModel.signUpWithEmailAndPassword()
                             }
                         },
                         enabled = !signUpClicked
@@ -160,20 +189,22 @@ fun SignUpScreen(
     }
 
     // Google one tap sign in
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
-            try {
-                val credentials = viewModel.oneTapClient.getSignInCredentialFromIntent(result.data)
-                val googleIdToken = credentials.googleIdToken
-                val googleCredentials = getCredential(googleIdToken, null)
-                if (signUpClicked) {
-                    viewModel.signInWithGoogle(googleCredentials)
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                try {
+                    val credentials =
+                        viewModel.oneTapClient.getSignInCredentialFromIntent(result.data)
+                    val googleIdToken = credentials.googleIdToken
+                    val googleCredentials = getCredential(googleIdToken, null)
+                    if (signUpClicked) {
+                        viewModel.signInWithGoogle(googleCredentials)
+                    }
+                } catch (it: ApiException) {
+                    print(it)
                 }
-            } catch (it: ApiException) {
-                print(it)
             }
         }
-    }
 
     fun launch(signInResult: BeginSignInResult) {
         val intent = IntentSenderRequest.Builder(signInResult.pendingIntent.intentSender).build()
@@ -189,6 +220,19 @@ fun SignUpScreen(
     SignInWithGoogle(
         navigateToHomeScreen = { signedIn ->
             if (signedIn) {
+                navController.navigate(Screens.Main.route) {
+                    popUpTo(navController.graph.id) {
+                        inclusive = true
+                    }
+                }
+            }
+        }
+    )
+
+    // Email sign up
+    EmailSignUp(
+        navigateToHomeScreen = { signedUp ->
+            if (signedUp) {
                 navController.navigate(Screens.Main.route) {
                     popUpTo(navController.graph.id) {
                         inclusive = true

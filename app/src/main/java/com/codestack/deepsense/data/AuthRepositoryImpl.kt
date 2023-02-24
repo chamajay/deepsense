@@ -9,23 +9,25 @@ import com.codestack.deepsense.core.Constants.SIGN_UP_REQUEST
 import com.codestack.deepsense.core.Constants.USERS
 import com.codestack.deepsense.domain.model.Response.Success
 import com.codestack.deepsense.domain.model.Response.Failure
-import com.codestack.deepsense.domain.repository.AuthRepository
-import com.codestack.deepsense.domain.repository.OneTapSignInResponse
-import com.codestack.deepsense.domain.repository.SignInWithGoogleResponse
+import com.codestack.deepsense.domain.repository.*
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FieldValue.serverTimestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import okhttp3.internal.wait
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 
 
-// adapted from - https://github.com/alexmamo/FirebaseSignInWithGoogle
+// adapted from -
+// https://github.com/alexmamo/FirebaseSignInWithGoogle,
+// https://github.com/alexmamo/FirebaseSignInWithEmailAndPassword
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
@@ -85,6 +87,45 @@ class AuthRepositoryImpl @Inject constructor(
         auth.currentUser?.apply {
             val user = toUser()
             db.collection(USERS).document(uid).set(user).await()
+        }
+    }
+
+    private suspend fun addEmailUserToFirestore(name: String) {
+        if (name.isNotEmpty()) {
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .build()
+            auth.currentUser?.updateProfile(profileUpdates)?.await()
+        }
+        auth.currentUser?.apply {
+            val user = toUser()
+            db.collection(USERS).document(uid).set(user).await()
+        }
+    }
+
+    override suspend fun firebaseSignUpWithEmailAndPassword(
+        email: String, password: String, name: String
+    ): SignUpResponse {
+        return try {
+            val authResult = auth.createUserWithEmailAndPassword(email, password).await()
+            val isNewUser = authResult.additionalUserInfo?.isNewUser ?: false
+            if (isNewUser) {
+                addEmailUserToFirestore(name)
+            }
+            Success(true)
+        } catch (e: Exception) {
+            Failure(e)
+        }
+    }
+
+    override suspend fun firebaseSignInWithEmailAndPassword(
+        email: String, password: String
+    ): SignInResponse {
+        return try {
+            auth.signInWithEmailAndPassword(email, password).await()
+            Success(true)
+        } catch (e: Exception) {
+            Failure(e)
         }
     }
 }

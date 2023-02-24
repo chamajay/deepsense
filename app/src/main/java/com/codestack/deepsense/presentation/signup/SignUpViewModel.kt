@@ -10,6 +10,7 @@ import com.codestack.deepsense.domain.model.Response.Success
 import com.codestack.deepsense.domain.repository.AuthRepository
 import com.codestack.deepsense.domain.repository.OneTapSignInResponse
 import com.codestack.deepsense.domain.repository.SignInWithGoogleResponse
+import com.codestack.deepsense.domain.repository.SignUpResponse
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.AuthCredential
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +25,10 @@ class SignUpViewModel @Inject constructor(
 
     var email by mutableStateOf("")
     var password by mutableStateOf("")
+    var name by mutableStateOf("")
+
+    var signUpResponse by mutableStateOf<SignUpResponse>(Success(false))
+        private set
 
     var oneTapSignInResponse by mutableStateOf<OneTapSignInResponse>(Success(null))
         private set
@@ -46,6 +51,15 @@ class SignUpViewModel @Inject constructor(
     fun signInWithGoogle(googleCredential: AuthCredential) = viewModelScope.launch {
         oneTapSignInResponse = Loading
         signInWithGoogleResponse = repo.firebaseSignInWithGoogle(googleCredential)
+    }
+
+    fun signUpWithEmailAndPassword() = viewModelScope.launch {
+        signUpResponse = Loading
+        signUpResponse = repo.firebaseSignUpWithEmailAndPassword(email, password, name)
+    }
+
+    fun onNameChange(newValue: String) {
+        name = newValue
     }
 
     fun onEmailChange(newValue: String) {
