@@ -1,4 +1,4 @@
-package com.codestack.deepsense.screens.signin
+package com.codestack.deepsense.presentation.signin
 
 
 import androidx.compose.foundation.Image

@@ -1,4 +1,4 @@
-package com.codestack.deepsense.screens.signup
+package com.codestack.deepsense.presentation.signup
 
 import android.util.Patterns
 import androidx.compose.foundation.layout.*

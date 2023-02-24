@@ -1,4 +1,4 @@
-package com.codestack.deepsense
+package com.codestack.deepsense.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

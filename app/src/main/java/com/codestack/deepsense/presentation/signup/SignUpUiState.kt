@@ -1,4 +1,4 @@
-package com.codestack.deepsense.screens.signup
+package com.codestack.deepsense.presentation.signup
 
 data class SignUpUiState (
     val email: String = "",

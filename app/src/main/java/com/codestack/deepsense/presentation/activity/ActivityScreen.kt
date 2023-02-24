@@ -1,4 +1,4 @@
-package com.codestack.deepsense.screens.activity
+package com.codestack.deepsense.presentation.activity
 
 
 import android.content.res.Configuration
