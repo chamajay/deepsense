@@ -139,7 +139,7 @@ fun SignUpScreen(
                                 passwordEmpty = true
                             } else {
                                 signUpClicked = !signUpClicked
-//                                viewModel.onSignUpClick(navController)
+                                viewModel.signUpWithEmailAndPassword()
                             }
                         },
                         enabled = !signUpClicked
@@ -189,6 +189,19 @@ fun SignUpScreen(
     SignInWithGoogle(
         navigateToHomeScreen = { signedIn ->
             if (signedIn) {
+                navController.navigate(Screens.Main.route) {
+                    popUpTo(navController.graph.id) {
+                        inclusive = true
+                    }
+                }
+            }
+        }
+    )
+
+    // Email sign up
+    EmailSignUp(
+        navigateToHomeScreen = { signedUp ->
+            if (signedUp) {
                 navController.navigate(Screens.Main.route) {
                     popUpTo(navController.graph.id) {
                         inclusive = true
