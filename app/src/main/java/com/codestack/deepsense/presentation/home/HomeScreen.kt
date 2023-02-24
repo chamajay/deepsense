@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel()
+//    viewModel: HomeViewModel = hiltViewModel()
 ) {
     val pagerState = rememberPagerState()
     val tabs = listOf(TabItem.Today, TabItem.Week, TabItem.Month)

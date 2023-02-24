@@ -52,6 +52,20 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun oneTapSignUpWithGoogle(): OneTapSignInResponse {
+        return try {
+            val signUpResult = oneTapClient.beginSignIn(signUpRequest).await()
+            Success(signUpResult)
+        } catch (e: Exception) {
+            try {
+                val signUpResult = oneTapClient.beginSignIn(signInRequest).await()
+                Success(signUpResult)
+            } catch (e: Exception) {
+                Failure(e)
+            }
+        }
+    }
+
     override suspend fun firebaseSignInWithGoogle(
         googleCredential: AuthCredential
     ): SignInWithGoogleResponse {
