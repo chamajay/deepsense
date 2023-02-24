@@ -7,6 +7,7 @@ typealias RevokeAccessResponse = Response<Boolean>
 
 // adapted from - https://github.com/alexmamo/FirebaseSignInWithGoogle
 interface ProfileRepository {
+    val isUserAuthenticated: Boolean
     val displayName: String
     val photoUrl: String
 

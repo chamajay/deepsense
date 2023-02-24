@@ -19,6 +19,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val repo: ProfileRepository
 ): ViewModel() {
+    val isUserAuthenticated get() = repo.isUserAuthenticated
     val displayName get() = repo.displayName
     val photoUrl get() = repo.photoUrl
 

@@ -24,6 +24,7 @@ class ProfileRepositoryImpl @Inject constructor(
     private val db: FirebaseFirestore
 ) : ProfileRepository {
 //    override val displayName = auth.currentUser?.displayName.toString()
+    override val isUserAuthenticated = auth.currentUser != null
     override val displayName = (auth.currentUser?.displayName ?: "Guest")
     override val photoUrl = auth.currentUser?.photoUrl.toString()
 
