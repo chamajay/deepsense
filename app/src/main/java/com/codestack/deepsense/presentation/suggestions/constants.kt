@@ -48,5 +48,27 @@ val HORIZONTAL_CONTENT_LIST= listOf(
 
 
 
+)
+
+val VERTICAL_CONTENT_LIST= listOf(
+    VerticalContent(
+        "Water Drop Music",
+        "A dialog is a type of modal window that appears in front of ",
+        "3 MIN Listen",
+        "Play now",
+        Green,
+        Black
+
+    ),
+    VerticalContent(
+        "Water Drop Music",
+        "A dialog is a type of modal window that appears in front of ",
+        "3 MIN Listen",
+        "Play now",
+        Green,
+        Black
+
+    ),
+
 
 )
