@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import com.codestack.deepsense.screens.EmptyScreen
 import com.codestack.deepsense.presentation.activity.ActivityScreen
 import com.codestack.deepsense.presentation.home.HomeScreen
+import com.codestack.deepsense.presentation.suggestions.SuggestionScreen
 
 @Composable
 fun BottomNavGraph(
@@ -30,7 +31,7 @@ fun BottomNavGraph(
         composable(
             route = BottomBarScreen.Suggestions.route
         ) {
-            EmptyScreen()
+            SuggestionScreen()
         }
     }
 
