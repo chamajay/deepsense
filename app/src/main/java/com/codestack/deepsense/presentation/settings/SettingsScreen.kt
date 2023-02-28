@@ -13,33 +13,36 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.codestack.deepsense.R
 import com.codestack.deepsense.navigation.Screens
+import com.codestack.deepsense.presentation.shared.ProfileViewModel
 
 
 @Composable
-fun SettingsScreen(navController: NavHostController) {
-    LazyColumn (){
-        // HeaderText()
-        item { ProfileUI() }
-        item { AccountUI() }
-        item { GeneralUI() }
-        item { SupportUI(navController) }
+fun SettingsScreen(
+    navController: NavHostController,
+    viewModel: ProfileViewModel = hiltViewModel()
+) {
+    Surface {
+        LazyColumn {
+            // HeaderText()
+            item { ProfileUI(viewModel.displayName) }
+            item { GeneralUI() }
+            item { AccountUI() }
+            item { SupportUI(navController) }
+        }
     }
 }
 
 
-
-
-
-@Preview(showBackground =true)
+@Preview(showBackground = true)
 @Composable
 fun SettingsScreenPreview() {
     SettingsScreen(navController = rememberNavController())
 }
-
 
 
 @Composable
@@ -53,39 +56,36 @@ fun GeneralUI() {
             text = "General",
             //fontFamily = Poppins,
             //color = Color.Black,
-            fontSize =MaterialTheme.typography.titleLarge.fontSize,
+            fontSize = MaterialTheme.typography.titleLarge.fontSize,
             modifier = Modifier.padding(vertical = 8.dp)
         )
         GeneralItems(
-            icon=R.drawable.settings_account_box_48px,
+            icon = R.drawable.settings_account_box_48px,
             mainText = "Customize ",
             subText = "Customize your app",
             onClick = {},
         )
         GeneralItems(
-            icon=R.drawable.contact_emergency_48px,
+            icon = R.drawable.contact_emergency_48px,
             mainText = "Emergency Contact",
             subText = "******",
             onClick = {}
         )
         GeneralItems(
-            icon=R.drawable.backup_48px,
+            icon = R.drawable.backup_48px,
             mainText = "Backup data",
             subText = "*****",
             onClick = {},
 
             )
         GeneralItems(
-            icon=R.drawable.ios_share_48px,
+            icon = R.drawable.ios_share_48px,
             mainText = "Export mood data",
             subText = "*****",
             onClick = {},
         )
     }
 }
-
-
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -135,20 +135,21 @@ fun GeneralItems(
                         text = mainText,
                         //fontFamily =Poppins,
                         //color = Color.Black,
-                        fontSize =MaterialTheme.typography.titleLarge.fontSize,
+                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = subText,
                         //fontFamily =Poppins,
                         //color = Color.LightGray,
-                        fontSize =MaterialTheme.typography.titleMedium.fontSize,
+                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.offset(y = (-4).dp)
                     )
                 }
             }
-            Row(verticalAlignment = Alignment.CenterVertically,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -158,7 +159,7 @@ fun GeneralItems(
 
             }
             Icon(
-                painter=painterResource(id =R.drawable.arrow_forward_ios_48px),
+                painter = painterResource(id = R.drawable.arrow_forward_ios_48px),
                 contentDescription = "",
                 modifier = Modifier.size(16.dp)
             )
@@ -167,14 +168,10 @@ fun GeneralItems(
 }
 
 
-
-
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountItems(
-    icon:Int,
+    icon: Int,
     mainText: String,
     subText: String,
     onClick: () -> Unit
@@ -207,7 +204,7 @@ fun AccountItems(
                 ) {
                     Icon(
                         painterResource(id = icon),
-                        contentDescription="",
+                        contentDescription = "",
                         tint = Color.Unspecified,
                         modifier = Modifier.padding(8.dp)
 
@@ -232,7 +229,8 @@ fun AccountItems(
                     )
                 }
             }
-            Row(verticalAlignment = Alignment.CenterVertically,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -242,13 +240,12 @@ fun AccountItems(
 
             }
             Icon(
-                painter=painterResource(id =R.drawable.arrow_forward_ios_48px),
+                painter = painterResource(id = R.drawable.arrow_forward_ios_48px),
                 contentDescription = "",
                 modifier = Modifier.size(16.dp)
             )
         }
     }
-
 
 
 }
@@ -268,15 +265,15 @@ fun AccountUI() {
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
             modifier = Modifier.padding(vertical = 8.dp)
         )
+//        AccountItems(
+//            icon=R.drawable.edit_48px,
+//            mainText = "Edit Account",
+//            subText = "*****",
+//            onClick = {}
+//        )
         AccountItems(
-            icon=R.drawable.edit_48px,
-            mainText = "Edit Account",
-            subText = "*****",
-            onClick = {}
-        )
-        AccountItems(
-            icon=R.drawable.delete_48px,
-            mainText = "Delete/Deactivate Account",
+            icon = R.drawable.delete_48px,
+            mainText = "Delete Account",
             subText = "*****",
             onClick = {}
         )
@@ -285,13 +282,9 @@ fun AccountUI() {
 }
 
 
-
-
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileItems() {
+fun ProfileItems(name: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -306,7 +299,7 @@ fun ProfileItems() {
         ) {
             Column {
                 Text(
-                    text = "User Name",
+                    text = name,
                     //fontFamily =Poppins,
                     //color = Color.Black,
                     fontSize = MaterialTheme.typography.titleLarge.fontSize,
@@ -336,7 +329,8 @@ fun ProfileItems() {
 
                 }
             }
-            Row(verticalAlignment = Alignment.CenterVertically,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -347,9 +341,9 @@ fun ProfileItems() {
             }
 
             Image(
-                painter = painterResource( R.drawable.account_circle_48px),
-                contentDescription ="",
-                modifier =Modifier.height(120.dp)
+                painter = painterResource(R.drawable.account_circle_48px),
+                contentDescription = "",
+                modifier = Modifier.height(120.dp)
 
             )
         }
@@ -359,7 +353,7 @@ fun ProfileItems() {
 
 
 @Composable
-fun ProfileUI() {
+fun ProfileUI(name: String) {
     Column(
         modifier = Modifier
             .padding(horizontal = 14.dp)
@@ -373,7 +367,7 @@ fun ProfileUI() {
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
             modifier = Modifier.padding(vertical = 8.dp)
         )
-        ProfileItems()
+        ProfileItems(name)
     }
 
 
@@ -394,13 +388,13 @@ fun SupportUI(navController: NavHostController) {
             modifier = Modifier.padding(vertical = 8.dp)
         )
         SupportItems(
-            icon=R.drawable.rate_review_48px,
-            mainText = "Feedback",
+            icon = R.drawable.rate_review_48px,
+            mainText = "Contact Us",
             subText = "*****",
             onClick = { navController.navigate(Screens.ContactUs.route) }
         )
         SupportItems(
-            icon=R.drawable.group_48px,
+            icon = R.drawable.group_48px,
             mainText = "About Us",
             subText = "*****",
             onClick = { navController.navigate(Screens.AboutUs.route) }
@@ -410,11 +404,11 @@ fun SupportUI(navController: NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SupportItems
-            ( icon:Int,
-              mainText: String,
-              subText: String,
-              onClick: () -> Unit
+fun SupportItems(
+    icon: Int,
+    mainText: String,
+    subText: String,
+    onClick: () -> Unit
 ) {
     Card(
         onClick = onClick,
@@ -464,7 +458,8 @@ fun SupportItems
                     )
                 }
             }
-            Row(verticalAlignment = Alignment.CenterVertically,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -474,7 +469,7 @@ fun SupportItems
 
             }
             Icon(
-                painter=painterResource(id =R.drawable.arrow_forward_ios_48px),
+                painter = painterResource(id = R.drawable.arrow_forward_ios_48px),
                 contentDescription = "",
                 modifier = Modifier.size(16.dp)
 
