@@ -3,7 +3,6 @@ package com.codestack.deepsense.presentation.activity
 
 import android.content.res.Configuration
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -18,10 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -56,33 +51,21 @@ val percentage = arrayOf("56","64","21","89")
 fun ActivityScreen() {
 
 
-    Log.d("Total length : ", valueLength.toString())
+    //Log.d("Total length : ", valueLength.toString())
 
 
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        //modifier = Modifier.scrollable(state =scrollState,orientation = Orientation.Horizontal )
+
         Column(Modifier.fillMaxSize()) {
-//            TopBar(title = "Activity page", imageVector = Icons.Default.AccountCircle)
-           Spacer(modifier = Modifier.padding(15.dp))
-//            MoodScoreSection()
-//            MoodTitle(percentage = "85")
-
-
+           //Spacer(modifier = Modifier.padding(15.dp))
             Text(
                 text = "Your typing activity",
-                modifier = Modifier.padding(start = 25.dp, bottom = 20.dp),
-                fontSize = 20.sp
+                modifier = Modifier.padding(15.dp,15.dp),
+                fontSize = MaterialTheme.typography.headlineSmall.fontSize
             )
-
-//                        Column(modifier = Modifier.verticalScroll(rememberScrollState()).padding(bottom = 20.dp)) {
-//                            ActivityCard("I feel lucky to have a friend like you", "Joy","80")
-//                            ActivityCard("I hate this life, I feel like ending it all","Suicidal","99")
-//                            ActivityCard("My dog passed away today","Sadness","95")
-//                            ActivityCard("Good things are coming my way","Admiration","85")
-//                        }
 
             LazyColumn(
                // contentPadding = PaddingValues(10.dp),
@@ -91,8 +74,7 @@ fun ActivityScreen() {
             {
                 itemsIndexed(items = allValues[0]) { index, item ->
 
-                    Log.d("Current item : ", item.toString())
-                    Log.d("CurrentIndex : ", index.toString())
+
 
                     //Card component
                     ActivityCard(
@@ -143,24 +125,18 @@ fun LinearProgressIndicator(mood: String, percentage: Float) {
 @Composable
 fun CustomPopUpDialog(onDismiss: () -> Unit, title: String, desc: String) {
 
-    // added a column to check whether dialog is centering
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+
+
 
     Dialog(onDismissRequest = onDismiss) {
-        Box(
-            modifier = Modifier
-                .height(520.dp).fillMaxSize(),
 
-
-
-        ) {
-            Column(modifier = Modifier)
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            )
             {
-                Spacer(modifier = Modifier.height(130.dp))
+                //Spacer(modifier = Modifier.height(130.dp))
                 Box(
                     modifier = Modifier
                         .height(390.dp)
@@ -176,7 +152,7 @@ fun CustomPopUpDialog(onDismiss: () -> Unit, title: String, desc: String) {
                             .padding(16.dp)
                             .fillMaxHeight(),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.SpaceEvenly
+                        verticalArrangement = Arrangement.Center
                     )
                     {
                         //Spacer(modifier = Modifier.height(24.dp))
@@ -208,8 +184,8 @@ fun CustomPopUpDialog(onDismiss: () -> Unit, title: String, desc: String) {
                         {
                             itemsIndexed(items = mood) { index, item ->
 
-                                Log.d("Current item : ", item)
-                                Log.d("CurrentIndex : ", index.toString())
+//                                Log.d("Current item : ", item)
+//                                Log.d("CurrentIndex : ", index.toString())
 
                                 LinearProgressIndicator(
                                     mood = mood[index],
@@ -217,20 +193,7 @@ fun CustomPopUpDialog(onDismiss: () -> Unit, title: String, desc: String) {
                                 )
 
                             }
-//                            item{
-//                                Spacer(modifier = Modifier.height(24.dp))
-//                                Button(
-//                                    onClick = onDismiss,
-//                                    modifier = Modifier
-//                                        .fillMaxWidth()
-//                                        .clip(RoundedCornerShape(5.dp))
-//                                ) {
-//                                    Text(
-//                                        text = "Close",
-//                                        color = Color.White
-//                                    )
-//                                }
-//                            }
+
 
                         }
                         //Spacer(modifier = Modifier.height(24.dp))
@@ -251,8 +214,6 @@ fun CustomPopUpDialog(onDismiss: () -> Unit, title: String, desc: String) {
             }
         }
     }
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -273,8 +234,7 @@ fun ActivityCard(moodStatus: String, emotion: String, percentage: String) {
     ) {
         Column(
             modifier = Modifier.padding(10.dp),
-//                verticalArrangement = Arrangement.Center,
-//                horizontalAlignment = Alignment.CenterHorizontally
+
 
         ) {
             Text(
@@ -298,10 +258,8 @@ fun ActivityCard(moodStatus: String, emotion: String, percentage: String) {
                         onClick = { /* Do something! */ },
                         label = { Text(text = emotion, textAlign = TextAlign.Center) },
 
-                       // modifier = Modifier.weight(3f)
-
                     )
-                    //Spacer(modifier = Modifier.padding(10.dp))
+
                     Text(
                         text = "${percentage}%",
                         fontSize = 30.sp,
@@ -320,102 +278,6 @@ fun ActivityCard(moodStatus: String, emotion: String, percentage: String) {
     }
 }
 
-@Composable
-fun TopBar(title: String, imageVector: ImageVector) {
-    val context = LocalContext.current
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp),
-
-        )
-    {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        )
-        {
-            Text(
-                text = title,
-                fontFamily = FontFamily.SansSerif,
-                fontSize = MaterialTheme.typography.headlineLarge.fontSize,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.weight(6f)
-            )
-
-            IconButton(
-                onClick = {
-                    Toast.makeText(context, "Account Circle", Toast.LENGTH_SHORT).show()
-                },
-                modifier = Modifier.weight(1f),
-            ) {
-                Icon(
-                    imageVector = imageVector,
-                    contentDescription = null,
-                    modifier = Modifier.size(35.dp)
-                )
-            }
-
-        }
-    }
-}
-
-@Composable
-fun MoodScoreSection() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp, bottom = 0.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    )
-    {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        )
-        {
-            Text(
-                text = "78%",
-                fontSize = 50.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.primary,
-
-                )
-            Text(
-                text = "Your mood score",
-                fontSize = 25.sp,
-                modifier = Modifier.padding(top = 10.dp, start = 8.dp)
-
-            )
-        }
-    }
-}
-
-
-@Composable
-fun MoodTitle(percentage: String) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(30.dp, bottom = 5.dp, top = 5.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    )
-    {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = "Keep your score above ${percentage}% to reach your daily goal.",
-                fontSize = 20.sp,
-                lineHeight = 26.sp,
-                color = androidx.compose.ui.graphics.Color.Gray,
-                //modifier = Modifier.padding(30.dp, top = 1.dp)
-            )
-        }
-    }
-
-}
-
 
 @Preview(name = "Light Mode")
 @Preview(
@@ -428,27 +290,7 @@ fun MoodTitle(percentage: String) {
 
 fun DefaultView() {
     DeepSenseTheme {
-//        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background){
-//
-//            Column {
-//                TopBar(title = "Activity page", imageVector = Icons.Default.AccountCircle)
-//                Spacer(modifier = Modifier.padding(15.dp))
-//                MoodScoreSection()
-//                MoodTitle(percentage= "85")
-//
-//            }
-//
-//        }
 
-//        Column()
-//        {
-//            TopBar(title = "Activity page", imageVector = Icons.Default.AccountCircle)
-//            Spacer(modifier = Modifier.padding(15.dp))
-//            MoodScoreSection()
-//            MoodTitle(percentage= "85")
-//        }
-
-        //ActivityCard(moodStatus = "I feel lucky to have a friend like you", "Joy","76")
         LinearProgressIndicator("Neutral",0.4f)
 
 //        CustomPopUpDialog(
