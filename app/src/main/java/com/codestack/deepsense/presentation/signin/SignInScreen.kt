@@ -1,6 +1,11 @@
 package com.codestack.deepsense.presentation.signin
 
 
+import android.app.Activity
+import android.util.Patterns
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 
@@ -18,8 +23,10 @@ import androidx.navigation.NavHostController
 import com.codestack.deepsense.R
 import com.codestack.deepsense.components.*
 import com.codestack.deepsense.navigation.Screens
-import com.codestack.deepsense.presentation.signup.SignUpViewModel
-import com.codestack.deepsense.presentation.signup.isEmailValid
+import com.codestack.deepsense.presentation.signup.*
+import com.google.android.gms.auth.api.identity.BeginSignInResult
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.GoogleAuthProvider
 
 @Composable
 
@@ -31,7 +38,7 @@ fun SignInScreen(
 //    var password by remember { mutableStateOf("") }
 
     var signInClicked by rememberSaveable { mutableStateOf(false) }
-    var facebookSignUpClicked by rememberSaveable { mutableStateOf(false) }
+    var facebookSignInClicked by rememberSaveable { mutableStateOf(false) }
     var emailInvalid by rememberSaveable { mutableStateOf(false) }
     var passwordEmpty by rememberSaveable { mutableStateOf(false) }
 
@@ -87,8 +94,8 @@ fun SignInScreen(
                             text = "Sign in with Facebook",
                             textClicked = "Signing in with Facebook",
                             icon = R.drawable.ic_facebook_logo_circle,
-                            isSigningUp = facebookSignUpClicked,
-                            onClick = { facebookSignUpClicked = !facebookSignUpClicked }
+                            isSigningUp = facebookSignInClicked,
+                            onClick = { facebookSignInClicked = !facebookSignInClicked }
                         )
                     }
 
@@ -188,6 +195,69 @@ fun SignInScreen(
             }
         }
     }
+
+
+    if (facebookSignInClicked) {
+        FeatureIncomingDialog { facebookSignInClicked = false }
+    }
+
+    // Google one tap sign in
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                try {
+                    val credentials =
+                        viewModel.oneTapClient.getSignInCredentialFromIntent(result.data)
+                    val googleIdToken = credentials.googleIdToken
+                    val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken, null)
+                    if (signInClicked) {
+                        viewModel.signInWithGoogle(googleCredentials)
+                    }
+                } catch (it: ApiException) {
+                    print(it)
+                }
+            }
+        }
+
+    fun launch(signInResult: BeginSignInResult) {
+        val intent = IntentSenderRequest.Builder(signInResult.pendingIntent.intentSender).build()
+        launcher.launch(intent)
+    }
+
+    OneTapSignIn(
+        launch = {
+            launch(it)
+        }
+    )
+
+    SignInWithGoogle(
+        navigateToHomeScreen = { signedIn ->
+            if (signedIn) {
+                navController.navigate(Screens.Main.route) {
+                    popUpTo(navController.graph.id) {
+                        inclusive = true
+                    }
+                }
+            }
+        }
+    )
+
+    // Email sign in
+    EmailSignIn(
+        navigateToHomeScreen = { signedUp ->
+            if (signedUp) {
+                navController.navigate(Screens.Main.route) {
+                    popUpTo(navController.graph.id) {
+                        inclusive = true
+                    }
+                }
+            }
+        }
+    )
+}
+
+fun isEmailValid(email: String): Boolean {
+    return Patterns.EMAIL_ADDRESS.matcher(email).matches()
 }
 
 
