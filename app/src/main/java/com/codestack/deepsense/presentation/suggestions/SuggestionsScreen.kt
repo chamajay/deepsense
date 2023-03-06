@@ -3,6 +3,7 @@ package com.codestack.deepsense.presentation.suggestions
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -23,11 +24,13 @@ fun SuggestionScreen() {
                 .fillMaxSize()
         ) {
 
+
             FilterBoxes()
             HorizontalBoxes()
             VerticalBoxes(verticalContent = VerticalContent("Mood video","heythere","3 mins","Play now",
                 Color.Green, Color.Black)
             )
+
 
 
         }
@@ -98,7 +101,9 @@ fun HorizontalChipComponent(horizontalContent: HorizontalContent) {
         modifier = Modifier
             .height(200.dp)
             .width(200.dp),
-        colors = CardDefaults.cardColors()
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colors.primary
+        )
 
 
     ) {
@@ -113,14 +118,18 @@ fun HorizontalChipComponent(horizontalContent: HorizontalContent) {
             Text(
                 text = horizontalContent.title,
                 style = MaterialTheme.typography.h6,
+                color = Color.White,
+
 
                 )
 
             Text(
                 text = horizontalContent.description,
                 style = MaterialTheme.typography.subtitle1,
+                color = Color.White,
                 modifier = Modifier
                     .padding(top = 8.dp)
+
             )
 
         }
@@ -134,21 +143,24 @@ fun VerticalBoxes(verticalContent: VerticalContent) {
     val verticalOptions = VERTICAL_CONTENT_LIST
     
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+
+        modifier = Modifier.padding( start = 32.dp, end = 32.dp)
     ) {
 
         Row(
             horizontalArrangement = Arrangement.Center,
-//        modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier
+    //            .padding( bottom = 8.dp)
+                .height(150.dp),
+//            verticalAlignment = Alignment.Center
         ) {
             verticalOptions.forEach { item ->
                 Card(
                     shape = RoundedCornerShape(14.dp),
                     modifier = Modifier
-                        .height(150.dp)
-                        .width(170.dp)
-                        .padding(16.dp)
+
+                        .width(160.dp)
+                        .padding(end=16.dp,)
                 ) {
                     Column(
                         verticalArrangement = Arrangement.SpaceEvenly,
@@ -173,15 +185,16 @@ fun VerticalBoxes(verticalContent: VerticalContent) {
 
         Row(
             horizontalArrangement = Arrangement.Center,
-//        modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier
+//                .padding( top = 8.dp)
+                .height(150.dp)
         ) {
             verticalOptions.forEach { item ->
                 Card(
                     shape = RoundedCornerShape(14.dp),
                     modifier = Modifier
-                        .height(150.dp)
-                        .width(170.dp)
-                        .padding(16.dp)
+                        .width(160.dp)
+                        .padding(end=16.dp, top = 8.dp)
                 ) {
                     Column(
                         verticalArrangement = Arrangement.SpaceEvenly,
