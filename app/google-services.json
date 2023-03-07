@@ -1,33 +1,49 @@
 {
   "project_info": {
-    "project_number": "378896477118",
-    "project_id": "testproject-7ebbe",
-    "storage_bucket": "testproject-7ebbe.appspot.com"
+    "project_number": "66640076100",
+    "project_id": "deepsense-4f35e",
+    "storage_bucket": "deepsense-4f35e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:378896477118:android:f94527df0203ad1f6ea7ef",
+        "mobilesdk_app_id": "1:66640076100:android:bcbe69a5807ebbaafc0b11",
         "android_client_info": {
           "package_name": "com.codestack.deepsense"
         }
       },
       "oauth_client": [
         {
-          "client_id": "378896477118-nkg78bmv5df341ncb8l8kgqe2cl232np.apps.googleusercontent.com",
+          "client_id": "66640076100-l93hacnp357eldd4s8n8q6jmi62rbvfr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.codestack.deepsense",
+            "certificate_hash": "b4716b8174b7c7a1409467794525ece91aecd6ab"
+          }
+        },
+        {
+          "client_id": "66640076100-og34ri582i834517k6rh5tpsmpgmiplf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.codestack.deepsense",
+            "certificate_hash": "08d5208eec76183105cac7c1228a9bcea5c64f6c"
+          }
+        },
+        {
+          "client_id": "66640076100-fuv5igqrucbm0qmv7cadh3q6jsc2m9s6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCPdUC7kSXuD3dETcs74y0gQmIewYNnF28"
+          "current_key": "AIzaSyCmWvVhCAv5E_ki2n8q7hN5QXtb5W51B9o"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "378896477118-nkg78bmv5df341ncb8l8kgqe2cl232np.apps.googleusercontent.com",
+              "client_id": "66640076100-7tiqide0o1e9fg85rgk5fjkbd87ncp5s.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
