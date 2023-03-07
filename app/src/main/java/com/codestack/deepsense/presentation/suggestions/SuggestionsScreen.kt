@@ -81,7 +81,7 @@ fun ChipComponent(filter: FilterContent) {
 fun HorizontalBoxes() {
     val horizontalOptions = HORIZONTAL_CONTENT_LIST
     LazyRow(
-        Modifier.padding(16.dp),
+        Modifier.padding(0.dp,16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(horizontalOptions.size) {
