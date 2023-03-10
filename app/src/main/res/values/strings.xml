@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">DeepSense</string>
+    <string name="accessibility_service_description">This accessibility service captures user-typed text from popular chat apps and web browsers in order to detect user\'s emotion and suicidal text patterns. The captured text remains private and is not shared with any third-party services.</string>
     //IDs
     <string name="web_client_id">66640076100-fuv5igqrucbm0qmv7cadh3q6jsc2m9s6.apps.googleusercontent.com</string>
 </resources>
