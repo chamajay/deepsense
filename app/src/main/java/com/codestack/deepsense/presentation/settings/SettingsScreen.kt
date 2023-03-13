@@ -27,21 +27,104 @@ fun SettingsScreen(
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     Surface {
-        LazyColumn {
-            // HeaderText()
-            item { ProfileUI(viewModel.displayName) }
-            item { GeneralUI() }
-            item { AccountUI() }
-            item { SupportUI(navController) }
+        Column {
+
+            LazyColumn {
+                item { ProfileUI(viewModel.displayName,viewModel.photoUrl) }
+                item { GeneralUI() }
+                item { AccountUI() }
+                item { SupportUI(navController) }
+            }
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
 fun SettingsScreenPreview() {
     SettingsScreen(navController = rememberNavController())
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ProfileUI(name: String, imageUrl:String?) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 14.dp)
+            .padding(vertical = 8.dp)
+    ) {
+        Text(
+            text = "Settings",
+            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(150.dp)
+                .padding(2.dp),
+            //shape= Shapes.medium
+        ) {
+            Row(
+                modifier = Modifier.padding(vertical = 10.dp, horizontal = 14.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column {
+                    Text(
+                        text = name,
+                        //fontFamily =Poppins,
+                        //color = Color.Black,
+                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                        fontWeight = FontWeight.Bold
+
+                    )
+                    Text(
+                        text = "gmail/contact",
+                        //fontFamily =Poppins,
+                        //color = Color.Black,
+                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    )
+                    Button(
+                        onClick = {},
+                        modifier = Modifier.padding(top =2.dp),
+                        //shape = Shapes.medium
+                    )
+                    {
+                        Text(
+                            text = "Sign Out",
+                            //fontFamily =Poppins,
+                            //color = Color.Black,
+                            fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                            fontWeight = FontWeight.Bold
+
+                        )
+
+                    }
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+
+                ) {
+
+
+                }
+
+                Image(
+                    painter = painterResource(R.drawable.account_circle_48px),
+                    contentDescription = "",
+                    modifier = Modifier.height(150.dp)
+
+                )
+            }
+
+        }
+    }
 }
 
 
@@ -61,27 +144,27 @@ fun GeneralUI() {
         )
         GeneralItems(
             icon = R.drawable.settings_account_box_48px,
-            mainText = "Customize ",
-            subText = "Customize your app",
+            mainText = "Customize your app ",
+            //subText = "Customize your app",
             onClick = {},
         )
         GeneralItems(
             icon = R.drawable.contact_emergency_48px,
-            mainText = "Emergency Contact",
-            subText = "******",
+            mainText = "Emergency contact",
+            //subText = "Contact details of ",
             onClick = {}
         )
         GeneralItems(
             icon = R.drawable.backup_48px,
             mainText = "Backup data",
-            subText = "*****",
+            //subText = "*****",
             onClick = {},
 
             )
         GeneralItems(
             icon = R.drawable.ios_share_48px,
             mainText = "Export mood data",
-            subText = "*****",
+            //subText = "*****",
             onClick = {},
         )
     }
@@ -93,7 +176,7 @@ fun GeneralUI() {
 fun GeneralItems(
     icon: Int,
     mainText: String,
-    subText: String,
+    //subText: String,
     onClick: () -> Unit
 ) {
     Card(
@@ -136,16 +219,16 @@ fun GeneralItems(
                         //fontFamily =Poppins,
                         //color = Color.Black,
                         fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = subText,
-                        //fontFamily =Poppins,
-                        //color = Color.LightGray,
-                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.offset(y = (-4).dp)
-                    )
+
+                        )
+//                    Text(
+//                        text = subText,
+//                        //fontFamily =Poppins,
+//                        //color = Color.LightGray,
+//                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
+//                        fontWeight = FontWeight.SemiBold,
+//                        modifier = Modifier.offset(y = (-4).dp)
+//                    )
                 }
             }
             Row(
@@ -169,88 +252,6 @@ fun GeneralItems(
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AccountItems(
-    icon: Int,
-    mainText: String,
-    subText: String,
-    onClick: () -> Unit
-) {
-
-
-    Card(
-        onClick = {
-            onClick()
-        },
-
-
-        modifier = Modifier
-            .padding(bottom = 8.dp)
-            .fillMaxWidth(),
-
-        ) {
-        Row(
-            modifier = Modifier.padding(vertical = 10.dp, horizontal = 14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-
-                Box(
-                    modifier = Modifier
-                        .size(34.dp)
-                    //.clip(shape = Shapes.medium)
-                    //.background(Color.White)
-                ) {
-                    Icon(
-                        painterResource(id = icon),
-                        contentDescription = "",
-                        tint = Color.Unspecified,
-                        modifier = Modifier.padding(8.dp)
-
-                    )
-                }
-                Spacer(modifier = Modifier.width(14.dp))
-                Column {
-                    Text(
-                        text = mainText,
-                        //fontFamily =Poppins,
-                        //color = Color.Black,
-                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = subText,
-                        //fontFamily =Poppins,
-                        //color = Color.LightGray,
-                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.offset(y = (-4).dp)
-                    )
-                }
-            }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-
-            ) {
-
-            }
-            Icon(
-                painter = painterResource(id = R.drawable.arrow_forward_ios_48px),
-                contentDescription = "",
-                modifier = Modifier.size(16.dp)
-            )
-        }
-    }
-
-
-}
-
-
 @Composable
 fun AccountUI() {
     Column(
@@ -260,118 +261,66 @@ fun AccountUI() {
     ) {
         Text(
             text = "Account",
-            //fontFamily = Poppins,
-            //color = Color.Black,
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
             modifier = Modifier.padding(vertical = 8.dp)
         )
-//        AccountItems(
-//            icon=R.drawable.edit_48px,
-//            mainText = "Edit Account",
-//            subText = "*****",
-//            onClick = {}
-//        )
-        AccountItems(
-            icon = R.drawable.delete_48px,
-            mainText = "Delete Account",
-            subText = "*****",
-            onClick = {}
-        )
-    }
 
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ProfileItems(name: String) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(150.dp)
-            .padding(10.dp),
-        //shape= Shapes.medium
-    ) {
-        Row(
-            modifier = Modifier.padding(vertical = 10.dp, horizontal = 14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                Text(
-                    text = name,
-                    //fontFamily =Poppins,
-                    //color = Color.Black,
-                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                    fontWeight = FontWeight.Bold
-
-                )
-                Text(
-                    text = "gmail/contact",
-                    //fontFamily =Poppins,
-                    //color = Color.Black,
-                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                )
-                Button(
-                    onClick = {},
-                    modifier = Modifier.padding(top = 10.dp),
-                    //shape = Shapes.medium
-                )
-                {
-                    Text(
-                        text = "Sign Out",
-                        //fontFamily =Poppins,
-                        //color = Color.Black,
-                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                        fontWeight = FontWeight.Bold
-
-                    )
-
-                }
-            }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
+        Card(
+            onClick = {},
+            modifier = Modifier
+                .padding(bottom = 8.dp)
+                .fillMaxWidth(),
 
             ) {
+            Row(
+                modifier = Modifier.padding(vertical = 10.dp, horizontal = 14.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
 
+                    Box(
+                        modifier = Modifier
+                            .size(34.dp)
+                    ) {
+                        Icon(
+                            painterResource(id = R.drawable.delete_48px),
+                            contentDescription = "",
+                            tint = Color.Unspecified,
+                            modifier = Modifier.padding(8.dp)
+
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(14.dp))
+                    Column {
+                        Text(
+                            text = "Delete Account",
+                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                        )
+                    }
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+
+                ) {
+
+                }
+                Icon(
+                    painter = painterResource(id = R.drawable.arrow_forward_ios_48px),
+                    contentDescription = "",
+                    modifier = Modifier.size(16.dp)
+                )
             }
-
-            Image(
-                painter = painterResource(R.drawable.account_circle_48px),
-                contentDescription = "",
-                modifier = Modifier.height(120.dp)
-
-            )
         }
-
     }
 }
 
 
-@Composable
-fun ProfileUI(name: String) {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 14.dp)
-            .padding(top = 10.dp)
-    ) {
 
-        Text(
-            text = "Settings",
-            //fontFamily = Poppins,
-            //color = Color.Black,
-            fontSize = MaterialTheme.typography.titleLarge.fontSize,
-            modifier = Modifier.padding(vertical = 8.dp)
-        )
-        ProfileItems(name)
-    }
-
-
-}
 
 @Composable
 fun SupportUI(navController: NavHostController) {
@@ -390,13 +339,13 @@ fun SupportUI(navController: NavHostController) {
         SupportItems(
             icon = R.drawable.rate_review_48px,
             mainText = "Contact Us",
-            subText = "*****",
+            //subText = "*****",
             onClick = { navController.navigate(Screens.ContactUs.route) }
         )
         SupportItems(
             icon = R.drawable.group_48px,
             mainText = "About Us",
-            subText = "*****",
+            //subText = "*****",
             onClick = { navController.navigate(Screens.AboutUs.route) }
         )
     }
@@ -407,7 +356,7 @@ fun SupportUI(navController: NavHostController) {
 fun SupportItems(
     icon: Int,
     mainText: String,
-    subText: String,
+    //subText: String,
     onClick: () -> Unit
 ) {
     Card(
@@ -446,15 +395,7 @@ fun SupportItems(
                         //fontFamily =Poppins,
                         //color = Color.Black,
                         fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = subText,
-                        //fontFamily =Poppins,
-                        //color = Color.LightGray,
-                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.offset(y = (-4).dp)
+                        //fontWeight = FontWeight.Bold
                     )
                 }
             }
