@@ -1,7 +1,6 @@
 package com.codestack.deepsense.presentation.settings
 
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
@@ -17,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.codestack.deepsense.R
+import com.codestack.deepsense.components.MainTopAppBarPreview
 import com.codestack.deepsense.navigation.Screens
 import com.codestack.deepsense.presentation.shared.ProfileViewModel
 
@@ -30,7 +30,9 @@ fun SettingsScreen(
         Column {
 
             LazyColumn {
-                item { ProfileUI(viewModel.displayName,viewModel.photoUrl) }
+                item { MainTopAppBarPreview()}
+                item { ProfileUI(viewModel.displayName,viewModel.isUserAuthenticated,
+                    navController) }
                 item { GeneralUI() }
                 item { AccountUI() }
                 item { SupportUI(navController) }
@@ -45,12 +47,13 @@ fun SettingsScreenPreview() {
     SettingsScreen(navController = rememberNavController())
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileUI(name: String, imageUrl:String?) {
+fun ProfileUI(name: String, isUserAuthenticated: Boolean,navController: NavHostController) {
     Column(
         modifier = Modifier
-            .padding(horizontal = 14.dp)
+            .padding(horizontal =14.dp)
             .padding(vertical = 8.dp)
     ) {
         Text(
@@ -59,73 +62,63 @@ fun ProfileUI(name: String, imageUrl:String?) {
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 8.dp)
         )
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .padding(2.dp),
-            //shape= Shapes.medium
-        ) {
-            Row(
-                modifier = Modifier.padding(vertical = 10.dp, horizontal = 14.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+        if (isUserAuthenticated) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(70.dp)
+                    .padding(2.dp),
+                //shape= Shapes.medium
             ) {
-                Column {
-                    Text(
-                        text = name,
-                        //fontFamily =Poppins,
-                        //color = Color.Black,
-                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                        fontWeight = FontWeight.Bold
-
-                    )
-                    Text(
-                        text = "gmail/contact",
-                        //fontFamily =Poppins,
-                        //color = Color.Black,
-                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                    )
+                Row(
+                    modifier = Modifier.padding(vertical = 10.dp, horizontal = 14.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column {
+                        Text(
+                            text = name,
+                            //fontFamily =Poppins,
+                            //color = Color.Black,
+                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(90.dp))
                     Button(
-                        onClick = {},
-                        modifier = Modifier.padding(top =2.dp),
+                        onClick = {navController.navigate(Screens.Welcome.route)},
+                        modifier = Modifier.padding(top = 2.dp),
                         //shape = Shapes.medium
-                    )
-                    {
+                    ) {
                         Text(
                             text = "Sign Out",
                             //fontFamily =Poppins,
                             //color = Color.Black,
                             fontSize = MaterialTheme.typography.titleMedium.fontSize,
                             fontWeight = FontWeight.Bold
-
                         )
-
                     }
                 }
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-
-                ) {
-
-
-                }
-
-                Image(
-                    painter = painterResource(R.drawable.account_circle_48px),
-                    contentDescription = "",
-                    modifier = Modifier.height(150.dp)
-
+            }
+        } else {
+            Button(
+                onClick = {navController.navigate(Screens.SignUp.route)},
+                modifier = Modifier.padding(top = 2.dp),
+                //shape = Shapes.medium
+            ) {
+                Text(
+                    text = "Sign In",
+                    //fontFamily =Poppins,
+                    //color = Color.Black,
+                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    fontWeight = FontWeight.Bold
                 )
             }
-
         }
     }
 }
+
+
 
 
 @Composable
@@ -420,3 +413,4 @@ fun SupportItems(
 
 
 }
+
