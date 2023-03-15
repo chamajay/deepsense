@@ -25,7 +25,7 @@ fun ContactUsScreen()
 {
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
+            MediumTopAppBar(
                 title = {
                     Text(
                         text = "Contact Us",
@@ -35,7 +35,7 @@ fun ContactUsScreen()
 
                 },
                 navigationIcon = { Icon(Icons.Filled.ArrowBack, contentDescription = "Go Back") },
-                //actions = { /* create your action items here */ }
+
                 )
         },
         content = {
@@ -56,7 +56,7 @@ fun Content() {
                 .fillMaxHeight()
         )
         {
-            Spacer(modifier = Modifier.height(80.dp))
+            Spacer(modifier = Modifier.height(100.dp))
             LazyColumn() {
 
                 item {
