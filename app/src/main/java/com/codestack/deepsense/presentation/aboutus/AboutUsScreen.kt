@@ -25,7 +25,7 @@ import com.codestack.deepsense.R
 fun AboutUsScreen()
 { Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
+            MediumTopAppBar(
                 title = {
 
                     Text(
@@ -36,7 +36,7 @@ fun AboutUsScreen()
 
                 },
                 navigationIcon = { Icon(Icons.Filled.ArrowBack, contentDescription = "Go Back") },
-                actions = { /* create your action items here */ },
+
 
             )
         },
@@ -84,7 +84,7 @@ fun Content() {
         //Spacer(modifier = Modifier.height(110.dp))
         Column(modifier = Modifier.fillMaxHeight())
         {
-            Spacer(modifier = Modifier.height(80.dp))
+            Spacer(modifier = Modifier.height(120.dp))
             LazyColumn() {
                 item {
                     Row(
