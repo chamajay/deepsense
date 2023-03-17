@@ -1,16 +1,20 @@
 package com.codestack.deepsense.presentation.contactus
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,6 +50,12 @@ fun ContactUsScreen()
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Content() {
+    val mail = "codestack@gmail.com"
+    val context = LocalContext.current
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var message by remember { mutableStateOf("") }
+
     Surface {
         Column(
             modifier = Modifier
@@ -64,13 +74,13 @@ fun Content() {
                     ) {
 
                         Card(Modifier.size(width = 350.dp, height = 100.dp)) {
-                            Spacer(modifier = Modifier.height(20.dp))
+                            Spacer(modifier = Modifier.height(30.dp))
 
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Spacer(modifier = Modifier.width(30.dp))
+                                Spacer(modifier = Modifier.width(40.dp))
                                 Icon(
                                     painter = painterResource(R.drawable.mail_48px),
                                     "mail",
@@ -81,28 +91,18 @@ fun Content() {
                                         )
 
                                 )
-                                Text(text = "  XXXXX.XXXXXXXX@iit.ac.lk")
+                                Spacer(modifier = Modifier.width(20.dp))
+                                Text(text = "  $mail",
+                                    modifier = Modifier.clickable(onClick = {
+                                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                                            data = Uri.parse("mailto:$mail")
+                                        }
+                                        context.startActivity(intent)
+                                    })
+                                )
 
                             }
-                            //Spacer(modifier = Modifier.height(20.dp))
-/*
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Spacer(modifier = Modifier.width(30.dp))
-                                Icon(
-                                    painter = painterResource(R.drawable.call_48px),
-                                    "call",
-                                    modifier = Modifier
-                                        .size(40.dp)
-                                        .clip(
-                                            RoundedCornerShape(50.dp)
-                                        )
-
-                                )
-                                Text(text = "  0XX-XXXXXXX")
-
-                            }*/
                         }
-
                     }
                 }
                 item {
@@ -113,7 +113,7 @@ fun Content() {
                     ) {
                         Card(Modifier.size(width = 350.dp, height = 410.dp)) {
                             Spacer(modifier = Modifier.height(20.dp))
-
+                            Spacer(modifier = Modifier.width(10.dp))
                             Text(
                                 text = "   Please fill out the form below to contact us.",
                             )
@@ -123,11 +123,10 @@ fun Content() {
                                 horizontalArrangement = Arrangement.Center
                             )
                             {
-
                                 OutlinedTextField(
-                                    value = "Name",
-                                    onValueChange = {},
-                                    label = { Text(text = "Name") }
+                                    value = name,
+                                    onValueChange = { name = it },
+                                    label = { Text("Name") }
                                 )
                             }
                             Spacer(modifier = Modifier.height(25.dp))
@@ -137,9 +136,9 @@ fun Content() {
                             ) {
 
                                 OutlinedTextField(
-                                    value = "Email",
-                                    onValueChange = {},
-                                    label = { Text(text = "Email") }
+                                    value = email,
+                                    onValueChange = { email = it },
+                                    label = { Text("Email") }
                                 )
                             }
                             Spacer(modifier = Modifier.height(25.dp))
@@ -149,9 +148,9 @@ fun Content() {
                             ) {
 
                                 OutlinedTextField(
-                                    value = "message",
-                                    onValueChange = {},
-                                    label = { Text(text = "Message") },
+                                    value = message,
+                                    onValueChange = { message = it },
+                                    label = { Text("Message") },
                                     maxLines = 10
                                 )
                             }
