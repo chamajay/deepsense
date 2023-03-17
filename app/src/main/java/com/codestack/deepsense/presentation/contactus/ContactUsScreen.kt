@@ -32,10 +32,8 @@ fun ContactUsScreen()
                         fontWeight = FontWeight.Bold,
                         fontSize = 27.sp
                     )
-
                 },
-                navigationIcon = { Icon(Icons.Filled.ArrowBack, contentDescription = "Go Back") },
-
+                navigationIcon = { Icon(Icons.Filled.ArrowBack, contentDescription = "Go Back") }
                 )
         },
         content = {
@@ -65,7 +63,7 @@ fun Content() {
                         horizontalArrangement = Arrangement.Center
                     ) {
 
-                        Card(Modifier.size(width = 350.dp, height = 140.dp)) {
+                        Card(Modifier.size(width = 350.dp, height = 100.dp)) {
                             Spacer(modifier = Modifier.height(20.dp))
 
                             Row(
@@ -86,8 +84,8 @@ fun Content() {
                                 Text(text = "  XXXXX.XXXXXXXX@iit.ac.lk")
 
                             }
-                            Spacer(modifier = Modifier.height(20.dp))
-
+                            //Spacer(modifier = Modifier.height(20.dp))
+/*
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Spacer(modifier = Modifier.width(30.dp))
                                 Icon(
@@ -102,7 +100,7 @@ fun Content() {
                                 )
                                 Text(text = "  0XX-XXXXXXX")
 
-                            }
+                            }*/
                         }
 
                     }
