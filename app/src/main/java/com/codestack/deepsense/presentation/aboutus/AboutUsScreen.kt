@@ -19,32 +19,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.codestack.deepsense.R
 
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutUsScreen()
-{ Scaffold(
+{
+    Scaffold(
         topBar = {
             MediumTopAppBar(
                 title = {
-
                     Text(
                         text = "About Us",
                         fontWeight = FontWeight.Bold,
                         fontSize = 27.sp
                     )
-
                 },
                 navigationIcon = { Icon(Icons.Filled.ArrowBack, contentDescription = "Go Back") },
-
-
             )
         },
         content = {
             Content()
         }
     )
-
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,7 +82,7 @@ fun Content() {
         Column(modifier = Modifier.fillMaxHeight())
         {
             Spacer(modifier = Modifier.height(120.dp))
-            LazyColumn() {
+            LazyColumn {
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -97,7 +94,6 @@ fun Content() {
                             maxLines = 6,
                             overflow = TextOverflow.Ellipsis
                         )
-
                     }
                 }
                 item {
@@ -119,23 +115,23 @@ fun Content() {
                     MemberInfo(
                         "member2",
                         memImage = R.drawable.account_circle_48px,
-                        name = " Kumudu Wijewardhana "
+                        name = "   Kumudu Wijewardhana "
                     )
 
                     MemberInfo(
                         "member3",
                         memImage = R.drawable.account_circle_48px,
-                        name = " Thimasha Thakshali  "
+                        name = "   Thimasha Thakshali  "
                     )
                     MemberInfo(
                         "member4",
                         memImage = R.drawable.account_circle_48px,
-                        name = " Ruwindi Perera "
+                        name = "   Ruwindi Perera "
                     )
                     MemberInfo(
                         "member5",
                         memImage = R.drawable.account_circle_48px,
-                        name = " Sahan Dissanayake "
+                        name = "   Sahan Dissanayake "
                     )
                 }
 
@@ -144,8 +140,6 @@ fun Content() {
 
     }
 }
-
-
 
 
 @Preview
