@@ -1,486 +1,449 @@
 package com.codestack.deepsense.presentation.settings
 
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.codestack.deepsense.R
 import com.codestack.deepsense.navigation.Screens
+import com.codestack.deepsense.presentation.shared.ProfileViewModel
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(navController: NavHostController) {
-    LazyColumn (){
-        // HeaderText()
-        item { ProfileUI() }
-        item { AccountUI() }
-        item { GeneralUI() }
-        item { SupportUI(navController) }
+fun SettingsScreen(
+    navController: NavHostController,
+    viewModel: ProfileViewModel = hiltViewModel()
+) {
+    Scaffold(
+        topBar = {
+            MediumTopAppBar(
+                title = {
+                    Text(text = "Settings")
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Go back"
+                        )
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
+        Surface(Modifier.padding(innerPadding)) {
+            Column {
+                LazyColumn {
+                    item {
+                        ProfileUI(
+                            viewModel.displayName,
+                            viewModel.isUserAuthenticated,
+                            navController,
+                            viewModel
+                        )
+                    }
+                    item { GeneralUI() }
+                    item { AccountUI() }
+                    item { SupportUI(navController) }
+                }
+            }
+        }
     }
 }
 
 
 
-
-
-@Preview(showBackground =true)
+@Preview(showBackground = true)
 @Composable
 fun SettingsScreenPreview() {
     SettingsScreen(navController = rememberNavController())
 }
 
 
-
-@Composable
-fun GeneralUI() {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 14.dp)
-            .padding(top = 10.dp)
-    ) {
-        Text(
-            text = "General",
-            //fontFamily = Poppins,
-            //color = Color.Black,
-            fontSize =MaterialTheme.typography.titleLarge.fontSize,
-            modifier = Modifier.padding(vertical = 8.dp)
-        )
-        GeneralItems(
-            icon=R.drawable.settings_account_box_48px,
-            mainText = "Customize ",
-            subText = "Customize your app",
-            onClick = {},
-        )
-        GeneralItems(
-            icon=R.drawable.contact_emergency_48px,
-            mainText = "Emergency Contact",
-            subText = "******",
-            onClick = {}
-        )
-        GeneralItems(
-            icon=R.drawable.backup_48px,
-            mainText = "Backup data",
-            subText = "*****",
-            onClick = {},
-
-            )
-        GeneralItems(
-            icon=R.drawable.ios_share_48px,
-            mainText = "Export mood data",
-            subText = "*****",
-            onClick = {},
-        )
-    }
-}
-
-
-
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GeneralItems(
-    icon: Int,
-    mainText: String,
-    subText: String,
-    onClick: () -> Unit
-) {
-    Card(
-        onClick = {
-            onClick()
-        },
-
-        modifier = Modifier
-            .padding(bottom = 8.dp)
-            .fillMaxWidth(),
-
-
-        ) {
-        Row(
-            modifier = Modifier.padding(vertical = 10.dp, horizontal = 14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-
-                Box(
-                    modifier = Modifier
-                        .size(34.dp)
-                    //.clip(shape = Shapes.medium)
-                    //.background(Color.White)
-                ) {
-                    Icon(
-                        painterResource(id = icon),
-                        contentDescription = "",
-                        tint = Color.Unspecified,
-                        modifier = Modifier.padding(8.dp)
-
-
-                    )
-                }
-                Spacer(modifier = Modifier.width(14.dp))
-                Column {
-                    Text(
-                        text = mainText,
-                        //fontFamily =Poppins,
-                        //color = Color.Black,
-                        fontSize =MaterialTheme.typography.titleLarge.fontSize,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = subText,
-                        //fontFamily =Poppins,
-                        //color = Color.LightGray,
-                        fontSize =MaterialTheme.typography.titleMedium.fontSize,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.offset(y = (-4).dp)
-                    )
-                }
-            }
-            Row(verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-
-            ) {
-
-            }
-            Icon(
-                painter=painterResource(id =R.drawable.arrow_forward_ios_48px),
-                contentDescription = "",
-                modifier = Modifier.size(16.dp)
-            )
-        }
-    }
-}
-
-
-
-
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AccountItems(
-    icon:Int,
-    mainText: String,
-    subText: String,
-    onClick: () -> Unit
-) {
-
-
-    Card(
-        onClick = {
-            onClick()
-        },
-
-
-        modifier = Modifier
-            .padding(bottom = 8.dp)
-            .fillMaxWidth(),
-
-        ) {
-        Row(
-            modifier = Modifier.padding(vertical = 10.dp, horizontal = 14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-
-                Box(
-                    modifier = Modifier
-                        .size(34.dp)
-                    //.clip(shape = Shapes.medium)
-                    //.background(Color.White)
-                ) {
-                    Icon(
-                        painterResource(id = icon),
-                        contentDescription="",
-                        tint = Color.Unspecified,
-                        modifier = Modifier.padding(8.dp)
-
-                    )
-                }
-                Spacer(modifier = Modifier.width(14.dp))
-                Column {
-                    Text(
-                        text = mainText,
-                        //fontFamily =Poppins,
-                        //color = Color.Black,
-                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = subText,
-                        //fontFamily =Poppins,
-                        //color = Color.LightGray,
-                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.offset(y = (-4).dp)
-                    )
-                }
-            }
-            Row(verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-
-            ) {
-
-            }
-            Icon(
-                painter=painterResource(id =R.drawable.arrow_forward_ios_48px),
-                contentDescription = "",
-                modifier = Modifier.size(16.dp)
-            )
-        }
-    }
-
-
-
-}
-
-
-@Composable
-fun AccountUI() {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 14.dp)
-            .padding(top = 10.dp)
-    ) {
-        Text(
-            text = "Account",
-            //fontFamily = Poppins,
-            //color = Color.Black,
-            fontSize = MaterialTheme.typography.titleLarge.fontSize,
-            modifier = Modifier.padding(vertical = 8.dp)
-        )
-        AccountItems(
-            icon=R.drawable.edit_48px,
-            mainText = "Edit Account",
-            subText = "*****",
-            onClick = {}
-        )
-        AccountItems(
-            icon=R.drawable.delete_48px,
-            mainText = "Delete/Deactivate Account",
-            subText = "*****",
-            onClick = {}
-        )
-    }
-
-}
-
-
-
-
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ProfileItems() {
+fun ProfileUI(name: String, isUserAuthenticated: Boolean, navController: NavHostController, viewModel: ProfileViewModel) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(150.dp)
-            .padding(10.dp),
-        //shape= Shapes.medium
+            .padding(14.dp)
     ) {
         Row(
-            modifier = Modifier.padding(vertical = 10.dp, horizontal = 14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Column {
+            if (viewModel.photoUrl != "null") {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(viewModel.photoUrl)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(48.dp)
+                )
+            } else {
+                Icon(
+                    Icons.Outlined.AccountCircle,
+                    contentDescription = "Localized description",
+                    modifier = Modifier.size(48.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "User Name",
-                    //fontFamily =Poppins,
-                    //color = Color.Black,
+                    text = " $name",
                     fontSize = MaterialTheme.typography.titleLarge.fontSize,
                     fontWeight = FontWeight.Bold
-
                 )
-                Text(
-                    text = "gmail/contact",
-                    //fontFamily =Poppins,
-                    //color = Color.Black,
-                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                )
-                Button(
-                    onClick = {},
-                    modifier = Modifier.padding(top = 10.dp),
-                    //shape = Shapes.medium
-                )
-                {
-                    Text(
-                        text = "Sign Out",
-                        //fontFamily =Poppins,
-                        //color = Color.Black,
-                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                        fontWeight = FontWeight.Bold
 
-                    )
+                Spacer(modifier = Modifier.height(16.dp))
 
+                if (isUserAuthenticated) {
+                    Button(
+                        onClick = { navController.navigate(Screens.Welcome.route) },
+                        modifier = Modifier.fillMaxWidth(),
+                        //shape = Shapes.medium
+                    ) {
+                        Text(
+                            text = "Sign Out",
+                            fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                } else {
+                    Button(
+                        onClick = { navController.navigate(Screens.SignUp.route) },
+                        modifier = Modifier.fillMaxWidth(),
+                        //shape = Shapes.medium
+                    ) {
+                        Text(
+                            text = "Sign In",
+                            fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
-            Row(verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
+        }
+    }
+}
 
-            ) {
 
-            }
+@Composable
+    fun GeneralUI() {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 14.dp)
+                .padding(top = 10.dp)
+        ) {
+            Text(
+                text = "General",
+                //fontFamily = Poppins,
+                //color = Color.Black,
+                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+            GeneralItems(
+                icon = R.drawable.settings_account_box_48px,
+                mainText = "Customize your app ",
+                //subText = "Customize your app",
+                onClick = {},
+            )
+            GeneralItems(
+                icon = R.drawable.contact_emergency_48px,
+                mainText = "Emergency contact",
+                //subText = "Contact details of ",
+                onClick = {}
+            )
+            GeneralItems(
+                icon = R.drawable.backup_48px,
+                mainText = "Backup data",
+                //subText = "*****",
+                onClick = {},
 
-            Image(
-                painter = painterResource( R.drawable.account_circle_48px),
-                contentDescription ="",
-                modifier =Modifier.height(120.dp)
-
+                )
+            GeneralItems(
+                icon = R.drawable.ios_share_48px,
+                mainText = "Export mood data",
+                //subText = "*****",
+                onClick = {},
             )
         }
-
     }
-}
 
 
-@Composable
-fun ProfileUI() {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 14.dp)
-            .padding(top = 10.dp)
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun GeneralItems(
+        icon: Int,
+        mainText: String,
+        //subText: String,
+        onClick: () -> Unit
     ) {
+        Card(
+            onClick = {
+                onClick()
+            },
 
-        Text(
-            text = "Settings",
-            //fontFamily = Poppins,
-            //color = Color.Black,
-            fontSize = MaterialTheme.typography.titleLarge.fontSize,
-            modifier = Modifier.padding(vertical = 8.dp)
-        )
-        ProfileItems()
-    }
+            modifier = Modifier
+                .padding(bottom = 8.dp)
+                .fillMaxWidth(),
 
 
-}
+            ) {
+            Row(
+                modifier = Modifier.padding(vertical = 10.dp, horizontal = 14.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
 
-@Composable
-fun SupportUI(navController: NavHostController) {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 14.dp)
-            .padding(top = 10.dp)
-    ) {
-        Text(
-            text = "Support",
-            //fontFamily = Poppins,
-            //color = Color.Black,
-            fontSize = MaterialTheme.typography.titleLarge.fontSize,
-            modifier = Modifier.padding(vertical = 8.dp)
-        )
-        SupportItems(
-            icon=R.drawable.rate_review_48px,
-            mainText = "Feedback",
-            subText = "*****",
-            onClick = { navController.navigate(Screens.ContactUs.route) }
-        )
-        SupportItems(
-            icon=R.drawable.group_48px,
-            mainText = "About Us",
-            subText = "*****",
-            onClick = { navController.navigate(Screens.AboutUs.route) }
-        )
-    }
-}
+                    Box(
+                        modifier = Modifier
+                            .size(34.dp)
+                        //.clip(shape = Shapes.medium)
+                        //.background(Color.White)
+                    ) {
+                        Icon(
+                            painterResource(id = icon),
+                            contentDescription = "",
+                            tint = Color.Unspecified,
+                            modifier = Modifier.padding(8.dp)
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SupportItems
-            ( icon:Int,
-              mainText: String,
-              subText: String,
-              onClick: () -> Unit
-) {
-    Card(
-        onClick = onClick,
 
-        modifier = Modifier
-            .padding(bottom = 8.dp)
-            .fillMaxWidth(),
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(14.dp))
+                    Column {
+                        Text(
+                            text = mainText,
+                            //fontFamily =Poppins,
+                            //color = Color.Black,
+                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
 
-        ) {
-        Row(
-            modifier = Modifier.padding(vertical = 10.dp, horizontal = 14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-
-                Box(
+                            )
+//                    Text(
+//                        text = subText,
+//                        //fontFamily =Poppins,
+//                        //color = Color.LightGray,
+//                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
+//                        fontWeight = FontWeight.SemiBold,
+//                        modifier = Modifier.offset(y = (-4).dp)
+//                    )
+                    }
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End,
                     modifier = Modifier
-                        .size(34.dp)
-                    //.clip(shape = Shapes.medium)
-                    //.background(Color.White)
+                        .fillMaxWidth()
+                        .weight(1f)
+
                 ) {
-                    Icon(
-                        painterResource(id = icon),
-                        contentDescription = "",
-                        tint = Color.Unspecified,
-                        modifier = Modifier.padding(8.dp)
 
-                    )
                 }
-                Spacer(modifier = Modifier.width(14.dp))
-                Column {
-                    Text(
-                        text = mainText,
-                        //fontFamily =Poppins,
-                        //color = Color.Black,
-                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = subText,
-                        //fontFamily =Poppins,
-                        //color = Color.LightGray,
-                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.offset(y = (-4).dp)
-                    )
-                }
+                Icon(
+                    painter = painterResource(id = R.drawable.arrow_forward_ios_48px),
+                    contentDescription = "",
+                    modifier = Modifier.size(16.dp)
+                )
             }
-            Row(verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-
-            ) {
-
-            }
-            Icon(
-                painter=painterResource(id =R.drawable.arrow_forward_ios_48px),
-                contentDescription = "",
-                modifier = Modifier.size(16.dp)
-
-            )
         }
     }
 
 
-}
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun AccountUI() {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 14.dp)
+                .padding(top = 10.dp)
+        ) {
+            Text(
+                text = "Account",
+                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+
+            Card(
+                onClick = {},
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .fillMaxWidth(),
+
+                ) {
+                Row(
+                    modifier = Modifier.padding(vertical = 10.dp, horizontal = 14.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+
+                        Box(
+                            modifier = Modifier
+                                .size(34.dp)
+                        ) {
+                            Icon(
+                                painterResource(id = R.drawable.delete_48px),
+                                contentDescription = "",
+                                tint = Color.Unspecified,
+                                modifier = Modifier.padding(8.dp)
+
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(14.dp))
+                        Column {
+                            Text(
+                                text = "Delete Account",
+                                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                            )
+                        }
+                    }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+
+                    ) {
+
+                    }
+                    Icon(
+                        painter = painterResource(id = R.drawable.arrow_forward_ios_48px),
+                        contentDescription = "",
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+            }
+        }
+    }
+
+
+    @Composable
+    fun SupportUI(navController: NavHostController) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 14.dp)
+                .padding(top = 10.dp)
+        ) {
+            Text(
+                text = "Support",
+                //fontFamily = Poppins,
+                //color = Color.Black,
+                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+            SupportItems(
+                icon = R.drawable.rate_review_48px,
+                mainText = "Contact Us",
+                //subText = "*****",
+                onClick = { navController.navigate(Screens.ContactUs.route) }
+            )
+            SupportItems(
+                icon = R.drawable.group_48px,
+                mainText = "About Us",
+                //subText = "*****",
+                onClick = { navController.navigate(Screens.AboutUs.route) }
+            )
+        }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun SupportItems(
+        icon: Int,
+        mainText: String,
+        //subText: String,
+        onClick: () -> Unit
+    ) {
+        Card(
+            onClick = onClick,
+
+            modifier = Modifier
+                .padding(bottom = 8.dp)
+                .fillMaxWidth(),
+
+            ) {
+            Row(
+                modifier = Modifier.padding(vertical = 10.dp, horizontal = 14.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+
+                    Box(
+                        modifier = Modifier
+                            .size(34.dp)
+                        //.clip(shape = Shapes.medium)
+                        //.background(Color.White)
+                    ) {
+                        Icon(
+                            painterResource(id = icon),
+                            contentDescription = "",
+                            tint = Color.Unspecified,
+                            modifier = Modifier.padding(8.dp)
+
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(14.dp))
+                    Column {
+                        Text(
+                            text = mainText,
+                            //fontFamily =Poppins,
+                            //color = Color.Black,
+                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                            //fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+
+                ) {
+
+                }
+                Icon(
+                    painter = painterResource(id = R.drawable.arrow_forward_ios_48px),
+                    contentDescription = "",
+                    modifier = Modifier.size(16.dp)
+
+                )
+            }
+        }
+    }
+
+
