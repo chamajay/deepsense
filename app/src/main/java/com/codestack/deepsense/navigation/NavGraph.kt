@@ -51,12 +51,12 @@ fun SetupNavGraph(
         composable(
             route = Screens.AboutUs.route
         ) {
-            AboutUsScreen()
+            AboutUsScreen(navController)
         }
         composable(
             route = Screens.ContactUs.route
         ) {
-            ContactUsScreen()
+            ContactUsScreen(navController)
         }
         composable(
             route = Screens.Settings.route
