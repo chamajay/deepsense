@@ -1,7 +1,6 @@
 package com.codestack.deepsense.presentation.settings
 
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -24,7 +23,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.codestack.deepsense.R
 import com.codestack.deepsense.navigation.Screens
@@ -44,7 +42,7 @@ fun SettingsScreen(
                     Text(text = "Settings")
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate(Screens.Welcome.route) }) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Go back"
@@ -121,7 +119,7 @@ fun ProfileUI(name: String, isUserAuthenticated: Boolean, navController: NavHost
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "  $name",
+                    text = " $name",
                     fontSize = MaterialTheme.typography.titleLarge.fontSize,
                     fontWeight = FontWeight.Bold
                 )
