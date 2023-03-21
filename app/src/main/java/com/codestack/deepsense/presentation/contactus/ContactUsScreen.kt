@@ -24,12 +24,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.codestack.deepsense.R
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ContactUsScreen()
+fun ContactUsScreen(navController: NavHostController)
 {
     Scaffold(
         topBar = {
@@ -41,7 +43,14 @@ fun ContactUsScreen()
                         fontSize = 27.sp
                     )
                 },
-                navigationIcon = { Icon(Icons.Filled.ArrowBack, contentDescription = "Go Back") }
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Go back"
+                        )
+                    }
+                }
                 )
         },
         content = {
@@ -241,6 +250,6 @@ fun isValidEmail(email: String): Boolean {
 @Composable
 fun ContactUsScreenPreview()
 {
-    ContactUsScreen()
+    ContactUsScreen(navController= rememberNavController())
 
 }
