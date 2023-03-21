@@ -1,6 +1,7 @@
 package com.codestack.deepsense.presentation.aboutus
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,13 +18,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.codestack.deepsense.R
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AboutUsScreen()
+fun AboutUsScreen(navController: NavHostController)
 {
     Scaffold(
         topBar = {
@@ -35,7 +38,15 @@ fun AboutUsScreen()
                         fontSize = 27.sp
                     )
                 },
-                navigationIcon = { Icon(Icons.Filled.ArrowBack, contentDescription = "Go Back") },
+
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Go back"
+                        )
+                    }
+                }
             )
         },
         content = {
@@ -52,12 +63,16 @@ fun MemberInfo(
 
 ) {
     Spacer(modifier = Modifier.height(10.dp))
+
     Row(modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ){
-        Card(Modifier.size(width = 350.dp, height = 80.dp)) {
+        Card(Modifier.size(width = 350.dp, height = 80.dp
+
+        )) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
+
+                Image(
                     painter = painterResource(id = memImage),
                     memNo,
                     modifier = Modifier
@@ -68,9 +83,12 @@ fun MemberInfo(
                 )
                 Text(
                     text = name,
+
                 )
+
             }
         }
+
         Spacer(modifier = Modifier.height(10.dp))
     }
 }
@@ -82,13 +100,17 @@ fun Content() {
         Column(modifier = Modifier.fillMaxHeight())
         {
             Spacer(modifier = Modifier.height(120.dp))
+
             LazyColumn {
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
+
                     ) {
+
                         Spacer(modifier = Modifier.width(10.dp))
+
                         Text(
                             text = "We are a team of passionate developers who are Software engineering undergraduate students of informatics institute of technology. We are dedicated to delivering high-quality apps to make people's lives easier.",
                             maxLines = 6,
@@ -99,6 +121,7 @@ fun Content() {
                 item {
 
                     Spacer(modifier = Modifier.height(15.dp))
+
                     Row {
                         Spacer(modifier = Modifier.width(10.dp))
                         Text("Team Members:", fontWeight = FontWeight.Bold)
@@ -106,26 +129,27 @@ fun Content() {
                     }
 
                     Spacer(modifier = Modifier.height(15.dp))
+
                     MemberInfo(
                         "member1",
-                        memImage = R.drawable.account_circle_48px,
-                        name = " Chamath Jayasena "
+                        memImage = R.drawable.cj_8bit,
+                        name = "   Chamath Jayasena "
                     )
 
                     MemberInfo(
                         "member2",
-                        memImage = R.drawable.account_circle_48px,
+                        memImage = R.drawable.kj,
                         name = "   Kumudu Wijewardhana "
                     )
 
                     MemberInfo(
                         "member3",
-                        memImage = R.drawable.account_circle_48px,
+                        memImage = R.drawable.tt,
                         name = "   Thimasha Thakshali  "
                     )
                     MemberInfo(
                         "member4",
-                        memImage = R.drawable.account_circle_48px,
+                        memImage = R.drawable.rp,
                         name = "   Ruwindi Perera "
                     )
                     MemberInfo(
@@ -146,6 +170,6 @@ fun Content() {
 @Composable
 fun AboutUsScreenPreview()
 {
-    AboutUsScreen()
+    AboutUsScreen(navController= rememberNavController())
     
 }
