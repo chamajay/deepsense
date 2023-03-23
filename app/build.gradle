@@ -87,9 +87,11 @@ dependencies {
 
     // Coil
     implementation "io.coil-kt:coil-compose:2.2.2"
+
+    // OkHttp3
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
 }
 
-// Allow references to generated code
 // Allow references to generated code
 kapt {
     correctErrorTypes true

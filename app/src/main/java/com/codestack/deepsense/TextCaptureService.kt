@@ -6,8 +6,19 @@ import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.widget.Toast
 import com.codestack.deepsense.core.Constants.TAG
+import kotlinx.coroutines.*
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.net.URL
 
 class TextCaptureService : AccessibilityService() {
+
+    private val client = OkHttpClient()
+    private val serverUrl = URL("http://192.168.1.102:5000/text-input")
+    private val job = Job()
+    private val scope = CoroutineScope(Dispatchers.IO + job)
 
     private val chatApps = listOf(
         "com.whatsapp",
@@ -31,9 +42,19 @@ class TextCaptureService : AccessibilityService() {
     }
 
 
+    override fun onInterrupt() {
+        TODO("Not yet implemented")
+    }
+
+
+    override fun onDestroy() {
+        job.cancel()
+    }
+
+
     override fun onAccessibilityEvent(myevent: AccessibilityEvent?) {
         if (myevent != null) {
-            val eventType = myevent.eventType.toString()
+//            val eventType = myevent.eventType.toString()
             val packageName = myevent.packageName?.toString()
 //            Log.i(TAG, "package: $packageName, event: $eventType")
 
@@ -112,13 +133,36 @@ class TextCaptureService : AccessibilityService() {
         // only capture sentences with words 3 or more
         if (prevTxt.split(" ").size > 2) {
             Toast.makeText(applicationContext, prevTxt, Toast.LENGTH_SHORT).show()
-            prevTxt = ""
+            scope.launch {
+                postTxt(prevTxt)
+            }
         }
     }
 
 
-    override fun onInterrupt() {
-        TODO("Not yet implemented")
+    private suspend fun postTxt(capturedTxt: String) {
+        withContext(Dispatchers.IO) {
+            // make JSON object
+            val jsonString = "{\"text\": \"$capturedTxt\"}"
+
+            val mediaType = "application/json; charset=utf-8".toMediaType()
+            val body = jsonString.toRequestBody(mediaType)
+
+            val request = Request.Builder()
+                .url(serverUrl)
+                .post(body)
+                .build()
+
+            // execute request
+            val response = client.newCall(request).execute()
+
+            // response
+//            val responseBody = response.body!!.string()
+//            Log.d(TAG, responseBody)
+
+            // reset prev text
+            prevTxt = ""
+        }
     }
 
 }
