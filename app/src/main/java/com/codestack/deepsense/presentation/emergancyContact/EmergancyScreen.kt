@@ -1,14 +1,14 @@
 package com.codestack.deepsense.presentation.emergancyContact
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,41 +19,59 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun EmergencyScreen() {
     // Define a list of contacts
     val contacts = remember { mutableStateListOf<Contact>() }
-
-
-
+    val heading = "Emergency contact"
 
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Emergency Contact") },
+                title = {
+                    Text(
+                        text = heading,
+                        fontSize = MaterialTheme.typography.headlineSmall.fontSize
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { /* Go back to settings screen */ }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
-                }
+                },
+
+                backgroundColor = Color.Transparent,
+                elevation = 0.dp
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = {
-                // Add a new contact to the list
-                val newContact = Contact("", "")
-                contacts.add(newContact)
-            }) {
+            FloatingActionButton(
+                onClick = {
+                    // Add a new contact to the list
+                    val newContact = Contact("", "")
+                    contacts.add(newContact)
+                },
+                elevation = FloatingActionButtonDefaults.elevation(
+                    defaultElevation = 0.dp,
+                    pressedElevation = 0.dp
+                )
+
+            ) {
                 Icon(Icons.Default.Add, contentDescription = "Add Contact")
             }
         }
     ) {
         LazyColumn(
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            item {
+                val appBarHeight = 40.dp
+                Spacer(modifier = Modifier.height(appBarHeight))
+            }
             items(contacts.size) { index ->
                 EmergencyContactCard(contact = contacts[index],
                     onContactDeleted = { contacts.removeAt(index) },
@@ -64,31 +82,10 @@ fun EmergencyScreen() {
 }
 
 
-
 @Preview(showBackground = true)
 @Composable
 fun EmergencyScreenPreview() {
     EmergencyScreen()
-}
-
-@Preview
-@Composable
-fun Heading() {
-    val heading = "Emergency contact"
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row() {
-            Text(
-                text = heading,
-                fontSize = MaterialTheme.typography.headlineSmall.fontSize,
-            )
-
-        }
-    }
 }
 
 
@@ -104,8 +101,12 @@ fun EmergencyContactCard(
     val phoneState = remember { mutableStateOf(contact.number) }
 
     ElevatedCard(
-        modifier = Modifier.fillMaxWidth(),
-    ) {
+        
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surface),
+
+        ) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -159,27 +160,52 @@ fun EmergencyContactCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Button(onClick = { onContactDeleted() }) {
-                        Text("Delete")
+
+                    Button(
+                        onClick = {
+                            onContactPriorityChanged()
+                        },
+                        shape = RoundedCornerShape(8.dp),
+                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            if (contact.isPriority) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                        )
+                    ) {
+                        Text(if (contact.isPriority) "Priority" else "Make Priority")
                     }
+
+
                     Row {
+
                         Button(
-                            onClick = { cardState = CardState.Editing }
+                            colors = ButtonDefaults.textButtonColors(
+                                contentColor = MaterialTheme.colorScheme.primary
+                            ),
+                            onClick = { cardState = CardState.Editing },
+                            modifier = Modifier
+                                .background(Color.Transparent),
+
                         ) {
-                            Text("Edit")
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Button(
-                            onClick = {
-                                onContactPriorityChanged()
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = if (contact.isPriority) Color.Red else MaterialTheme.colorScheme.primary
+                            Text(
+                                text = "Edit",
+                                fontSize = MaterialTheme.typography.labelLarge.fontSize
                             )
+                        }
+
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        IconButton(
+                            onClick = onContactDeleted,
+                            modifier = Modifier.size(40.dp)
                         ) {
-                            Text(if (contact.isPriority) "Priority" else "Make Priority")
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Delete Contact",
+                            )
                         }
                     }
+
                 }
             }
         }
