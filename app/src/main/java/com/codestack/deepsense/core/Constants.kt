@@ -1,8 +1,13 @@
 package com.codestack.deepsense.core
 
+import java.net.URL
+
 object Constants {
     //App
     const val TAG = "AppTag"
+
+    //Server
+    val BASE_URL = URL("http://192.168.1.102:5000")
 
     //Collection References
     const val USERS = "users"
