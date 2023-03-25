@@ -5,19 +5,26 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.codestack.deepsense.R
 
 @Composable
-fun TodayScreen() {
+fun TodayScreen(
+    viewModel: HomeViewModel
+) {
     Row(
         modifier = Modifier
             .padding(15.dp, 0.dp)
@@ -29,7 +36,7 @@ fun TodayScreen() {
                 .verticalScroll(rememberScrollState())
         ) {
             Row {
-                Mood()
+                Mood(viewModel)
             }
             Row {
                 MoodToday()
@@ -41,14 +48,16 @@ fun TodayScreen() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun TodayScreenPreview() {
-    TodayScreen()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun TodayScreenPreview() {
+//    TodayScreen()
+//}
 
 @Composable
-fun WeekScreen() {
+fun WeekScreen(
+    viewModel: HomeViewModel
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -63,15 +72,17 @@ fun WeekScreen() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun WeekScreenPreview() {
-    WeekScreen()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun WeekScreenPreview() {
+//    WeekScreen()
+//}
 
 
 @Composable
-fun MonthScreen() {
+fun MonthScreen(
+    viewModel: HomeViewModel
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -86,51 +97,66 @@ fun MonthScreen() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun MonthScreenPreview() {
-    MonthScreen()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun MonthScreenPreview() {
+//    MonthScreen()
+//}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Mood(
-    mood: String = "Sad"
+    viewModel: HomeViewModel
 ) {
+    val mood by viewModel.mood.collectAsState()
+    val moodImg by viewModel.moodImage.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.retrieveMood()
+    }
+
     ElevatedCard(
         modifier = Modifier
             .height(200.dp)
             .fillMaxWidth()
             .padding(5.dp),
     ) {
-        Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(0.dp, 15.dp)
-            ) {
-                androidx.compose.material3.Text(
-                    text = "You seem ",
-                    fontSize = MaterialTheme.typography.headlineLarge.fontSize,
-                )
-                androidx.compose.material3.Text(
-                    text = mood,
-                    fontSize = MaterialTheme.typography.headlineLarge.fontSize,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 20.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_loudly_crying_face),
-                    contentDescription = "hello",
-                    modifier = Modifier.size(80.dp)
-                )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (mood.isEmpty()) {
+                CircularProgressIndicator(modifier = Modifier.size(50.dp))
+            } else {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(0.dp, 15.dp)
+                ) {
+                    androidx.compose.material3.Text(
+                        text = "You seem ",
+                        fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                    )
+                    androidx.compose.material3.Text(
+                        text = mood,
+                        fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 20.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = moodImg),
+                        contentDescription = "hello",
+                        modifier = Modifier.size(80.dp)
+                    )
+                }
             }
         }
     }

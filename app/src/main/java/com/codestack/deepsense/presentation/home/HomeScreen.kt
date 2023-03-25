@@ -1,5 +1,6 @@
 package com.codestack.deepsense.presentation.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -16,7 +17,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HomeScreen(
-//    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     val pagerState = rememberPagerState()
     val tabs = listOf(TabItem.Today, TabItem.Week, TabItem.Month)
@@ -26,7 +27,7 @@ fun HomeScreen(
             .fillMaxHeight()
     ) {
         TabsRow(tabs, pagerState)
-        TabsContent(tabs, pagerState)
+        TabsContent(tabs, pagerState, viewModel)
     }
 }
 
@@ -66,8 +67,8 @@ fun TabsRow(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabsContent(tabs: List<TabItem>, pagerState: PagerState) {
+fun TabsContent(tabs: List<TabItem>, pagerState: PagerState, viewModel: HomeViewModel) {
     HorizontalPager(state = pagerState, count = tabs.size, userScrollEnabled = false) { page ->
-        tabs[page].screen()
+        tabs[page].screen(viewModel)
     }
 }
