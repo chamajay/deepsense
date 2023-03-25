@@ -4,11 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -16,10 +12,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.codestack.deepsense.R
+import com.codestack.deepsense.core.Utils
 
 @Composable
 fun TodayScreen(
@@ -39,7 +33,7 @@ fun TodayScreen(
                 Mood(viewModel)
             }
             Row {
-                MoodToday()
+                MoodToday(viewModel)
             }
             Row {
                 MentalHealth()
@@ -135,11 +129,11 @@ fun Mood(
                         .fillMaxWidth()
                         .padding(0.dp, 15.dp)
                 ) {
-                    androidx.compose.material3.Text(
+                    Text(
                         text = "You seem ",
                         fontSize = MaterialTheme.typography.headlineLarge.fontSize,
                     )
-                    androidx.compose.material3.Text(
+                    Text(
                         text = mood,
                         fontSize = MaterialTheme.typography.headlineLarge.fontSize,
                         color = MaterialTheme.colorScheme.primary
@@ -165,15 +159,21 @@ fun Mood(
 @Composable
 fun MoodPercentage(
     mood: String,
-    percentage: Int
+    percentage: Double,
+    image: Int
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(15.dp)) {
-        androidx.compose.material3.Text(
+        Image(
+            painter = painterResource(id = image),
+            contentDescription = "hello",
+            modifier = Modifier.size(25.dp)
+        )
+        Text(
             text = mood,
             color = MaterialTheme.colorScheme.primary,
-            fontSize = MaterialTheme.typography.titleLarge.fontSize
+            fontSize = MaterialTheme.typography.titleMedium.fontSize
         )
-        androidx.compose.material3.Text(
+        Text(
             text = "$percentage%",
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = MaterialTheme.typography.titleMedium.fontSize
@@ -184,26 +184,55 @@ fun MoodPercentage(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MoodToday() {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        androidx.compose.material3.Text(
+fun MoodToday(
+    viewModel: HomeViewModel
+) {
+    val moodPercentages by viewModel.emotionsPercentages.collectAsState()
+//    val mood by viewModel.mood.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.retrieveMoodPercentages()
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(160.dp)
+    ) {
+        Text(
             text = "Your mood today",
             fontSize = MaterialTheme.typography.headlineSmall.fontSize,
             modifier = Modifier.padding(bottom = 10.dp)
         )
         ElevatedCard(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .padding(0.dp, 5.dp)
         ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxSize()
             ) {
-                MoodPercentage(mood = "Happy", percentage = 30)
-                MoodPercentage(mood = "Sad", percentage = 50)
-                MoodPercentage(mood = "Angry", percentage = 15)
+                if (moodPercentages.isEmpty()) {
+                    CircularProgressIndicator(modifier = Modifier.size(50.dp))
+                } else {
+
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        moodPercentages.forEach { (emotion, percentage) ->
+                            val (mappedEmotion, imageResId) = Utils.mapEmotion(emotion)
+                            MoodPercentage(
+                                mood = mappedEmotion,
+                                percentage = percentage,
+                                image = imageResId
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -213,7 +242,7 @@ fun MoodToday() {
 @Composable
 fun MentalHealth() {
     Column(modifier = Modifier.fillMaxWidth()) {
-        androidx.compose.material3.Text(
+        Text(
             text = "Your mental health",
             fontSize = MaterialTheme.typography.headlineSmall.fontSize,
             modifier = Modifier.padding(bottom = 10.dp)
@@ -231,7 +260,7 @@ fun MentalHealth() {
                     .fillMaxSize()
                     .padding(10.dp),
             ) {
-                androidx.compose.material3.Text(
+                Text(
                     text = "You seem healthy!",
                     color = MaterialTheme.colorScheme.primary,
                     fontSize = MaterialTheme.typography.titleLarge.fontSize,
