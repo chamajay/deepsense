@@ -38,7 +38,7 @@ fun EmergencyScreen() {
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { /* Go back to settings screen */ }) {
+                    IconButton(onClick = {  }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 },
