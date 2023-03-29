@@ -4,6 +4,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -11,7 +13,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.codestack.deepsense.core.Utils
 
@@ -36,7 +40,7 @@ fun TodayScreen(
                 MoodToday(viewModel)
             }
             Row {
-                MentalHealth()
+                MentalHealth(viewModel)
             }
         }
     }
@@ -104,6 +108,7 @@ fun Mood(
 ) {
     val mood by viewModel.mood.collectAsState()
     val moodImg by viewModel.moodImage.collectAsState()
+    val isConnectionError by viewModel.isConnectionError.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.retrieveMood()
@@ -120,36 +125,40 @@ fun Mood(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (mood.isEmpty()) {
-                CircularProgressIndicator(modifier = Modifier.size(50.dp))
+            if (isConnectionError) {
+                ServerErrorLg()
             } else {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(0.dp, 15.dp)
-                ) {
-                    Text(
-                        text = "You seem ",
-                        fontSize = MaterialTheme.typography.headlineLarge.fontSize,
-                    )
-                    Text(
-                        text = mood,
-                        fontSize = MaterialTheme.typography.headlineLarge.fontSize,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 20.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = moodImg),
-                        contentDescription = "hello",
-                        modifier = Modifier.size(80.dp)
-                    )
+                if (mood.isEmpty()) {
+                    CircularProgressIndicator(modifier = Modifier.size(50.dp))
+                } else {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(0.dp, 15.dp)
+                    ) {
+                        Text(
+                            text = "You seem ",
+                            fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                        )
+                        Text(
+                            text = mood,
+                            fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 20.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = moodImg),
+                            contentDescription = "hello",
+                            modifier = Modifier.size(80.dp)
+                        )
+                    }
                 }
             }
         }
@@ -188,7 +197,7 @@ fun MoodToday(
     viewModel: HomeViewModel
 ) {
     val moodPercentages by viewModel.emotionsPercentages.collectAsState()
-//    val mood by viewModel.mood.collectAsState()
+    val isConnectionError by viewModel.isConnectionError.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.retrieveMoodPercentages()
@@ -214,22 +223,25 @@ fun MoodToday(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize()
             ) {
-                if (moodPercentages.isEmpty()) {
-                    CircularProgressIndicator(modifier = Modifier.size(50.dp))
+                if (isConnectionError) {
+                    ServerErrorLg()
                 } else {
-
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        moodPercentages.forEach { (emotion, percentage) ->
-                            val (mappedEmotion, imageResId) = Utils.mapEmotion(emotion)
-                            MoodPercentage(
-                                mood = mappedEmotion,
-                                percentage = percentage,
-                                image = imageResId
-                            )
+                    if (moodPercentages.isEmpty()) {
+                        CircularProgressIndicator(modifier = Modifier.size(50.dp))
+                    } else {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            moodPercentages.forEach { (emotion, percentage) ->
+                                val (mappedEmotion, imageResId) = Utils.mapEmotion(emotion)
+                                MoodPercentage(
+                                    mood = mappedEmotion,
+                                    percentage = percentage,
+                                    image = imageResId
+                                )
+                            }
                         }
                     }
                 }
@@ -240,7 +252,12 @@ fun MoodToday(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MentalHealth() {
+fun MentalHealth(
+    viewModel: HomeViewModel
+) {
+
+    val isConnectionError by viewModel.isConnectionError.collectAsState()
+
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = "Your mental health",
@@ -260,13 +277,57 @@ fun MentalHealth() {
                     .fillMaxSize()
                     .padding(10.dp),
             ) {
-                Text(
-                    text = "You seem healthy!",
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                    modifier = Modifier.padding(5.dp, 0.dp)
-                )
+                if (isConnectionError) {
+                    ServerErrorSm()
+                } else {
+                    Text(
+                        text = "You seem healthy!",
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                        modifier = Modifier.padding(5.dp, 0.dp)
+                    )
+                }
             }
         }
     }
+}
+
+
+@Composable
+fun ServerErrorLg() {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Icon(
+            imageVector = Icons.Filled.Warning,
+            tint = Color(0xFFE21818),
+            contentDescription = "Error"
+        )
+        Text(
+            text = "Can't connect to the server",
+            fontSize = MaterialTheme.typography.titleMedium.fontSize,
+            modifier = Modifier.padding(start = 5.dp)
+        )
+    }
+}
+
+@Composable
+fun ServerErrorSm() {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            imageVector = Icons.Filled.Warning,
+            tint = Color(0xFFE21818),
+            contentDescription = "Error",
+            modifier = Modifier.size(30.dp).padding(end = 5.dp)
+        )
+        Text(
+            text = "Can't connect to the server",
+            fontSize = MaterialTheme.typography.titleMedium.fontSize
+        )
+    }
+}
+
+
+@Composable
+@Preview
+fun ServerErrorPreview() {
+    ServerErrorSm()
 }

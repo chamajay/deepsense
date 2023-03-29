@@ -12,6 +12,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.net.URL
+import java.net.ConnectException
 
 class TextCaptureService : AccessibilityService() {
 
@@ -153,14 +154,11 @@ class TextCaptureService : AccessibilityService() {
                 .post(body)
                 .build()
 
-            // execute request
-            val response = client.newCall(request).execute()
+            try {
+                // execute request
+                client.newCall(request).execute()
+            } catch (_: ConnectException) {}
 
-            // response
-//            val responseBody = response.body!!.string()
-//            Log.d(TAG, responseBody)
-
-            // reset prev text
             prevTxt = ""
         }
     }
