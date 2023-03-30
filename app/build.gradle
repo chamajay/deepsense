@@ -90,6 +90,9 @@ dependencies {
 
     // OkHttp3
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
+
+    // Lottie
+    implementation "com.airbnb.android:lottie-compose:6.0.0"
 }
 
 // Allow references to generated code
