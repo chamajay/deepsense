@@ -24,13 +24,13 @@ class Utils {
             }
 
             val imageResId = when (mappedEmotion) {
-                "Angry" -> R.drawable.ic_angry_face
-                "Disgusted" -> R.drawable.ic_nauseated_face
-                "Scared" -> R.drawable.ic_fearful_face
-                "Happy" -> R.drawable.ic_hugging_face
-                "Meh" -> R.drawable.ic_neutral_face
-                "Sad" -> R.drawable.ic_loudly_crying_face
-                "Surprised" -> R.drawable.ic_face_with_open_mouth
+                "Angry" -> R.raw.angry_lottie
+                "Disgusted" -> R.raw.disgusted_lottie
+                "Scared" -> R.raw.fear_lottie
+                "Happy" -> R.raw.joy_lottie
+                "Meh" -> R.raw.meh_lottie
+                "Sad" -> R.raw.sad_lottie
+                "Surprised" -> R.raw.surprise_lottie
                 else -> 0 // no image resource ID
             }
 
