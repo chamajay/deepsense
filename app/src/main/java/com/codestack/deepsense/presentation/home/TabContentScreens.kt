@@ -1,5 +1,8 @@
 package com.codestack.deepsense.presentation.home
 
+import android.graphics.drawable.AnimatedImageDrawable
+import androidx.annotation.DrawableRes
+import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -7,16 +10,17 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.airbnb.lottie.compose.*
+import com.codestack.deepsense.R
 import com.codestack.deepsense.core.Utils
 
 @Composable
@@ -153,11 +157,7 @@ fun Mood(
                             .fillMaxWidth()
                             .padding(bottom = 20.dp)
                     ) {
-                        Image(
-                            painter = painterResource(id = moodImg),
-                            contentDescription = "hello",
-                            modifier = Modifier.size(80.dp)
-                        )
+                        LottieAnimation(lottieFile = moodImg)
                     }
                 }
             }
@@ -172,11 +172,9 @@ fun MoodPercentage(
     image: Int
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(15.dp)) {
-        Image(
-            painter = painterResource(id = image),
-            contentDescription = "hello",
-            modifier = Modifier.size(25.dp)
-        )
+        Row(modifier = Modifier.size(35.dp)) {
+            LottieAnimation(lottieFile = image)
+        }
         Text(
             text = mood,
             color = MaterialTheme.colorScheme.primary,
@@ -316,7 +314,9 @@ fun ServerErrorSm() {
             imageVector = Icons.Filled.Warning,
             tint = Color(0xFFE21818),
             contentDescription = "Error",
-            modifier = Modifier.size(30.dp).padding(end = 5.dp)
+            modifier = Modifier
+                .size(30.dp)
+                .padding(end = 5.dp)
         )
         Text(
             text = "Can't connect to the server",
@@ -326,8 +326,20 @@ fun ServerErrorSm() {
 }
 
 
+//@Composable
+//@Preview
+//fun ServerErrorPreview() {
+//    ServerErrorSm()
+//}
+
+
+
 @Composable
-@Preview
-fun ServerErrorPreview() {
-    ServerErrorSm()
+fun LottieAnimation(lottieFile: Int) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(lottieFile))
+    val progress by animateLottieCompositionAsState(composition = composition, iterations = 1, speed = 0.8f)
+    LottieAnimation(
+        composition = composition,
+        progress = { progress },
+    )
 }
