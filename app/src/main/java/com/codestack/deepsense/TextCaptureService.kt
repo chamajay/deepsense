@@ -2,22 +2,19 @@ package com.codestack.deepsense
 
 
 import android.accessibilityservice.AccessibilityService
-import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.widget.Toast
-import com.codestack.deepsense.core.Constants.TAG
+import com.codestack.deepsense.core.Constants.BASE_URL
 import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import java.net.URL
 import java.net.ConnectException
 
 class TextCaptureService : AccessibilityService() {
 
     private val client = OkHttpClient()
-    private val serverUrl = URL("http://192.168.1.102:5000/text-input")
     private val job = Job()
     private val scope = CoroutineScope(Dispatchers.IO + job)
 
@@ -150,7 +147,7 @@ class TextCaptureService : AccessibilityService() {
             val body = jsonString.toRequestBody(mediaType)
 
             val request = Request.Builder()
-                .url(serverUrl)
+                .url("$BASE_URL/text-input")
                 .post(body)
                 .build()
 
