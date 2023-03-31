@@ -4,6 +4,7 @@ package com.codestack.deepsense.presentation.settings
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.AccountCircle
@@ -33,7 +34,7 @@ fun SettingsScreen(
 ) {
     Scaffold(
         topBar = {
-            MediumTopAppBar(
+            SmallTopAppBar(
                 title = {
                     Text(text = "Settings")
                 },
@@ -109,13 +110,13 @@ fun ProfileUI(viewModel: ProfileViewModel) {
                 Icon(
                     Icons.Outlined.AccountCircle,
                     contentDescription = "Localized description",
-                    modifier = Modifier.size(80.dp)
+                    modifier = Modifier.size(70.dp)
                 )
             }
             Column(modifier = Modifier.padding(horizontal = 15.dp)) {
                 Text(
                     viewModel.displayName,
-                    fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                    fontSize = MaterialTheme.typography.headlineSmall.fontSize
                 )
                 if (viewModel.email != null) {
                     Text(viewModel.email!!)
@@ -138,12 +139,6 @@ fun GeneralUI() {
             //color = Color.Black,
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
             modifier = Modifier.padding(vertical = 8.dp)
-        )
-        GeneralItems(
-            icon = R.drawable.settings_account_box_48px,
-            mainText = "Customize your app ",
-            //subText = "Customize your app",
-            onClick = {},
         )
         GeneralItems(
             icon = R.drawable.contact_emergency_48px,
