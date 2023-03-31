@@ -10,6 +10,7 @@ interface ProfileRepository {
     val isUserAuthenticated: Boolean
     val displayName: String
     val photoUrl: String
+    val email: String?
 
     suspend fun signOut(): SignOutResponse
 
