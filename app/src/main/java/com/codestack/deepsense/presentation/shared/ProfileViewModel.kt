@@ -22,6 +22,7 @@ class ProfileViewModel @Inject constructor(
     val isUserAuthenticated get() = repo.isUserAuthenticated
     val displayName get() = repo.displayName
     val photoUrl get() = repo.photoUrl
+    val email get() = repo.email
 
     var signOutResponse by mutableStateOf<SignOutResponse>(Success(false))
         private set
