@@ -196,7 +196,6 @@ fun GeneralItems(
                     Icon(
                         painterResource(id = icon),
                         contentDescription = "",
-                        tint = Color.Unspecified,
                         modifier = Modifier.padding(8.dp)
 
 
@@ -275,7 +274,6 @@ fun AccountUI() {
                         Icon(
                             painterResource(id = R.drawable.delete_48px),
                             contentDescription = "",
-                            tint = Color.Unspecified,
                             modifier = Modifier.padding(8.dp)
 
                         )
@@ -369,9 +367,7 @@ fun SupportItems(
                     Icon(
                         painterResource(id = icon),
                         contentDescription = "",
-                        tint = Color.Unspecified,
                         modifier = Modifier.padding(8.dp)
-
                     )
                 }
                 Spacer(modifier = Modifier.width(14.dp))
@@ -399,7 +395,6 @@ fun SupportItems(
                 painter = painterResource(id = R.drawable.arrow_forward_ios_48px),
                 contentDescription = "",
                 modifier = Modifier.size(16.dp)
-
             )
         }
     }
