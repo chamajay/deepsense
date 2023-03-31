@@ -7,12 +7,10 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.internal.enableLiveLiterals
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -44,6 +42,7 @@ fun SignUpScreen(
     var emailInvalid by rememberSaveable { mutableStateOf(false) }
     var passwordEmpty by rememberSaveable { mutableStateOf(false) }
     var nameEmpty by rememberSaveable { mutableStateOf(false) }
+    var passwordValidLength by rememberSaveable { mutableStateOf(true) }
 
 
     Surface {
@@ -166,7 +165,10 @@ fun SignUpScreen(
                                 emailInvalid = true
                             } else if (viewModel.password.isEmpty()) {
                                 passwordEmpty = true
+                            } else if (viewModel.password.length < 8) {
+                                passwordValidLength = false
                             } else {
+                                passwordValidLength = true
                                 signUpClicked = !signUpClicked
                                 viewModel.signUpWithEmailAndPassword()
                             }
@@ -186,6 +188,10 @@ fun SignUpScreen(
 
     if (facebookSignUpClicked) {
         FeatureIncomingDialog { facebookSignUpClicked = false }
+    }
+
+    if (!passwordValidLength) {
+        PasswordLengthErrorDialog { passwordValidLength = true }
     }
 
     // Google one tap sign in
