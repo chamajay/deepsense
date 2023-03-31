@@ -11,7 +11,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
 import org.json.JSONObject
-import java.net.ConnectException
 
 class HomeViewModel : ViewModel() {
     private val client = OkHttpClient()
@@ -66,7 +65,7 @@ class HomeViewModel : ViewModel() {
 
                 _isConnectionError.value = false
 
-            } catch (_: ConnectException) {
+            } catch (_: Exception) {
                 _isConnectionError.value = true
             }
         }
@@ -105,7 +104,7 @@ class HomeViewModel : ViewModel() {
 
                 _isConnectionError.value = false
 
-            } catch (_: ConnectException) {
+            } catch (_: Exception) {
                 _isConnectionError.value = true
             }
         }
