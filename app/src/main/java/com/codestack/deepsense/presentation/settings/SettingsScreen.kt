@@ -12,17 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.codestack.deepsense.R
@@ -62,8 +57,8 @@ fun SettingsScreen(
                         )
                     }
                     item { GeneralUI() }
-                    item { AccountUI() }
                     item { SupportUI(navController) }
+                    item { AccountUI(viewModel) }
                 }
             }
         }
@@ -240,12 +235,12 @@ fun GeneralItems(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountUI() {
+fun AccountUI(viewModel: ProfileViewModel) {
     Column(
         modifier = Modifier
             .padding(top = 10.dp)
+            .fillMaxWidth()
     ) {
         Text(
             text = "Account",
@@ -253,54 +248,20 @@ fun AccountUI() {
             modifier = Modifier.padding(vertical = 8.dp)
         )
 
-        Card(
-            onClick = {},
-            modifier = Modifier
-                .padding(bottom = 8.dp)
-                .fillMaxWidth(),
-
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+            Button(
+                onClick = { viewModel.signOut() },
+                modifier = Modifier.fillMaxWidth()
             ) {
-            Row(
-                modifier = Modifier.padding(vertical = 10.dp, horizontal = 14.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                Text(text = "Sign Out")
+            }
+        }
+        Row(modifier = Modifier.fillMaxWidth()) {
+            OutlinedButton(
+                onClick = { viewModel.revokeAccess() },
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-
-                    Box(
-                        modifier = Modifier
-                            .size(34.dp)
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.delete_48px),
-                            contentDescription = "",
-                            modifier = Modifier.padding(8.dp)
-
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(14.dp))
-                    Column {
-                        Text(
-                            text = "Delete Account",
-                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                        )
-                    }
-                }
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-
-                ) {
-
-                }
-                Icon(
-                    painter = painterResource(id = R.drawable.arrow_forward_ios_48px),
-                    contentDescription = "",
-                    modifier = Modifier.size(16.dp)
-                )
+                Text(text = "Delete Account")
             }
         }
     }
