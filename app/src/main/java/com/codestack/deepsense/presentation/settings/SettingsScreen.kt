@@ -63,6 +63,18 @@ fun SettingsScreen(
             }
         }
     }
+
+    SignOut(
+        navigateToAuthScreen = { signedOut ->
+            if (signedOut) {
+                navController.navigate(Screens.Signin.route) {
+                    popUpTo(navController.graph.id) {
+                        inclusive = true
+                    }
+                }
+            }
+        }
+    )
 }
 
 
@@ -258,7 +270,8 @@ fun AccountUI(viewModel: ProfileViewModel) {
         }
         Row(modifier = Modifier.fillMaxWidth()) {
             OutlinedButton(
-                onClick = { viewModel.revokeAccess() },
+                onClick = {
+                    viewModel.revokeAccess() },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = "Delete Account")
