@@ -1,16 +1,15 @@
 package com.codestack.deepsense.presentation.activity
 
 
-import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,75 +21,69 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.codestack.deepsense.components.NotEnoughDataLg
+import com.codestack.deepsense.components.ServerErrorLg
 import com.codestack.deepsense.ui.theme.DeepSenseTheme
 
 import java.util.*
 
-
-    val moodList = arrayOf("Joy", "Suicidal", "Sadness", "Admiration", "Neutral")
-    val moodStatusList = arrayOf(
-        "I feel lucky to have a friend like you",
-        "I hate this life, I feel like ending it all",
-        "My dog passed away today",
-        "Good things are coming my way",
-        "Nothing is new, I need something different and get new experience "
-    )
-
-    val percentageList = arrayOf("80", "99", "95", "85", "56")
-    val allValues = arrayOf(moodStatusList, moodList, percentageList)
-
-    val valueLength = moodList.size + moodStatusList.size + percentageList.size
-
-// progress indicator values
-
-val mood = arrayOf("Joy","Sad","Neutral", "Admire")
-val percentage = arrayOf("56","64","21","89")
-
-
 @Composable
-fun ActivityScreen() {
-
-
-    //Log.d("Total length : ", valueLength.toString())
-
-
+fun ActivityScreen(
+    viewModel: ActivityViewModel = hiltViewModel()
+) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
 
+        LaunchedEffect(Unit) {
+            viewModel.retrieveTypingActivity()
+        }
+
+        val typingActivityList by viewModel.typingActivityList.collectAsState()
+        val isConnectionError by viewModel.isConnectionError.collectAsState()
+        val isNotEnoughData by viewModel.isNotEnoughData.collectAsState()
+
+
         Column(Modifier.fillMaxSize()) {
-           //Spacer(modifier = Modifier.padding(15.dp))
+            //Spacer(modifier = Modifier.padding(15.dp))
             Text(
                 text = "Your typing activity",
-                modifier = Modifier.padding(15.dp,15.dp),
+                modifier = Modifier.padding(15.dp, 15.dp),
                 fontSize = MaterialTheme.typography.headlineSmall.fontSize
             )
 
-            LazyColumn(
-               // contentPadding = PaddingValues(10.dp),
-
-                )
-            {
-                itemsIndexed(items = allValues[0]) { index, item ->
-
-
-
-                    //Card component
-                    ActivityCard(
-
-                        moodStatus = moodStatusList[index],
-                        emotion = moodList[index],
-                        percentage = percentageList[index],
-                    )
-
+            if (isConnectionError) {
+                ServerErrorLg()
+            } else {
+                if (isNotEnoughData) {
+                    NotEnoughDataLg()
+                } else {
+                    if (typingActivityList.isEmpty()) {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            CircularProgressIndicator(modifier = Modifier.size(50.dp))
+                        }
+                    } else {
+                        LazyColumn() {
+                            items(typingActivityList.size) {
+                                val item = typingActivityList[it]
+                                val text: String = item["text"] as String
+                                val predictions: Map<String, String> =
+                                    item["predictions"] as Map<String, String>
+                                ActivityCard(text = text, predictions = predictions)
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 }
-
-
 
 
 @Composable
@@ -98,24 +91,31 @@ fun LinearProgressIndicator(mood: String, percentage: Float) {
     var progress by remember { mutableStateOf(0.1f) }
     val size by animateFloatAsState(
         targetValue = progress,
-        tween(durationMillis = 1000, delayMillis = 200, easing = LinearOutSlowInEasing))
+        tween(durationMillis = 1000, delayMillis = 200, easing = LinearOutSlowInEasing)
+    )
 
     Column(horizontalAlignment = Alignment.CenterHorizontally)
     {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = mood, modifier = Modifier
-                .weight(2.5f)
-                .padding(end = 2.dp), fontSize = 12.sp)
-            LinearProgressIndicator(progress = size, modifier = Modifier.weight(7f))
+            Text(
+                text = mood,
+                modifier = Modifier
+                    .weight(4f)
+                    .padding(end = 2.dp), fontSize = 12.sp
+            )
 
-            LaunchedEffect(key1 = true){
-                progress = percentage/100
+            LinearProgressIndicator(progress = size, modifier = Modifier.weight(5f))
+
+            LaunchedEffect(key1 = true) {
+                progress = percentage / 100
             }
 
 
-            Text(text = percentage.toString().substringBefore(".")+"%" ,modifier = Modifier
-                .weight(2f)
-                .padding(start = 15.dp), fontSize = 12.sp)
+            Text(
+                text = percentage.toString().substringBefore(".") + "%", modifier = Modifier
+                    .weight(2f)
+                    .padding(start = 15.dp), fontSize = 12.sp
+            )
         }
         Spacer(Modifier.height(15.dp))
 
@@ -123,101 +123,81 @@ fun LinearProgressIndicator(mood: String, percentage: Float) {
 }
 
 @Composable
-fun CustomPopUpDialog(onDismiss: () -> Unit, title: String, desc: String) {
-
-
-
-
+fun CustomPopUpDialog(
+    onDismiss: () -> Unit,
+    text: String,
+    predictions: Map<String, String>
+) {
     Dialog(onDismissRequest = onDismiss) {
-
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            )
-            {
-                //Spacer(modifier = Modifier.height(130.dp))
-                Box(
-                    modifier = Modifier
-                        .height(390.dp)
-                        .background(
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            //shape = RoundedCornerShape(25.dp, 10.dp, 25.dp, 10.dp)
-                            shape = RoundedCornerShape(10.dp)
-
-                        )
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxHeight(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+        Column(
+//            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        )
+        {
+            Box(
+                modifier = Modifier
+                    .height(550.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        //shape = RoundedCornerShape(25.dp, 10.dp, 25.dp, 10.dp)
+                        shape = RoundedCornerShape(10.dp)
                     )
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxHeight(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                )
+                {
+                    Text(
+                        text = text,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                            .fillMaxWidth(),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    )
+
+                    Spacer(modifier = Modifier.height(18.dp))
+
+                    LazyColumn(contentPadding = PaddingValues(10.dp))
                     {
-                        //Spacer(modifier = Modifier.height(24.dp))
-                        Text(
-                            text = title,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .padding(top = 10.dp)
-                                .fillMaxWidth(),
-                            style = MaterialTheme.typography.headlineSmall,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = desc,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .padding(top = 10.dp, start = 10.dp, end = 10.dp)
-                                .fillMaxWidth(),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        )
-                        Spacer(modifier = Modifier.height(10.dp))
-
-                        LazyColumn(
-                            contentPadding = PaddingValues(10.dp),
-
-                            )
-                        {
-                            itemsIndexed(items = mood) { index, item ->
-
-//                                Log.d("Current item : ", item)
-//                                Log.d("CurrentIndex : ", index.toString())
-
-                                LinearProgressIndicator(
-                                    mood = mood[index],
-                                    percentage = percentage[index].toFloat()
-                                )
-
-                            }
-
-
-                        }
-                        //Spacer(modifier = Modifier.height(24.dp))
-                        Button(
-                            onClick = onDismiss,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(5.dp))
-                        ) {
-                            Text(
-                                text = "Close",
-                                color = Color.White
+                        items(predictions.toList().size - 2) {
+                            val prediction = predictions.toList()[it]
+                            LinearProgressIndicator(
+                                mood = prediction.first,
+                                percentage = prediction.second.toFloat()
                             )
                         }
+                    }
 
+                    Button(
+                        onClick = onDismiss,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(5.dp))
+                    ) {
+                        Text(
+                            text = "Close"
+                        )
                     }
                 }
             }
         }
     }
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ActivityCard(moodStatus: String, emotion: String, percentage: String) {
+fun ActivityCard(
+    text: String,
+    predictions: Map<String, String>,
+) {
 
     val dialogVisibility = remember { mutableStateOf(false) }
 
@@ -234,38 +214,37 @@ fun ActivityCard(moodStatus: String, emotion: String, percentage: String) {
     ) {
         Column(
             modifier = Modifier.padding(10.dp),
-
-
         ) {
             Text(
-                text = moodStatus,
+                text = text,
                 fontSize = 18.sp,
                 maxLines = 1
             )
+
             Spacer(modifier = Modifier.padding(5.dp))
 
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
 
-
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                )
+                Row(verticalAlignment = Alignment.CenterVertically)
                 {
                     SuggestionChip(
                         onClick = { /* Do something! */ },
-                        label = { Text(text = emotion, textAlign = TextAlign.Center) },
-
+                        label = {
+                            Text(
+                                text = predictions["Primary"]!!,
+                                textAlign = TextAlign.Center
+                            )
+                        },
                     )
 
                     Text(
-                        text = "${percentage}%",
+                        text = "${predictions[predictions["Primary"]]}%",
                         fontSize = 30.sp,
                         textAlign = TextAlign.Right,
                         modifier = Modifier.weight(6f)
-
                     )
                 }
             }
@@ -274,24 +253,26 @@ fun ActivityCard(moodStatus: String, emotion: String, percentage: String) {
         }
     }
     if (dialogVisibility.value) {
-        CustomPopUpDialog(onDismiss = { dialogVisibility.value = false }, emotion, moodStatus)
+        CustomPopUpDialog(
+            onDismiss = { dialogVisibility.value = false },
+            text,
+            predictions
+        )
     }
 }
 
 
-@Preview(name = "Light Mode")
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    showBackground = true,
-    name = "Dark Mode"
-)
+@Preview()
+@Composable
+fun ActivityScreenPreview() {
+    ActivityScreen()
+}
 
 @Composable
-
 fun DefaultView() {
     DeepSenseTheme {
 
-        LinearProgressIndicator("Neutral",0.4f)
+        LinearProgressIndicator("Neutral", 0.4f)
 
 //        CustomPopUpDialog(
 //            onDismiss = {},

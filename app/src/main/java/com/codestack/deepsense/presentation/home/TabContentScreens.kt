@@ -25,6 +25,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.*
 import com.codestack.deepsense.R
+import com.codestack.deepsense.components.NotEnoughDataLg
+import com.codestack.deepsense.components.NotEnoughDataSm
+import com.codestack.deepsense.components.ServerErrorLg
+import com.codestack.deepsense.components.ServerErrorSm
 import com.codestack.deepsense.core.Utils
 
 @Composable
@@ -321,85 +325,6 @@ fun MentalHealth(
         }
     }
 }
-
-
-@Composable
-fun ServerErrorLg() {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Icon(
-            imageVector = Icons.Filled.Warning,
-            tint = Color(0xFFE21818),
-            contentDescription = "Error"
-        )
-        Text(
-            text = "Can't connect to the server",
-            fontSize = MaterialTheme.typography.titleMedium.fontSize,
-            modifier = Modifier.padding(start = 5.dp)
-        )
-    }
-}
-
-@Composable
-fun ServerErrorSm() {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            imageVector = Icons.Filled.Warning,
-            tint = Color(0xFFE21818),
-            contentDescription = "Error",
-            modifier = Modifier
-                .size(30.dp)
-                .padding(end = 5.dp)
-        )
-        Text(
-            text = "Can't connect to the server",
-            fontSize = MaterialTheme.typography.titleMedium.fontSize
-        )
-    }
-}
-
-
-@Composable
-fun NotEnoughDataLg() {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Icon(
-            imageVector = Icons.Filled.Info,
-            tint = Color(0xFFFF8400),
-            contentDescription = "Info",
-            modifier = Modifier
-                .size(30.dp)
-                .padding(end = 5.dp)
-        )
-        Text(
-            text = "I need more data to make predictions",
-            fontSize = MaterialTheme.typography.titleMedium.fontSize,
-            modifier = Modifier.padding(start = 5.dp)
-        )
-    }
-}
-
-@Composable
-fun NotEnoughDataSm() {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            imageVector = Icons.Filled.Info,
-            tint = Color(0xFFFF8400),
-            contentDescription = "Info",
-            modifier = Modifier
-                .size(30.dp)
-                .padding(end = 8.dp)
-        )
-        Text(
-            text = "I need more data to make predictions",
-            fontSize = MaterialTheme.typography.titleMedium.fontSize
-        )
-    }
-}
-
-//@Composable
-//@Preview
-//fun ServerErrorPreview() {
-//    ServerErrorSm()
-//}
 
 
 @Composable
