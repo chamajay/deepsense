@@ -30,6 +30,9 @@ class ActivityViewModel : ViewModel() {
 
     fun retrieveTypingActivity() {
         scope.launch {
+            // Clear list before fetching
+            _typingActivityList.value = mutableListOf()
+
             val request = Request.Builder()
                 .url("$BASE_URL/recent-text-activity")
                 .build()
