@@ -16,12 +16,12 @@ class ActivityViewModel : ViewModel() {
     private val job = Job()
     private val scope = CoroutineScope(Dispatchers.IO + job)
 
-    private val _typingActivity: MutableStateFlow<MutableMap<String, Map<String, String>>> =
+    private val _typingActivityList: MutableStateFlow<MutableList<Map<String, Any>>> =
         MutableStateFlow(
-            mutableMapOf()
+            mutableListOf()
         )
-    val typingActivity: StateFlow<MutableMap<String, Map<String, String>>>
-        get() = _typingActivity
+    val typingActivityList: StateFlow<MutableList<Map<String, Any>>>
+        get() = _typingActivityList
 
     private val _isConnectionError: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isConnectionError: StateFlow<Boolean>
@@ -66,24 +66,26 @@ class ActivityViewModel : ViewModel() {
                         val suicideRisk = jsonObject.getString("suicide_risk")
 
                         val emotionsMap = mapOf(
-                            "Happy" to joy.toString(),
-                            "Surprised" to surprise.toString(),
-                            "Meh" to neutral.toString(),
-                            "Sad" to sadness.toString(),
-                            "Angry" to anger.toString(),
-                            "Disgusted" to disgust.toString(),
-                            "Scared" to fear.toString(),
-                            "Non-suicidal" to nonSuicidal.toString(),
-                            "Suicidal" to suicidal.toString(),
-                            "Primary" to primary,
-                            "SuicideRisk" to capitalize(suicideRisk)
+                            "text" to text,
+                            "predictions" to mapOf(
+                                "Happy" to joy.toString(),
+                                "Surprised" to surprise.toString(),
+                                "Meh" to neutral.toString(),
+                                "Sad" to sadness.toString(),
+                                "Angry" to anger.toString(),
+                                "Disgusted" to disgust.toString(),
+                                "Scared" to fear.toString(),
+                                "Non-suicidal" to nonSuicidal.toString(),
+                                "Suicidal" to suicidal.toString(),
+                                "Primary" to primary,
+                                "SuicideRisk" to capitalize(suicideRisk)
+                            )
                         )
 
-                        _typingActivity.value =
-                            _typingActivity.value.toMutableMap().apply {
-                                put(text, emotionsMap)
+                        _typingActivityList.value =
+                            _typingActivityList.value.toMutableList().apply {
+                                add(emotionsMap)
                             }
-
                     }
                 }
             } catch (_: Exception) {
