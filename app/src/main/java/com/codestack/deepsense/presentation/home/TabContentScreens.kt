@@ -326,6 +326,43 @@ fun ServerErrorSm() {
 }
 
 
+@Composable
+fun NotEnoughDataLg() {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Icon(
+            imageVector = Icons.Filled.Info,
+            tint = Color(0xFFFF8400),
+            contentDescription = "Info",
+            modifier = Modifier
+                .size(30.dp)
+                .padding(end = 5.dp)
+        )
+        Text(
+            text = "I need more data to make predictions",
+            fontSize = MaterialTheme.typography.titleMedium.fontSize,
+            modifier = Modifier.padding(start = 5.dp)
+        )
+    }
+}
+
+@Composable
+fun NotEnoughDataSm() {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            imageVector = Icons.Filled.Info,
+            tint = Color(0xFFFF8400),
+            contentDescription = "Info",
+            modifier = Modifier
+                .size(30.dp)
+                .padding(end = 8.dp)
+        )
+        Text(
+            text = "I need more data to make predictions",
+            fontSize = MaterialTheme.typography.titleMedium.fontSize
+        )
+    }
+}
+
 //@Composable
 //@Preview
 //fun ServerErrorPreview() {
