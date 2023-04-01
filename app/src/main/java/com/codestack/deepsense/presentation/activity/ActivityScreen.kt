@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.codestack.deepsense.components.NotEnoughDataLg
 import com.codestack.deepsense.components.ServerErrorLg
 import com.codestack.deepsense.ui.theme.DeepSenseTheme
 
@@ -42,6 +43,7 @@ fun ActivityScreen(
 
         val typingActivityList by viewModel.typingActivityList.collectAsState()
         val isConnectionError by viewModel.isConnectionError.collectAsState()
+        val isNotEnoughData by viewModel.isNotEnoughData.collectAsState()
 
 
         Column(Modifier.fillMaxSize()) {
@@ -55,13 +57,27 @@ fun ActivityScreen(
             if (isConnectionError) {
                 ServerErrorLg()
             } else {
-                LazyColumn() {
-                    items(typingActivityList.size) {
-                        val item = typingActivityList[it]
-                        val text: String = item["text"] as String
-                        val predictions: Map<String, String> =
-                            item["predictions"] as Map<String, String>
-                        ActivityCard(text = text, predictions = predictions)
+                if (isNotEnoughData) {
+                    NotEnoughDataLg()
+                } else {
+                    if (typingActivityList.isEmpty()) {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            CircularProgressIndicator(modifier = Modifier.size(50.dp))
+                        }
+                    } else {
+                        LazyColumn() {
+                            items(typingActivityList.size) {
+                                val item = typingActivityList[it]
+                                val text: String = item["text"] as String
+                                val predictions: Map<String, String> =
+                                    item["predictions"] as Map<String, String>
+                                ActivityCard(text = text, predictions = predictions)
+                            }
+                        }
                     }
                 }
             }
