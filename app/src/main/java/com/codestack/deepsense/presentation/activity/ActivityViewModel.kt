@@ -70,7 +70,7 @@ class ActivityViewModel : ViewModel() {
                             "Non-suicidal" to nonSuicidal.toString(),
                             "Suicidal" to suicidal.toString(),
                             "Primary" to primary,
-                            "SuicideRisk" to suicideRisk
+                            "SuicideRisk" to capitalize(suicideRisk)
                         )
 
                         _typingActivity.value =
@@ -82,5 +82,16 @@ class ActivityViewModel : ViewModel() {
                 }
             } catch (_: Exception) { }
         }
+    }
+
+    private fun capitalize(word: String): String {
+        if (word.isEmpty()) {
+            return word
+        }
+
+        val firstLetter = word[0].uppercaseChar()
+        val restOfWord = word.substring(1)
+
+        return "$firstLetter$restOfWord"
     }
 }
