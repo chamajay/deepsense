@@ -36,6 +36,10 @@ class HomeViewModel : ViewModel() {
     val isConnectionError: StateFlow<Boolean>
         get() = _isConnectionError
 
+    private val _isNotEnoughData: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isNotEnoughData: StateFlow<Boolean>
+        get() = _isNotEnoughData
+
 
     fun retrieveMood() {
         scope.launch {
@@ -50,6 +54,8 @@ class HomeViewModel : ViewModel() {
                 // Execute request
                 val response = client.newCall(request).execute()
 
+                _isConnectionError.value = false
+
                 // Simulate a delay for loading animation
                 delay(500)
 
@@ -58,13 +64,17 @@ class HomeViewModel : ViewModel() {
                     val jsonObj = JSONObject(responseBodyString)
                     val emotionFromServer = jsonObj.getString("today_mood")
 
+                    // When there's not enough data
+                    if (emotionFromServer == "None") {
+                        _isNotEnoughData.value = true
+                        return@launch
+                    }
+                    _isNotEnoughData.value = false
+
                     val (mappedEmotion, imageResId) = Utils.mapEmotion(emotionFromServer)
                     _mood.value = mappedEmotion
                     _moodImage.value = imageResId
                 }
-
-                _isConnectionError.value = false
-
             } catch (_: Exception) {
                 _isConnectionError.value = true
             }
@@ -90,15 +100,18 @@ class HomeViewModel : ViewModel() {
                 val responseBodyString = response.body?.string()
                 responseBodyString?.let {
                     val jsonObj = JSONObject(responseBodyString)
-                    val jsonArr = JSONArray(jsonObj.getString("main_mood_percentages"))
-                    for (i in 0 until jsonArr.length()) {
-                        val jsonObject = jsonArr.getJSONObject(i)
-                        val emotion = jsonObject.getString("emotion")
-                        val percentage = jsonObject.getDouble("percentage")
-                        _emotionsPercentages.value =
-                            _emotionsPercentages.value.toMutableMap().apply {
-                                put(emotion, percentage)
-                            }
+                    val value = jsonObj.getString("main_mood_percentages")
+                    if (value != "None") {
+                        val jsonArr = JSONArray(value)
+                        for (i in 0 until jsonArr.length()) {
+                            val jsonObject = jsonArr.getJSONObject(i)
+                            val emotion = jsonObject.getString("emotion")
+                            val percentage = jsonObject.getDouble("percentage")
+                            _emotionsPercentages.value =
+                                _emotionsPercentages.value.toMutableMap().apply {
+                                    put(emotion, percentage)
+                                }
+                        }
                     }
                 }
 

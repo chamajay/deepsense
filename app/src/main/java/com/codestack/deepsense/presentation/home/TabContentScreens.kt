@@ -4,10 +4,14 @@ import android.graphics.drawable.AnimatedImageDrawable
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -113,6 +117,8 @@ fun Mood(
     val mood by viewModel.mood.collectAsState()
     val moodImg by viewModel.moodImage.collectAsState()
     val isConnectionError by viewModel.isConnectionError.collectAsState()
+    val isNotEnoughData by viewModel.isNotEnoughData.collectAsState()
+
 
     LaunchedEffect(Unit) {
         viewModel.retrieveMood()
@@ -132,32 +138,36 @@ fun Mood(
             if (isConnectionError) {
                 ServerErrorLg()
             } else {
-                if (mood.isEmpty()) {
-                    CircularProgressIndicator(modifier = Modifier.size(50.dp))
+                if (isNotEnoughData) {
+                    NotEnoughDataLg()
                 } else {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(0.dp, 15.dp)
-                    ) {
-                        Text(
-                            text = "You seem ",
-                            fontSize = MaterialTheme.typography.headlineLarge.fontSize,
-                        )
-                        Text(
-                            text = mood,
-                            fontSize = MaterialTheme.typography.headlineLarge.fontSize,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 20.dp)
-                    ) {
-                        LottieAnimation(lottieFile = moodImg)
+                    if (mood.isEmpty()) {
+                        CircularProgressIndicator(modifier = Modifier.size(50.dp))
+                    } else {
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(0.dp, 15.dp)
+                        ) {
+                            Text(
+                                text = "You seem ",
+                                fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                            )
+                            Text(
+                                text = mood,
+                                fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 20.dp)
+                        ) {
+                            LottieAnimation(lottieFile = moodImg)
+                        }
                     }
                 }
             }
@@ -171,7 +181,10 @@ fun MoodPercentage(
     percentage: Double,
     image: Int
 ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(15.dp)) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(vertical = 15.dp, horizontal = 25.dp)
+    ) {
         Row(modifier = Modifier.size(35.dp)) {
             LottieAnimation(lottieFile = image)
         }
@@ -196,6 +209,7 @@ fun MoodToday(
 ) {
     val moodPercentages by viewModel.emotionsPercentages.collectAsState()
     val isConnectionError by viewModel.isConnectionError.collectAsState()
+    val isNotEnoughData by viewModel.isNotEnoughData.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.retrieveMoodPercentages()
@@ -224,21 +238,33 @@ fun MoodToday(
                 if (isConnectionError) {
                     ServerErrorLg()
                 } else {
-                    if (moodPercentages.isEmpty()) {
-                        CircularProgressIndicator(modifier = Modifier.size(50.dp))
+                    if (isNotEnoughData) {
+                        NotEnoughDataSm()
                     } else {
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            moodPercentages.forEach { (emotion, percentage) ->
-                                val (mappedEmotion, imageResId) = Utils.mapEmotion(emotion)
-                                MoodPercentage(
-                                    mood = mappedEmotion,
-                                    percentage = percentage,
-                                    image = imageResId
-                                )
+                        if (moodPercentages.isEmpty()) {
+                            CircularProgressIndicator(modifier = Modifier.size(50.dp))
+                        } else {
+                            LazyRow(
+                                contentPadding = PaddingValues(
+                                    horizontal = 16.dp
+                                ),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                items(moodPercentages.size) { index ->
+                                    val emotion = moodPercentages.keys.toList()[index]
+                                    val percentage = moodPercentages.values.toList()[index]
+                                    val (mappedEmotion, imageResId) = Utils.mapEmotion(emotion)
+                                    Box(
+                                        modifier = Modifier.wrapContentSize(),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        MoodPercentage(
+                                            mood = mappedEmotion,
+                                            percentage = percentage,
+                                            image = imageResId
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
@@ -248,13 +274,15 @@ fun MoodToday(
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MentalHealth(
     viewModel: HomeViewModel
 ) {
-
     val isConnectionError by viewModel.isConnectionError.collectAsState()
+    val isNotEnoughData by viewModel.isNotEnoughData.collectAsState()
+
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
@@ -278,12 +306,16 @@ fun MentalHealth(
                 if (isConnectionError) {
                     ServerErrorSm()
                 } else {
-                    Text(
-                        text = "You seem healthy!",
-                        color = MaterialTheme.colorScheme.primary,
-                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                        modifier = Modifier.padding(5.dp, 0.dp)
-                    )
+                    if (isNotEnoughData) {
+                        NotEnoughDataSm()
+                    } else {
+                        Text(
+                            text = "You seem healthy!",
+                            color = MaterialTheme.colorScheme.primary,
+                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                            modifier = Modifier.padding(5.dp, 0.dp)
+                        )
+                    }
                 }
             }
         }
@@ -326,6 +358,43 @@ fun ServerErrorSm() {
 }
 
 
+@Composable
+fun NotEnoughDataLg() {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Icon(
+            imageVector = Icons.Filled.Info,
+            tint = Color(0xFFFF8400),
+            contentDescription = "Info",
+            modifier = Modifier
+                .size(30.dp)
+                .padding(end = 5.dp)
+        )
+        Text(
+            text = "I need more data to make predictions",
+            fontSize = MaterialTheme.typography.titleMedium.fontSize,
+            modifier = Modifier.padding(start = 5.dp)
+        )
+    }
+}
+
+@Composable
+fun NotEnoughDataSm() {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            imageVector = Icons.Filled.Info,
+            tint = Color(0xFFFF8400),
+            contentDescription = "Info",
+            modifier = Modifier
+                .size(30.dp)
+                .padding(end = 8.dp)
+        )
+        Text(
+            text = "I need more data to make predictions",
+            fontSize = MaterialTheme.typography.titleMedium.fontSize
+        )
+    }
+}
+
 //@Composable
 //@Preview
 //fun ServerErrorPreview() {
@@ -333,11 +402,14 @@ fun ServerErrorSm() {
 //}
 
 
-
 @Composable
 fun LottieAnimation(lottieFile: Int) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(lottieFile))
-    val progress by animateLottieCompositionAsState(composition = composition, iterations = 1, speed = 0.8f)
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = 1,
+        speed = 0.8f
+    )
     LottieAnimation(
         composition = composition,
         progress = { progress },
