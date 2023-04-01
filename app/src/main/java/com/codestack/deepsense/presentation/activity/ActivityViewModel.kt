@@ -27,6 +27,10 @@ class ActivityViewModel : ViewModel() {
     val isConnectionError: StateFlow<Boolean>
         get() = _isConnectionError
 
+    private val _isNotEnoughData: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isNotEnoughData: StateFlow<Boolean>
+        get() = _isNotEnoughData
+
 
     fun retrieveTypingActivity() {
         scope.launch {
@@ -50,6 +54,13 @@ class ActivityViewModel : ViewModel() {
                 responseBodyString?.let {
                     val jsonObj = JSONObject(responseBodyString)
                     val value = jsonObj.getString("recent_text_activity")
+
+                    // When there's not enough data
+                    if (value == "None") {
+                        _isNotEnoughData.value = true
+                        return@launch
+                    }
+                    _isNotEnoughData.value = false
 
                     val jsonArr = JSONArray(value)
                     for (i in 0 until jsonArr.length()) {
