@@ -1,6 +1,7 @@
 package com.codestack.deepsense.presentation.activity
 
 
+import android.util.Log
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -13,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,7 +23,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.codestack.deepsense.components.NotEnoughDataLg
 import com.codestack.deepsense.components.ServerErrorLg
-import com.codestack.deepsense.ui.theme.DeepSenseTheme
 import java.util.*
 
 @Composable
@@ -71,7 +72,11 @@ fun ActivityScreen(
                                 val text: String = item["text"] as String
                                 val predictions: Map<String, String> =
                                     item["predictions"] as Map<String, String>
-                                ActivityCard(text = text, predictions = predictions)
+                                ActivityCard(text = text, predictions = predictions, suicidalRisk = predictions["SuicideRisk"] == "Suicidal")
+                                // Check SuicideRisk
+                                Log.d("Activity suicidalCheck",
+                                    (predictions["SuicideRisk"] == "Suicidal").toString()
+                                )
                             }
                         }
                     }
@@ -133,7 +138,7 @@ fun CustomPopUpDialog(
         {
             Box(
                 modifier = Modifier
-                    .height(450.dp)
+                    .height(480.dp)
                     .background(
                         color = MaterialTheme.colorScheme.onPrimary,
                         //shape = RoundedCornerShape(25.dp, 10.dp, 25.dp, 10.dp)
@@ -166,7 +171,8 @@ fun CustomPopUpDialog(
                             val prediction = predictions.toList()[it]
                             LinearProgressIndicator(
                                 mood = prediction.first,
-                                percentage = prediction.second.toFloat()
+                                percentage = prediction.second.toFloat(),
+
                             )
                         }
                     }
@@ -193,6 +199,7 @@ fun CustomPopUpDialog(
 fun ActivityCard(
     text: String,
     predictions: Map<String, String>,
+    suicidalRisk: Boolean
 ) {
 
     val dialogVisibility = remember { mutableStateOf(false) }
@@ -235,6 +242,32 @@ fun ActivityCard(
                             )
                         },
                     )
+                    Spacer(modifier = Modifier.padding(start = 6.dp))
+
+                    //Log.d("SuicideRisk::::","TRUE")
+                    // Suicidal chip
+                    if(suicidalRisk){
+//                        Log.d("SuicideRisk::::","TRUE")
+
+                        SuggestionChip(
+                            onClick = { /* Do something! */ },
+                            colors = SuggestionChipDefaults.suggestionChipColors(
+                                containerColor =  MaterialTheme.colorScheme.onError
+                            ),
+                            border = SuggestionChipDefaults.suggestionChipBorder(
+                                borderWidth = 1.dp,
+                                borderColor = MaterialTheme.colorScheme.onError
+                            ),
+                            label = {
+                                Text(
+                                    text = "Suicidal",
+                                    textAlign = TextAlign.Center,
+                                    color = Color.White
+                                )
+                            },
+                        )
+                    }
+
 
                     Text(
                         text = "${predictions[predictions["Primary"]]}%",
@@ -242,6 +275,7 @@ fun ActivityCard(
                         textAlign = TextAlign.Right,
                         modifier = Modifier.weight(6f)
                     )
+
 
                 }
 
@@ -261,23 +295,7 @@ fun ActivityCard(
 @Preview()
 @Composable
 fun ActivityScreenPreview() {
-
-
     ActivityScreen()
-
-
 }
 
-@Composable
-fun DefaultView() {
-    DeepSenseTheme {
 
-        LinearProgressIndicator("Neutral", 0.4f)
-
-//        CustomPopUpDialog(
-//            onDismiss = {},
-//            "Mood status",
-//            "Dialog description will be visible here, Some long text should be there"
-//        )
-    }
-}
