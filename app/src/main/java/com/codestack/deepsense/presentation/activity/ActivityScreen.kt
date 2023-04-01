@@ -8,6 +8,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.codestack.deepsense.components.ServerErrorLg
 import com.codestack.deepsense.ui.theme.DeepSenseTheme
 
 import java.util.*
@@ -38,6 +41,8 @@ fun ActivityScreen(
         }
 
         val typingActivityList by viewModel.typingActivityList.collectAsState()
+        val isConnectionError by viewModel.isConnectionError.collectAsState()
+
 
         Column(Modifier.fillMaxSize()) {
             //Spacer(modifier = Modifier.padding(15.dp))
@@ -47,13 +52,17 @@ fun ActivityScreen(
                 fontSize = MaterialTheme.typography.headlineSmall.fontSize
             )
 
-            LazyColumn() {
-                items(typingActivityList.size) {
-                    val item = typingActivityList[it]
-                    val text: String = item["text"] as String
-                    val predictions: Map<String, String> =
-                        item["predictions"] as Map<String, String>
-                    ActivityCard(text = text, predictions = predictions)
+            if (isConnectionError) {
+                ServerErrorLg()
+            } else {
+                LazyColumn() {
+                    items(typingActivityList.size) {
+                        val item = typingActivityList[it]
+                        val text: String = item["text"] as String
+                        val predictions: Map<String, String> =
+                            item["predictions"] as Map<String, String>
+                        ActivityCard(text = text, predictions = predictions)
+                    }
                 }
             }
         }
