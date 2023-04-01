@@ -23,6 +23,10 @@ class ActivityViewModel : ViewModel() {
     val typingActivity: StateFlow<MutableMap<String, Map<String, String>>>
         get() = _typingActivity
 
+    private val _isConnectionError: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isConnectionError: StateFlow<Boolean>
+        get() = _isConnectionError
+
 
     fun retrieveTypingActivity() {
         scope.launch {
@@ -33,6 +37,8 @@ class ActivityViewModel : ViewModel() {
             try {
                 // Execute request
                 val response = client.newCall(request).execute()
+
+                _isConnectionError.value = false
 
                 // Simulate a delay for loading animation
                 delay(500)
@@ -80,7 +86,9 @@ class ActivityViewModel : ViewModel() {
 
                     }
                 }
-            } catch (_: Exception) { }
+            } catch (_: Exception) {
+                _isConnectionError.value = true
+            }
         }
     }
 
