@@ -8,14 +8,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.codestack.deepsense.components.NotEnoughDataLg
 import com.codestack.deepsense.components.ServerErrorLg
 import com.codestack.deepsense.ui.theme.DeepSenseTheme
-
 import java.util.*
 
 @Composable
@@ -101,7 +97,7 @@ fun LinearProgressIndicator(mood: String, percentage: Float) {
                 text = mood,
                 modifier = Modifier
                     .weight(4f)
-                    .padding(end = 2.dp), fontSize = 12.sp
+                    .padding(end = 2.dp), fontSize = 14.sp
             )
 
             LinearProgressIndicator(progress = size, modifier = Modifier.weight(5f))
@@ -114,7 +110,7 @@ fun LinearProgressIndicator(mood: String, percentage: Float) {
             Text(
                 text = percentage.toString().substringBefore(".") + "%", modifier = Modifier
                     .weight(2f)
-                    .padding(start = 15.dp), fontSize = 12.sp
+                    .padding(start = 15.dp), fontSize = 14.sp
             )
         }
         Spacer(Modifier.height(15.dp))
@@ -137,7 +133,7 @@ fun CustomPopUpDialog(
         {
             Box(
                 modifier = Modifier
-                    .height(550.dp)
+                    .height(450.dp)
                     .background(
                         color = MaterialTheme.colorScheme.onPrimary,
                         //shape = RoundedCornerShape(25.dp, 10.dp, 25.dp, 10.dp)
@@ -175,7 +171,7 @@ fun CustomPopUpDialog(
                         }
                     }
 
-                    Button(
+                    OutlinedButton(
                         onClick = onDismiss,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -242,14 +238,14 @@ fun ActivityCard(
 
                     Text(
                         text = "${predictions[predictions["Primary"]]}%",
-                        fontSize = 30.sp,
+                        fontSize = 20.sp,
                         textAlign = TextAlign.Right,
                         modifier = Modifier.weight(6f)
                     )
+
                 }
+
             }
-
-
         }
     }
     if (dialogVisibility.value) {
@@ -265,7 +261,11 @@ fun ActivityCard(
 @Preview()
 @Composable
 fun ActivityScreenPreview() {
+
+
     ActivityScreen()
+
+
 }
 
 @Composable
