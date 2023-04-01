@@ -210,7 +210,7 @@ fun ActivityCard(
         modifier = Modifier
             .size(width = 500.dp, height = 120.dp)
             .padding(start = 20.dp, end = 20.dp, top = 15.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
+        colors = if(!suicidalRisk) CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer) else CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer) ,
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
 
 
@@ -221,7 +221,8 @@ fun ActivityCard(
             Text(
                 text = text,
                 fontSize = 18.sp,
-                maxLines = 1
+                maxLines = 1,
+                color = Color.White
             )
 
             Spacer(modifier = Modifier.padding(5.dp))
@@ -235,10 +236,15 @@ fun ActivityCard(
                 {
                     SuggestionChip(
                         onClick = { /* Do something! */ },
+                        border = SuggestionChipDefaults.suggestionChipBorder(
+                            borderWidth = 1.dp,
+                            borderColor = Color.White
+                        ),
                         label = {
                             Text(
                                 text = predictions["Primary"]!!,
-                                textAlign = TextAlign.Center
+                                textAlign = TextAlign.Center,
+                                color = Color.White
                             )
                         },
                     )
@@ -273,7 +279,8 @@ fun ActivityCard(
                         text = "${predictions[predictions["Primary"]]}%",
                         fontSize = 20.sp,
                         textAlign = TextAlign.Right,
-                        modifier = Modifier.weight(6f)
+                        modifier = Modifier.weight(6f),
+                        color = Color.White
                     )
 
 
