@@ -1,6 +1,7 @@
 package com.codestack.deepsense.components
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -22,10 +23,9 @@ fun NotEnoughDataSm() {
             imageVector = Icons.Filled.Info,
             tint = Color(0xFFFF8400),
             contentDescription = "Info",
-            modifier = Modifier
-                .size(30.dp)
-                .padding(end = 8.dp)
+            modifier = Modifier.size(30.dp)
         )
+        Spacer(modifier = Modifier.size(5.dp))
         Text(
             text = "I need more data to make predictions",
             fontSize = MaterialTheme.typography.titleMedium.fontSize

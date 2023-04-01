@@ -1,9 +1,6 @@
 package com.codestack.deepsense.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
@@ -26,12 +23,13 @@ fun ServerErrorLg() {
         Icon(
             imageVector = Icons.Filled.Warning,
             tint = Color(0xFFE21818),
-            contentDescription = "Error"
+            contentDescription = "Error",
+            modifier = Modifier.size(30.dp)
         )
+        Spacer(modifier = Modifier.size(5.dp))
         Text(
             text = "Can't connect to the server",
             fontSize = MaterialTheme.typography.titleMedium.fontSize,
-            modifier = Modifier.padding(start = 5.dp)
         )
     }
 }

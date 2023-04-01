@@ -1,6 +1,7 @@
 package com.codestack.deepsense.components
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -22,10 +23,9 @@ fun ServerErrorSm() {
             imageVector = Icons.Filled.Warning,
             tint = Color(0xFFE21818),
             contentDescription = "Error",
-            modifier = Modifier
-                .size(30.dp)
-                .padding(end = 5.dp)
+            modifier = Modifier.size(30.dp)
         )
+        Spacer(modifier = Modifier.size(10.dp))
         Text(
             text = "Can't connect to the server",
             fontSize = MaterialTheme.typography.titleMedium.fontSize

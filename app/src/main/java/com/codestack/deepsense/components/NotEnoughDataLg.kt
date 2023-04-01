@@ -1,8 +1,6 @@
 package com.codestack.deepsense.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Icon
@@ -17,19 +15,21 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun NotEnoughDataLg() {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
         Icon(
             imageVector = Icons.Filled.Info,
             tint = Color(0xFFFF8400),
             contentDescription = "Info",
-            modifier = Modifier
-                .size(30.dp)
-                .padding(end = 5.dp)
+            modifier = Modifier.size(30.dp)
         )
+        Spacer(modifier = Modifier.size(10.dp))
         Text(
             text = "I need more data to make predictions",
             fontSize = MaterialTheme.typography.titleMedium.fontSize,
-            modifier = Modifier.padding(start = 5.dp)
         )
     }
 }
