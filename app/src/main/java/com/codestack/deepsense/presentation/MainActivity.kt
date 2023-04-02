@@ -1,5 +1,6 @@
 package com.codestack.deepsense.presentation
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -27,15 +28,27 @@ class MainActivity : ComponentActivity() {
                 navController = rememberNavController()
                 SetupNavGraph(navController = navController)
             }
-            checkAuthState()
+            reroute()
         }
     }
 
-    private fun checkAuthState() {
+    private fun reroute() {
         if (viewModel.isUserAuthenticated) {
-            navigateToProfileScreen()
+            if (isServiceEnabled()) {
+                navigateToMainScreen()
+            } else {
+                navigateToAccessibilityScreen()
+            }
         }
     }
 
-    private fun navigateToProfileScreen() = navController.navigate(Screens.Main.route)
+    private fun navigateToMainScreen() = navController.navigate(Screens.Main.route)
+
+    private fun navigateToAccessibilityScreen() = navController.navigate(Screens.Accessibility.route)
+
+    private fun isServiceEnabled(): Boolean {
+        val sharedPreference =
+            applicationContext.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+        return sharedPreference.getBoolean("isAccessibilityServiceEnabled", false)
+    }
 }

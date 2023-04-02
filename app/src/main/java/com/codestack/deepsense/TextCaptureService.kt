@@ -2,6 +2,7 @@ package com.codestack.deepsense
 
 
 import android.accessibilityservice.AccessibilityService
+import android.content.Context
 import android.view.accessibility.AccessibilityEvent
 import android.widget.Toast
 import com.codestack.deepsense.core.Constants.BASE_URL
@@ -37,18 +38,20 @@ class TextCaptureService : AccessibilityService() {
 
     override fun onServiceConnected() {
         Toast.makeText(applicationContext, "DeepSense: service started!", Toast.LENGTH_SHORT).show()
+        sharedPrefUpdate(true)
     }
 
 
     override fun onInterrupt() {
-        TODO("Not yet implemented")
+        sharedPrefUpdate(false)
     }
 
 
     override fun onDestroy() {
+        sharedPrefUpdate(false)
+        Toast.makeText(applicationContext, "DeepSense: service stopped!", Toast.LENGTH_SHORT).show()
         job.cancel()
     }
-
 
     override fun onAccessibilityEvent(myevent: AccessibilityEvent?) {
         if (myevent != null) {
@@ -154,10 +157,19 @@ class TextCaptureService : AccessibilityService() {
             try {
                 // execute request
                 client.newCall(request).execute()
-            } catch (_: ConnectException) {}
+            } catch (_: ConnectException) {
+            }
 
             prevTxt = ""
         }
+    }
+
+    private fun sharedPrefUpdate(enabled: Boolean) {
+        val sharedPref =
+            applicationContext.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+        val sharedPrefEditor = sharedPref.edit()
+        sharedPrefEditor.putBoolean("isAccessibilityServiceEnabled", enabled)
+        sharedPrefEditor.apply()
     }
 
 }

@@ -1,6 +1,7 @@
 package com.codestack.deepsense.presentation.signup
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.util.Patterns
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
@@ -16,6 +17,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,6 +38,8 @@ fun SignUpScreen(
     navController: NavHostController,
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
+
+    val context = LocalContext.current
 
     var signUpClicked by rememberSaveable { mutableStateOf(false) }
     var facebookSignUpClicked by rememberSaveable { mutableStateOf(false) }
@@ -226,9 +230,17 @@ fun SignUpScreen(
     SignInWithGoogle(
         navigateToHomeScreen = { signedIn ->
             if (signedIn) {
-                navController.navigate(Screens.Main.route) {
-                    popUpTo(navController.graph.id) {
-                        inclusive = true
+                if (isServiceEnabled(context)) {
+                    navController.navigate(Screens.Main.route) {
+                        popUpTo(navController.graph.id) {
+                            inclusive = true
+                        }
+                    }
+                } else {
+                    navController.navigate(Screens.Accessibility.route) {
+                        popUpTo(navController.graph.id) {
+                            inclusive = true
+                        }
                     }
                 }
             }
@@ -239,9 +251,17 @@ fun SignUpScreen(
     EmailSignUp(
         navigateToHomeScreen = { signedUp ->
             if (signedUp) {
-                navController.navigate(Screens.Main.route) {
-                    popUpTo(navController.graph.id) {
-                        inclusive = true
+                if (isServiceEnabled(context)) {
+                    navController.navigate(Screens.Main.route) {
+                        popUpTo(navController.graph.id) {
+                            inclusive = true
+                        }
+                    }
+                } else {
+                    navController.navigate(Screens.Accessibility.route) {
+                        popUpTo(navController.graph.id) {
+                            inclusive = true
+                        }
                     }
                 }
             }
@@ -261,4 +281,10 @@ fun SignUpScreenPreview() {
     DeepSenseTheme {
         SignUpScreen(navController = rememberNavController())
     }
+}
+
+private fun isServiceEnabled(context: Context): Boolean {
+    val sharedPreference =
+        context.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+    return sharedPreference.getBoolean("isAccessibilityServiceEnabled", false)
 }
