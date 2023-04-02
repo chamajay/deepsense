@@ -10,9 +10,6 @@ sealed class Screens(val route: String) {
     object ContactUs: Screens(route = "contactus_screen")
     object Settings: Screens(route = "settings_screen")
     object Main: Screens(route = "main_screen")
-
-
-
-
+    object Accessibility: Screens(route = "accessibility_screen")
 }
 

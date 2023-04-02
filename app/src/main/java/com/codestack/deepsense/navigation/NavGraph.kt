@@ -11,6 +11,7 @@ import com.codestack.deepsense.presentation.aboutus.AboutUsScreen
 import com.codestack.deepsense.presentation.activity.ActivityScreen
 import com.codestack.deepsense.presentation.contactus.ContactUsScreen
 import com.codestack.deepsense.presentation.home.HomeScreen
+import com.codestack.deepsense.presentation.accessibility.PermissionsScreen
 
 import com.codestack.deepsense.presentation.settings.SettingsScreen
 import com.codestack.deepsense.presentation.signin.SignInScreen
@@ -67,6 +68,11 @@ fun SetupNavGraph(
             route = Screens.Main.route
         ) {
             MainScreen(navController)
+        }
+        composable(
+            route = Screens.Accessibility.route
+        ) {
+            PermissionsScreen(navController)
         }
     }
 }
