@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -88,7 +89,7 @@ fun ActivityScreen(
 
 
 @Composable
-fun LinearProgressIndicator(mood: String, percentage: Float) {
+fun LinearProgressIndicator(mood: String, percentage: Float, suicidal: Boolean) {
     var progress by remember { mutableStateOf(0.1f) }
     val size by animateFloatAsState(
         targetValue = progress,
@@ -100,12 +101,21 @@ fun LinearProgressIndicator(mood: String, percentage: Float) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = mood,
+
                 modifier = Modifier
-                    .weight(4f)
-                    .padding(end = 2.dp), fontSize = 14.sp
+                    .weight(6f)
+                    .padding(end = 5.dp),
+                fontSize = 16.sp,
+                textAlign = TextAlign.Left,
+                fontWeight = FontWeight.W300
+                //color = if(suicidal) Color.Red else MaterialTheme.colorScheme.onSurface
             )
 
-            LinearProgressIndicator(progress = size, modifier = Modifier.weight(5f))
+            LinearProgressIndicator(
+                progress = size,
+                modifier = Modifier.weight(7.9f),
+                color = if(suicidal) Color.Red else MaterialTheme.colorScheme.onSurface
+            )
 
             LaunchedEffect(key1 = true) {
                 progress = percentage / 100
@@ -113,9 +123,14 @@ fun LinearProgressIndicator(mood: String, percentage: Float) {
 
 
             Text(
-                text = percentage.toString().substringBefore(".") + "%", modifier = Modifier
-                    .weight(2f)
-                    .padding(start = 15.dp), fontSize = 14.sp
+                text = percentage.toString().substringBefore(".") + "%",
+                modifier = Modifier
+                    .weight(3f)
+                    .padding(start = 15.dp),
+                fontSize = 16.sp,
+                textAlign = TextAlign.Right,
+                fontWeight = FontWeight.W300
+                //color = if(suicidal) Color.Red else MaterialTheme.colorScheme.onSurface
             )
         }
         Spacer(Modifier.height(15.dp))
@@ -138,7 +153,7 @@ fun CustomPopUpDialog(
         {
             Box(
                 modifier = Modifier
-                    .height(480.dp)
+                    .height(520.dp)
                     .background(
                         color = MaterialTheme.colorScheme.onPrimary,
                         //shape = RoundedCornerShape(25.dp, 10.dp, 25.dp, 10.dp)
@@ -147,23 +162,27 @@ fun CustomPopUpDialog(
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(16.dp)
+                        .padding(9.dp)
                         .fillMaxHeight(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 )
+                // Full typed text
                 {
                     Text(
                         text = text,
                         textAlign = TextAlign.Center,
+
                         modifier = Modifier
-                            .padding(top = 10.dp)
+                            .padding(16.dp)
                             .fillMaxWidth(),
-                        style = MaterialTheme.typography.titleMedium,
+
+
+                        style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
 
-                    Spacer(modifier = Modifier.height(18.dp))
+                    Spacer(modifier = Modifier.height(5.dp))
 
                     LazyColumn(contentPadding = PaddingValues(10.dp))
                     {
@@ -172,6 +191,7 @@ fun CustomPopUpDialog(
                             LinearProgressIndicator(
                                 mood = prediction.first,
                                 percentage = prediction.second.toFloat(),
+                                suicidal = prediction.first == "Suicidal"
 
                             )
                         }
@@ -179,8 +199,7 @@ fun CustomPopUpDialog(
 
                     OutlinedButton(
                         onClick = onDismiss,
-                        modifier = Modifier
-                            .fillMaxWidth()
+                        modifier = Modifier.width(200.dp)
                             .clip(RoundedCornerShape(5.dp))
                     ) {
                         Text(
@@ -222,7 +241,7 @@ fun ActivityCard(
                 text = text,
                 fontSize = 18.sp,
                 maxLines = 1,
-                color = Color.White
+                //color = Color.White
             )
 
             Spacer(modifier = Modifier.padding(5.dp))
@@ -236,19 +255,22 @@ fun ActivityCard(
                 {
                     SuggestionChip(
                         onClick = { /* Do something! */ },
+                        colors = SuggestionChipDefaults.suggestionChipColors(
+                            containerColor =  MaterialTheme.colorScheme.onPrimary
+                        ),
                         border = SuggestionChipDefaults.suggestionChipBorder(
                             borderWidth = 1.dp,
-                            borderColor = Color.White
+                            borderColor = MaterialTheme.colorScheme.onPrimary
                         ),
                         label = {
                             Text(
                                 text = predictions["Primary"]!!,
                                 textAlign = TextAlign.Center,
-                                color = Color.White
+                                //color = Color.White
                             )
                         },
                     )
-                    Spacer(modifier = Modifier.padding(start = 6.dp))
+                    Spacer(modifier = Modifier.padding(start = 5.dp))
 
                     //Log.d("SuicideRisk::::","TRUE")
                     // Suicidal chip
@@ -268,7 +290,7 @@ fun ActivityCard(
                                 Text(
                                     text = "Suicidal",
                                     textAlign = TextAlign.Center,
-                                    color = Color.White
+                                    //color = Color.White
                                 )
                             },
                         )
@@ -280,7 +302,7 @@ fun ActivityCard(
                         fontSize = 20.sp,
                         textAlign = TextAlign.Right,
                         modifier = Modifier.weight(6f),
-                        color = Color.White
+                        //color = Color.White
                     )
 
 
