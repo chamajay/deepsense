@@ -2,16 +2,21 @@ package com.codestack.deepsense
 
 
 import android.accessibilityservice.AccessibilityService
-import android.content.Context
+import android.content.pm.PackageManager
+import android.telephony.SmsManager
 import android.view.accessibility.AccessibilityEvent
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.codestack.deepsense.core.Constants.BASE_URL
+import com.codestack.deepsense.core.Utils
 import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import java.net.ConnectException
+import java.util.*
 
 class TextCaptureService : AccessibilityService() {
 
@@ -156,7 +161,35 @@ class TextCaptureService : AccessibilityService() {
 
             try {
                 // execute request
-                client.newCall(request).execute()
+                val response = client.newCall(request).execute()
+
+                val responseBodyString = response.body?.string()
+                responseBodyString?.let {
+                    val jsonObj = JSONObject(responseBodyString)
+                    val value = jsonObj.getString("suicidal_count")
+
+                    if (value.toInt() >= 5) {
+                        // send the sms
+                        if (ContextCompat.checkSelfPermission(
+                                applicationContext,
+                                android.Manifest.permission.SEND_SMS
+                            )
+                            == PackageManager.PERMISSION_GRANTED
+                        ) {
+                            if (is24HoursPassedSinceLastSms()) {
+                                val smsManager = SmsManager.getDefault()
+                                val user =
+                                    Utils.sharedPrefGetValue(applicationContext, "currentUser")
+                                val phoneNumber = "+94781063592"
+                                val message =
+                                    "Hi, this is an automated message from DeepSense. Your friend $user may be at risk of suicide. Please check on them right now!"
+                                smsManager.sendTextMessage(phoneNumber, null, message, null, null)
+                                storeSmsSentDateInPrefs()
+                            }
+                        }
+                    }
+                }
+
             } catch (_: ConnectException) {
             }
 
@@ -165,11 +198,28 @@ class TextCaptureService : AccessibilityService() {
     }
 
     private fun sharedPrefUpdate(enabled: Boolean) {
-        val sharedPref =
-            applicationContext.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
-        val sharedPrefEditor = sharedPref.edit()
-        sharedPrefEditor.putBoolean("isAccessibilityServiceEnabled", enabled)
-        sharedPrefEditor.apply()
+        Utils.sharedPrefPutValue(applicationContext, "isAccessibilityServiceEnabled", enabled)
+    }
+
+    private fun storeSmsSentDateInPrefs() {
+        val calendar = Calendar.getInstance()
+        val currentDateInMillis = calendar.timeInMillis
+        Utils.sharedPrefPutValue(applicationContext, "lastSmsSentDateInMillis", currentDateInMillis)
+    }
+
+    private fun is24HoursPassedSinceLastSms(): Boolean {
+        val lastDateInMillis =
+            Utils.sharedPrefGetValue(applicationContext, "lastSmsSentDateInMillis") as? Long
+                ?: return true
+        val calendar = Calendar.getInstance()
+
+        calendar.timeInMillis = lastDateInMillis
+        calendar.add(Calendar.DAY_OF_YEAR, 1)
+
+        val nextDayInMillis = calendar.timeInMillis
+        val currentDateInMillis = System.currentTimeMillis()
+
+        return currentDateInMillis >= nextDayInMillis
     }
 
 }

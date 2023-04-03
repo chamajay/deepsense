@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.codestack.deepsense.core.Utils
 import com.codestack.deepsense.domain.model.Response.Loading
 import com.codestack.deepsense.domain.model.Response.Success
 import com.codestack.deepsense.domain.repository.AuthRepository
@@ -14,6 +15,7 @@ import com.codestack.deepsense.domain.repository.SignUpResponse
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.AuthCredential
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

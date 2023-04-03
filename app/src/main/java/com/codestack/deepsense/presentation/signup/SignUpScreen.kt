@@ -26,6 +26,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.codestack.deepsense.R
 import com.codestack.deepsense.components.*
+import com.codestack.deepsense.core.Utils
 import com.codestack.deepsense.navigation.Screens
 import com.codestack.deepsense.ui.theme.DeepSenseTheme
 import com.google.android.gms.auth.api.identity.BeginSignInResult
@@ -284,7 +285,5 @@ fun SignUpScreenPreview() {
 }
 
 private fun isServiceEnabled(context: Context): Boolean {
-    val sharedPreference =
-        context.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
-    return sharedPreference.getBoolean("isAccessibilityServiceEnabled", false)
+    return Utils.sharedPrefGetValue(context, "isAccessibilityServiceEnabled") as Boolean
 }
