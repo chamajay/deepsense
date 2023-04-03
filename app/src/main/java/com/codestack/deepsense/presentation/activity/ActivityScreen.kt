@@ -186,20 +186,31 @@ fun CustomPopUpDialog(
 
                     LazyColumn(contentPadding = PaddingValues(10.dp))
                     {
+                        var count =0
                         items(predictions.toList().size - 2) {
                             val prediction = predictions.toList()[it]
                             LinearProgressIndicator(
                                 mood = prediction.first,
                                 percentage = prediction.second.toFloat(),
                                 suicidal = prediction.first == "Suicidal"
-
                             )
+                            count++
+                            // Add divider bellow emotions list.
+                            if(count == 7){
+
+                                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                                    Divider(thickness = 1.5.dp,color = Color.Gray,modifier = Modifier.fillMaxWidth(0.8f))
+                                }
+                                Spacer(modifier = Modifier.padding(bottom = 10.dp))
+                            }
+
                         }
                     }
 
                     OutlinedButton(
                         onClick = onDismiss,
-                        modifier = Modifier.width(200.dp)
+                        modifier = Modifier
+                            .width(200.dp)
                             .clip(RoundedCornerShape(5.dp))
                     ) {
                         Text(
