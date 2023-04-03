@@ -1,5 +1,7 @@
 package com.codestack.deepsense.core
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import com.codestack.deepsense.R
 import com.codestack.deepsense.core.Constants.TAG
@@ -35,6 +37,34 @@ class Utils {
             }
 
             return Pair(mappedEmotion, imageResId)
+        }
+
+        fun sharedPrefPutValue(context: Context, key: String, value: Any?) {
+            val prefs: SharedPreferences =
+                context.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+            val editor = prefs.edit()
+            when (value) {
+                is String -> editor.putString(key, value)
+                is Int -> editor.putInt(key, value)
+                is Long -> editor.putLong(key, value)
+                is Float -> editor.putFloat(key, value)
+                is Boolean -> editor.putBoolean(key, value)
+                else -> editor.remove(key)
+            }
+            editor.apply()
+        }
+
+        fun sharedPrefGetValue(context: Context, key: String): Any? {
+            val prefs: SharedPreferences =
+                context.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+            return when (val value = prefs.all[key]) {
+                is String -> value
+                is Int -> value
+                is Long -> value
+                is Float -> value
+                is Boolean -> value
+                else -> null
+            }
         }
 
     }
