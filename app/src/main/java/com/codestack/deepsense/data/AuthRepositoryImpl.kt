@@ -1,5 +1,6 @@
 package com.codestack.deepsense.data
 
+import androidx.compose.ui.platform.LocalContext
 import com.codestack.deepsense.core.Constants.CREATED_AT
 import com.codestack.deepsense.core.Constants.DISPLAY_NAME
 import com.codestack.deepsense.core.Constants.EMAIL
@@ -7,6 +8,7 @@ import com.codestack.deepsense.core.Constants.PHOTO_URL
 import com.codestack.deepsense.core.Constants.SIGN_IN_REQUEST
 import com.codestack.deepsense.core.Constants.SIGN_UP_REQUEST
 import com.codestack.deepsense.core.Constants.USERS
+import com.codestack.deepsense.core.Utils
 import com.codestack.deepsense.domain.model.Response.Success
 import com.codestack.deepsense.domain.model.Response.Failure
 import com.codestack.deepsense.domain.repository.*
@@ -18,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FieldValue.serverTimestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.tasks.await
 import okhttp3.internal.wait
 import javax.inject.Inject
