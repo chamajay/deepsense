@@ -5,7 +5,9 @@ import android.accessibilityservice.AccessibilityService
 import android.content.Context
 import android.view.accessibility.AccessibilityEvent
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.codestack.deepsense.core.Constants.BASE_URL
+import com.codestack.deepsense.core.Utils
 import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -165,11 +167,7 @@ class TextCaptureService : AccessibilityService() {
     }
 
     private fun sharedPrefUpdate(enabled: Boolean) {
-        val sharedPref =
-            applicationContext.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
-        val sharedPrefEditor = sharedPref.edit()
-        sharedPrefEditor.putBoolean("isAccessibilityServiceEnabled", enabled)
-        sharedPrefEditor.apply()
+        Utils.sharedPrefPutValue(applicationContext, "isAccessibilityServiceEnabled", enabled)
     }
 
 }

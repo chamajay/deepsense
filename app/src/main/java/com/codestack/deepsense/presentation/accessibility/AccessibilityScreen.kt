@@ -22,6 +22,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.codestack.deepsense.R
+import com.codestack.deepsense.core.Utils
 import com.codestack.deepsense.navigation.Screens
 
 
@@ -35,9 +36,7 @@ fun PermissionsScreen(
     val resultLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
-        val sharedPreference =
-            context.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
-        val serviceEnabled = sharedPreference.getBoolean("isAccessibilityServiceEnabled", false)
+        val serviceEnabled = Utils.sharedPrefGetValue(context, "isAccessibilityServiceEnabled") as Boolean
         if (serviceEnabled) {
             navController.navigate(Screens.Main.route) {
                 popUpTo(navController.graph.id) {

@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.codestack.deepsense.core.Utils
 import com.codestack.deepsense.navigation.Screens
 import com.codestack.deepsense.navigation.SetupNavGraph
 import com.codestack.deepsense.presentation.shared.ProfileViewModel
@@ -52,9 +53,7 @@ class MainActivity : ComponentActivity() {
         navController.navigate(Screens.Accessibility.route)
 
     private fun isServiceEnabled(): Boolean {
-        val sharedPreference =
-            applicationContext.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
-        return sharedPreference.getBoolean("isAccessibilityServiceEnabled", false)
+        return Utils.sharedPrefGetValue(applicationContext, "isAccessibilityServiceEnabled") as Boolean
     }
 
     private fun requestSmsPermission() {
