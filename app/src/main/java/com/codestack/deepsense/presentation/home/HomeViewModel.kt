@@ -17,6 +17,7 @@ class HomeViewModel : ViewModel() {
     private val job = Job()
     private val scope = CoroutineScope(Dispatchers.IO + job)
 
+    // Today mood
     private val _mood: MutableStateFlow<String> = MutableStateFlow("")
     val mood: StateFlow<String>
         get() = _mood
@@ -32,6 +33,24 @@ class HomeViewModel : ViewModel() {
     val emotionsPercentages: StateFlow<MutableMap<String, Double>>
         get() = _emotionsPercentages
 
+    // Week mood
+    private val _moodWeek: MutableStateFlow<String> = MutableStateFlow("")
+    val moodWeek: StateFlow<String>
+        get() = _moodWeek
+
+    private val _moodWeekImage: MutableStateFlow<Int> = MutableStateFlow(R.drawable.error)
+    val moodWeekImage: StateFlow<Int>
+        get() = _moodWeekImage
+
+    private val _emotionsPercentagesWeek: MutableStateFlow<MutableMap<String, Double>> =
+        MutableStateFlow(
+            mutableMapOf()
+        )
+    val emotionsPercentagesWeek: StateFlow<MutableMap<String, Double>>
+        get() = _emotionsPercentagesWeek
+
+
+    // Connection and data
     private val _isConnectionError: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isConnectionError: StateFlow<Boolean>
         get() = _isConnectionError
@@ -117,6 +136,46 @@ class HomeViewModel : ViewModel() {
 
                 _isConnectionError.value = false
 
+            } catch (_: Exception) {
+                _isConnectionError.value = true
+            }
+        }
+    }
+
+    fun retrieveWeekMood() {
+        scope.launch {
+            // Reset mood before fetching
+            _moodWeek.value = ""
+
+            val request = Request.Builder()
+                .url("$BASE_URL/week-mood")
+                .build()
+
+            try {
+                // Execute request
+                val response = client.newCall(request).execute()
+
+                _isConnectionError.value = false
+
+                // Simulate a delay for loading animation
+                delay(500)
+
+                val responseBodyString = response.body?.string()
+                responseBodyString?.let {
+                    val jsonObj = JSONObject(responseBodyString)
+                    val emotionFromServer = jsonObj.getString("week_mood")
+
+                    // When there's not enough data
+                    if (emotionFromServer == "None") {
+                        _isNotEnoughData.value = true
+                        return@launch
+                    }
+                    _isNotEnoughData.value = false
+
+                    val (mappedEmotion, imageResId) = Utils.mapEmotion(emotionFromServer)
+                    _moodWeek.value = mappedEmotion
+                    _moodWeekImage.value = imageResId
+                }
             } catch (_: Exception) {
                 _isConnectionError.value = true
             }
