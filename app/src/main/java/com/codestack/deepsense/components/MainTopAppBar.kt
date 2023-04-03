@@ -13,6 +13,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale.Companion.Crop
@@ -29,15 +30,28 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.codestack.deepsense.core.Constants.TAG
+import com.codestack.deepsense.core.Utils
 import com.codestack.deepsense.navigation.Screens
 import com.codestack.deepsense.presentation.shared.ProfileViewModel
 import com.codestack.deepsense.ui.theme.DeepSenseTheme
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 @Composable
 fun MainTopAppBar(
     navController: NavHostController,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
+
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        if (viewModel.isUserAuthenticated) {
+            Utils.sharedPrefPutValue(context,"currentUser", viewModel.displayName)
+        } else {
+            Utils.sharedPrefPutValue(context,"currentUser", "Guest")
+        }
+    }
+
     TopAppBar(
         title = {
             Text(
