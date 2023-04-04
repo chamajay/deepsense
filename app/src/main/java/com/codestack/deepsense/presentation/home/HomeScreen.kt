@@ -1,11 +1,9 @@
 package com.codestack.deepsense.presentation.home
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -22,19 +20,33 @@ fun HomeScreen(
     val pagerState = rememberPagerState()
     val tabs = listOf(TabItem.Today, TabItem.Week, TabItem.Month)
 
+    LaunchedEffect(Unit) {
+        viewModel.retrieveAll()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxHeight()
     ) {
-        TabsRow(tabs, pagerState)
+        TabsRow(
+            tabs,
+            pagerState,
+            onTabSelected = { tab ->
+                when (tab) {
+                    TabItem.Today -> {
+                        viewModel.retrieveMood()
+                        viewModel.retrieveMoodPercentages()
+                    }
+                    TabItem.Week -> {
+                        viewModel.retrieveWeekMood()
+                        viewModel.retrieveWeekMoodPercentages()
+                    }
+                    else -> {}
+                }
+            }
+        )
         TabsContent(tabs, pagerState, viewModel)
     }
-}
-
-@Composable
-@Preview
-fun HomeScreenPreview() {
-    HomeScreen()
 }
 
 
@@ -42,7 +54,8 @@ fun HomeScreenPreview() {
 @Composable
 fun TabsRow(
     tabs: List<TabItem>,
-    pagerState: PagerState
+    pagerState: PagerState,
+    onTabSelected: (TabItem) -> Unit
 ) {
     val scope = rememberCoroutineScope()
 
@@ -58,6 +71,7 @@ fun TabsRow(
                     scope.launch {
                         pagerState.animateScrollToPage(index)
                     }
+                    onTabSelected(tab)
                 },
             )
         }
