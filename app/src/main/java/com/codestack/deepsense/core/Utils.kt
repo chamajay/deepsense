@@ -19,7 +19,7 @@ class Utils {
                 "disgust" -> "Disgusted"
                 "fear" -> "Scared"
                 "joy" -> "Happy"
-                "neutral" -> "Meh"
+                "neutral" -> "Neutral"
                 "sadness" -> "Sad"
                 "surprise" -> "Surprised"
                 else -> "unknown"
@@ -30,7 +30,7 @@ class Utils {
                 "Disgusted" -> R.raw.disgusted_lottie
                 "Scared" -> R.raw.fear_lottie
                 "Happy" -> R.raw.joy_lottie
-                "Meh" -> R.raw.meh_lottie
+                "Neutral" -> R.raw.meh_lottie
                 "Sad" -> R.raw.sad_lottie
                 "Surprised" -> R.raw.surprise_lottie
                 else -> 0 // no image resource ID

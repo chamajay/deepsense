@@ -84,7 +84,7 @@ class ActivityViewModel : ViewModel() {
                             "predictions" to mapOf(
                                 "Happy" to joy.toString(),
                                 "Surprised" to surprise.toString(),
-                                "Meh" to neutral.toString(),
+                                "Neutral" to neutral.toString(),
                                 "Sad" to sadness.toString(),
                                 "Angry" to anger.toString(),
                                 "Disgusted" to disgust.toString(),
