@@ -7,7 +7,7 @@ object Constants {
     const val TAG = "AppTag"
 
     //Server
-    val BASE_URL = URL("http://192.168.1.4:5000")
+    val BASE_URL = URL("http://192.168.1.102:5000")
 
     //Collection References
     const val USERS = "users"
