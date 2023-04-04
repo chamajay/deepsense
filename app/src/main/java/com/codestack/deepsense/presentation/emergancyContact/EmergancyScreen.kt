@@ -27,24 +27,25 @@ fun EmergencyScreen() {
     val contacts = remember { mutableStateListOf<Contact>() }
     val heading = "Emergency contact"
 
-
     Scaffold(
         topBar = {
-            TopAppBar(
+            MediumTopAppBar(
                 title = {
                     Text(
                         text = heading,
-                        fontSize = MaterialTheme.typography.headlineSmall.fontSize
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 27.sp
                     )
                 },
-                navigationIcon = {
-                    IconButton(onClick = {  }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                },
 
-                backgroundColor = Color.Transparent,
-                elevation = 0.dp
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Go back"
+                        )
+                    }
+                }
             )
         },
         floatingActionButton = {
@@ -65,12 +66,12 @@ fun EmergencyScreen() {
         }
     ) {
         LazyColumn(
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            contentPadding = it,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
-                val appBarHeight = 40.dp
-                Spacer(modifier = Modifier.height(appBarHeight))
+//                val appBarHeight = 40.dp
+//                Spacer(modifier = Modifier.height(appBarHeight))
             }
             items(contacts.size) { index ->
                 EmergencyContactCard(contact = contacts[index],
