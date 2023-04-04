@@ -33,6 +33,7 @@ class HomeViewModel : ViewModel() {
     val emotionsPercentages: StateFlow<MutableMap<String, Double>>
         get() = _emotionsPercentages
 
+
     // Week mood
     private val _moodWeek: MutableStateFlow<String> = MutableStateFlow("")
     val moodWeek: StateFlow<String>
@@ -48,6 +49,23 @@ class HomeViewModel : ViewModel() {
         )
     val emotionsPercentagesWeek: StateFlow<MutableMap<String, Double>>
         get() = _emotionsPercentagesWeek
+
+
+    // Month mood
+    private val _moodMonth: MutableStateFlow<String> = MutableStateFlow("")
+    val moodMonth: StateFlow<String>
+        get() = _moodMonth
+
+    private val _moodMonthImage: MutableStateFlow<Int> = MutableStateFlow(R.drawable.error)
+    val moodMonthImage: StateFlow<Int>
+        get() = _moodMonthImage
+
+    private val _emotionsPercentagesMonth: MutableStateFlow<MutableMap<String, Double>> =
+        MutableStateFlow(
+            mutableMapOf()
+        )
+    val emotionsPercentagesMonth: StateFlow<MutableMap<String, Double>>
+        get() = _emotionsPercentagesMonth
 
 
     // Connection and data
@@ -224,10 +242,94 @@ class HomeViewModel : ViewModel() {
         }
     }
 
+    fun retrieveMonthMood() {
+        scope.launch {
+            // Reset mood before fetching
+            _moodMonth.value = ""
+
+            val request = Request.Builder()
+                .url("$BASE_URL/month-mood")
+                .build()
+
+            try {
+                // Execute request
+                val response = client.newCall(request).execute()
+
+                _isConnectionError.value = false
+
+                // Simulate a delay for loading animation
+                delay(500)
+
+                val responseBodyString = response.body?.string()
+                responseBodyString?.let {
+                    val jsonObj = JSONObject(responseBodyString)
+                    val emotionFromServer = jsonObj.getString("month_mood")
+
+                    // When there's not enough data
+                    if (emotionFromServer == "None") {
+                        _isNotEnoughData.value = true
+                        return@launch
+                    }
+                    _isNotEnoughData.value = false
+
+                    val (mappedEmotion, imageResId) = Utils.mapEmotion(emotionFromServer)
+                    _moodMonth.value = mappedEmotion
+                    _moodMonthImage.value = imageResId
+                }
+            } catch (_: Exception) {
+                _isConnectionError.value = true
+            }
+        }
+    }
+
+    fun retrieveMonthMoodPercentages() {
+        scope.launch {
+            // Reset before fetching
+            _emotionsPercentagesMonth.value = mutableMapOf()
+
+            val request = Request.Builder()
+                .url("$BASE_URL/month_mood_percentages")
+                .build()
+
+            try {
+                // Execute request
+                val response = client.newCall(request).execute()
+
+                // Simulate a delay for loading animation
+                delay(500)
+
+                val responseBodyString = response.body?.string()
+                responseBodyString?.let {
+                    val jsonObj = JSONObject(responseBodyString)
+                    val value = jsonObj.getString("mood_percentages_month")
+                    if (value != "None") {
+                        val jsonArr = JSONArray(value)
+                        for (i in 0 until jsonArr.length()) {
+                            val jsonObject = jsonArr.getJSONObject(i)
+                            val emotion = jsonObject.getString("emotion")
+                            val percentage = jsonObject.getDouble("percentage")
+                            _emotionsPercentagesMonth.value =
+                                _emotionsPercentagesMonth.value.toMutableMap().apply {
+                                    put(emotion, percentage)
+                                }
+                        }
+                    }
+                }
+
+                _isConnectionError.value = false
+
+            } catch (_: Exception) {
+                _isConnectionError.value = true
+            }
+        }
+    }
+
     fun retrieveAll() {
         retrieveMood()
         retrieveMoodPercentages()
         retrieveWeekMood()
         retrieveWeekMoodPercentages()
+        retrieveMonthMood()
+        retrieveMonthMoodPercentages()
     }
 }
