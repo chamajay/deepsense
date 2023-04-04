@@ -1,15 +1,21 @@
 package com.codestack.deepsense.screens
 
+import android.app.Activity
+import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -26,6 +32,21 @@ import com.codestack.deepsense.presentation.home.NoRippleInteractionSource
 fun MainScreen(
     navController: NavHostController
 ) {
+
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.SEND_SMS)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                context as Activity,
+                arrayOf(android.Manifest.permission.SEND_SMS),
+                123
+            )
+        }
+    }
+
     val bottomNavController = rememberNavController()
     Scaffold(
         topBar = { MainTopAppBar(navController = navController) },
