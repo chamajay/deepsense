@@ -76,9 +76,9 @@ fun ActivityScreen(
                                     item["predictions"] as Map<String, String>
                                 ActivityCard(text = text, predictions = predictions, suicidalRisk = predictions["SuicideRisk"] == "Suicidal")
                                 // Check SuicideRisk
-                                Log.d("Activity suicidalCheck",
-                                    (predictions["SuicideRisk"] == "Suicidal").toString()
-                                )
+//                                Log.d("Activity suicidalCheck",
+//                                    (predictions["SuicideRisk"] == "Suicidal").toString()
+//                                )
                             }
                         }
                     }
