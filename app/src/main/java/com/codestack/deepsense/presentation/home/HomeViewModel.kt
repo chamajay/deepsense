@@ -114,7 +114,7 @@ class HomeViewModel : ViewModel() {
                 val response = client.newCall(request).execute()
 
                 // Simulate a delay for loading animation
-                delay(700)
+                delay(500)
 
                 val responseBodyString = response.body?.string()
                 responseBodyString?.let {
