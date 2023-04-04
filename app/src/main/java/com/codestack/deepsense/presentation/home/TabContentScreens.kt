@@ -98,17 +98,37 @@ fun WeekScreen(
 fun MonthScreen(
     viewModel: HomeViewModel
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+    val moodMonth by viewModel.moodMonth.collectAsState()
+    val moodMonthImg by viewModel.moodMonthImage.collectAsState()
+    val moodMonthPercentages by viewModel.emotionsPercentagesMonth.collectAsState()
+    val isConnectionError by viewModel.isConnectionError.collectAsState()
+    val isNotEnoughData by viewModel.isNotEnoughData.collectAsState()
+
+    Row(
         modifier = Modifier
-            .fillMaxSize()
+            .padding(15.dp, 0.dp)
     ) {
-        Text(
-            text = "Month View",
-            color = MaterialTheme.colorScheme.primary,
-            fontSize = MaterialTheme.typography.headlineMedium.fontSize
-        )
+        Column(
+            verticalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .fillMaxHeight()
+                .verticalScroll(rememberScrollState())
+        ) {
+            Row {
+                Mood(moodMonth, moodMonthImg, isConnectionError, isNotEnoughData)
+            }
+            Row {
+                MoodPercentages(
+                    moodMonthPercentages,
+                    isConnectionError,
+                    isNotEnoughData,
+                    "Your mood this month"
+                )
+            }
+            Row {
+                MentalHealth(isConnectionError, isNotEnoughData)
+            }
+        }
     }
 }
 

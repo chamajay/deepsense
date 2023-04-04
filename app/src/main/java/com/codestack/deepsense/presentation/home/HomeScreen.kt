@@ -41,6 +41,10 @@ fun HomeScreen(
                         viewModel.retrieveWeekMood()
                         viewModel.retrieveWeekMoodPercentages()
                     }
+                    TabItem.Month -> {
+                        viewModel.retrieveMonthMood()
+                        viewModel.retrieveMonthMoodPercentages()
+                    }
                     else -> {}
                 }
             }
