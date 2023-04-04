@@ -17,12 +17,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun EmergencyScreen() {
+fun EmergencyScreen(
+    navController: NavHostController
+) {
     // Define a list of contacts
     val contacts = remember { mutableStateListOf<Contact>() }
     val heading = "Emergency contact"
@@ -86,7 +90,7 @@ fun EmergencyScreen() {
 @Preview(showBackground = true)
 @Composable
 fun EmergencyScreenPreview() {
-    EmergencyScreen()
+    EmergencyScreen(navController = rememberNavController())
 }
 
 
