@@ -181,4 +181,46 @@ class HomeViewModel : ViewModel() {
             }
         }
     }
+
+    fun retrieveWeekMoodPercentages() {
+        scope.launch {
+            // Reset before fetching
+            _emotionsPercentagesWeek.value = mutableMapOf()
+
+            val request = Request.Builder()
+                .url("$BASE_URL/week_mood_percentages")
+                .build()
+
+            try {
+                // Execute request
+                val response = client.newCall(request).execute()
+
+                // Simulate a delay for loading animation
+                delay(500)
+
+                val responseBodyString = response.body?.string()
+                responseBodyString?.let {
+                    val jsonObj = JSONObject(responseBodyString)
+                    val value = jsonObj.getString("mood_percentages_week")
+                    if (value != "None") {
+                        val jsonArr = JSONArray(value)
+                        for (i in 0 until jsonArr.length()) {
+                            val jsonObject = jsonArr.getJSONObject(i)
+                            val emotion = jsonObject.getString("emotion")
+                            val percentage = jsonObject.getDouble("percentage")
+                            _emotionsPercentagesWeek.value =
+                                _emotionsPercentagesWeek.value.toMutableMap().apply {
+                                    put(emotion, percentage)
+                                }
+                        }
+                    }
+                }
+
+                _isConnectionError.value = false
+
+            } catch (_: Exception) {
+                _isConnectionError.value = true
+            }
+        }
+    }
 }
