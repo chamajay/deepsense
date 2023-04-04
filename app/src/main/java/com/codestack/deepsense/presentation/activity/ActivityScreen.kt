@@ -6,6 +6,7 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -159,10 +160,10 @@ fun CustomPopUpDialog(
                 modifier = Modifier
                     .height(520.dp)
                     .background(
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.background,
                         //shape = RoundedCornerShape(25.dp, 10.dp, 25.dp, 10.dp)
                         shape = RoundedCornerShape(10.dp)
-                    )
+                    ).border(1.dp, MaterialTheme.colorScheme.secondary, RoundedCornerShape(10.dp))
             ) {
                 Column(
                     modifier = Modifier
