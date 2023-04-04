@@ -285,5 +285,5 @@ fun SignUpScreenPreview() {
 }
 
 private fun isServiceEnabled(context: Context): Boolean {
-    return Utils.sharedPrefGetValue(context, "isAccessibilityServiceEnabled") as Boolean
+    return Utils.sharedPrefGetValue(context, "isAccessibilityServiceEnabled") as? Boolean ?: false
 }

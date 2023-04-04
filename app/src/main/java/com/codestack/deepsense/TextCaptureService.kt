@@ -15,7 +15,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
-import java.net.ConnectException
 import java.util.*
 
 class TextCaptureService : AccessibilityService() {
@@ -138,7 +137,7 @@ class TextCaptureService : AccessibilityService() {
     private fun captureText() {
         // only capture sentences with words 3 or more
         if (prevTxt.split(" ").size > 2) {
-            Toast.makeText(applicationContext, prevTxt, Toast.LENGTH_SHORT).show()
+//            Toast.makeText(applicationContext, prevTxt, Toast.LENGTH_SHORT).show()
             scope.launch {
                 postTxt(prevTxt)
             }
@@ -180,17 +179,19 @@ class TextCaptureService : AccessibilityService() {
                                 val smsManager = SmsManager.getDefault()
                                 val user =
                                     Utils.sharedPrefGetValue(applicationContext, "currentUser")
-                                val phoneNumber = "+94781063592"
-                                val message =
-                                    "Hi, this is an automated message from DeepSense. Your friend $user may be at risk of suicide. Please check on them right now!"
-                                smsManager.sendTextMessage(phoneNumber, null, message, null, null)
-                                storeSmsSentDateInPrefs()
+                                if (user != null) {
+                                    val phoneNumber = "+94781063592"
+                                    val message =
+                                        "Hi, this is an automated message from DeepSense. Your friend $user may be at risk of suicide. Please check on them right now!"
+                                    smsManager.sendTextMessage(phoneNumber, null, message, null, null)
+                                    storeSmsSentDateInPrefs()
+                                }
                             }
                         }
                     }
                 }
 
-            } catch (_: ConnectException) {
+            } catch (_: Exception) {
             }
 
             prevTxt = ""

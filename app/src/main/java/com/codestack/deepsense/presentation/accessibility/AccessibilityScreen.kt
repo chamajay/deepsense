@@ -1,7 +1,6 @@
 package com.codestack.deepsense.presentation.accessibility
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -36,7 +35,7 @@ fun PermissionsScreen(
     val resultLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
-        val serviceEnabled = Utils.sharedPrefGetValue(context, "isAccessibilityServiceEnabled") as Boolean
+        val serviceEnabled = Utils.sharedPrefGetValue(context, "isAccessibilityServiceEnabled") as? Boolean ?: false
         if (serviceEnabled) {
             navController.navigate(Screens.Main.route) {
                 popUpTo(navController.graph.id) {
