@@ -1,13 +1,9 @@
 package com.codestack.deepsense.presentation
 
-import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.codestack.deepsense.core.Utils
@@ -40,7 +36,6 @@ class MainActivity : ComponentActivity() {
         if (viewModel.isUserAuthenticated) {
             if (isServiceEnabled()) {
                 navigateToMainScreen()
-                requestSmsPermission()
             } else {
                 navigateToAccessibilityScreen()
             }
@@ -53,18 +48,6 @@ class MainActivity : ComponentActivity() {
         navController.navigate(Screens.Accessibility.route)
 
     private fun isServiceEnabled(): Boolean {
-        return Utils.sharedPrefGetValue(applicationContext, "isAccessibilityServiceEnabled") as Boolean
-    }
-
-    private fun requestSmsPermission() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.SEND_SMS)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(android.Manifest.permission.SEND_SMS),
-                123
-            )
-        }
+        return Utils.sharedPrefGetValue(applicationContext, "isAccessibilityServiceEnabled") as? Boolean ?: false
     }
 }
