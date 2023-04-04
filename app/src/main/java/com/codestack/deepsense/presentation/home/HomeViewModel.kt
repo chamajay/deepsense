@@ -223,4 +223,11 @@ class HomeViewModel : ViewModel() {
             }
         }
     }
+
+    fun retrieveAll() {
+        retrieveMood()
+        retrieveMoodPercentages()
+        retrieveWeekMood()
+        retrieveWeekMoodPercentages()
+    }
 }
