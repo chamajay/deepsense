@@ -5,7 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.TopAppBar
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -13,38 +13,46 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.codestack.deepsense.core.Utils
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun EmergencyScreen() {
+fun EmergencyScreen(
+    navController: NavHostController
+) {
     // Define a list of contacts
     val contacts = remember { mutableStateListOf<Contact>() }
     val heading = "Emergency contact"
 
-
     Scaffold(
         topBar = {
-            TopAppBar(
+            MediumTopAppBar(
                 title = {
                     Text(
                         text = heading,
-                        fontSize = MaterialTheme.typography.headlineSmall.fontSize
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 27.sp
                     )
                 },
-                navigationIcon = {
-                    IconButton(onClick = {  }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                },
 
-                backgroundColor = Color.Transparent,
-                elevation = 0.dp
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Go back"
+                        )
+                    }
+                }
             )
         },
         floatingActionButton = {
@@ -65,12 +73,12 @@ fun EmergencyScreen() {
         }
     ) {
         LazyColumn(
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            contentPadding = it,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
-                val appBarHeight = 40.dp
-                Spacer(modifier = Modifier.height(appBarHeight))
+//                val appBarHeight = 40.dp
+//                Spacer(modifier = Modifier.height(appBarHeight))
             }
             items(contacts.size) { index ->
                 EmergencyContactCard(contact = contacts[index],
@@ -85,7 +93,7 @@ fun EmergencyScreen() {
 @Preview(showBackground = true)
 @Composable
 fun EmergencyScreenPreview() {
-    EmergencyScreen()
+    EmergencyScreen(navController = rememberNavController())
 }
 
 
@@ -96,12 +104,15 @@ fun EmergencyContactCard(
     onContactDeleted: () -> Unit,
     onContactPriorityChanged: () -> Unit
 ) {
+
+    val context = LocalContext.current
+
     var cardState by remember { mutableStateOf(CardState.Editing) }
     val nameState = remember { mutableStateOf(contact.name) }
     val phoneState = remember { mutableStateOf(contact.number) }
 
     ElevatedCard(
-        
+
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface),
@@ -133,7 +144,10 @@ fun EmergencyContactCard(
                         value = phoneState.value,
                         onValueChange = { phoneState.value = it },
                         label = { Text("Phone Number") },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Number
+                        )
                     )
                 } else {
                     Text(text = contact.number, fontSize = 16.sp)
@@ -150,6 +164,8 @@ fun EmergencyContactCard(
                             contact.name = nameState.value
                             contact.number = phoneState.value
                             cardState = CardState.Viewing
+
+                            Utils.sharedPrefPutValue(context, "emergencyContact", contact.number)
                         }
                     ) {
                         Text("Save")
@@ -185,7 +201,7 @@ fun EmergencyContactCard(
                             modifier = Modifier
                                 .background(Color.Transparent),
 
-                        ) {
+                            ) {
                             Text(
                                 text = "Edit",
                                 fontSize = MaterialTheme.typography.labelLarge.fontSize

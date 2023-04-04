@@ -179,11 +179,11 @@ class TextCaptureService : AccessibilityService() {
                                 val smsManager = SmsManager.getDefault()
                                 val user =
                                     Utils.sharedPrefGetValue(applicationContext, "currentUser")
-                                if (user != null) {
-                                    val phoneNumber = "+94781063592"
+                                val number = Utils.sharedPrefGetValue(applicationContext, "emergencyContact")
+                                if (user != null && number != null) {
                                     val message =
                                         "Hi, this is an automated message from DeepSense. Your friend $user may be at risk of suicide. Please check on them right now!"
-                                    smsManager.sendTextMessage(phoneNumber, null, message, null, null)
+                                    smsManager.sendTextMessage(number as String, null, message, null, null)
                                     storeSmsSentDateInPrefs()
                                 }
                             }

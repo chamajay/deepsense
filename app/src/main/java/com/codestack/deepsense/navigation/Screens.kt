@@ -11,5 +11,6 @@ sealed class Screens(val route: String) {
     object Settings: Screens(route = "settings_screen")
     object Main: Screens(route = "main_screen")
     object Accessibility: Screens(route = "accessibility_screen")
+    object EmergencyContact: Screens(route = "emergency_screen")
 }
 
