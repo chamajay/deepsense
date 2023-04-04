@@ -1,30 +1,15 @@
 package com.codestack.deepsense.presentation.home
 
-import android.graphics.drawable.AnimatedImageDrawable
-import androidx.annotation.DrawableRes
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.*
-import com.codestack.deepsense.R
 import com.codestack.deepsense.components.NotEnoughDataLg
 import com.codestack.deepsense.components.NotEnoughDataSm
 import com.codestack.deepsense.components.ServerErrorLg
@@ -35,6 +20,12 @@ import com.codestack.deepsense.core.Utils
 fun TodayScreen(
     viewModel: HomeViewModel
 ) {
+    val mood by viewModel.mood.collectAsState()
+    val moodImg by viewModel.moodImage.collectAsState()
+    val moodPercentages by viewModel.emotionsPercentages.collectAsState()
+    val isConnectionError by viewModel.isConnectionError.collectAsState()
+    val isNotEnoughData by viewModel.isNotEnoughData.collectAsState()
+
     Row(
         modifier = Modifier
             .padding(15.dp, 0.dp)
@@ -46,47 +37,61 @@ fun TodayScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             Row {
-                Mood(viewModel)
+                Mood(mood, moodImg, isConnectionError, isNotEnoughData)
             }
             Row {
-                MoodToday(viewModel)
+                MoodPercentages(
+                    moodPercentages,
+                    isConnectionError,
+                    isNotEnoughData,
+                    "Your mood today"
+                )
             }
             Row {
-                MentalHealth(viewModel)
+                MentalHealth(isConnectionError, isNotEnoughData)
             }
         }
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun TodayScreenPreview() {
-//    TodayScreen()
-//}
 
 @Composable
 fun WeekScreen(
     viewModel: HomeViewModel
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+    val moodWeek by viewModel.moodWeek.collectAsState()
+    val moodWeekImg by viewModel.moodWeekImage.collectAsState()
+    val moodWeekPercentages by viewModel.emotionsPercentagesWeek.collectAsState()
+    val isConnectionError by viewModel.isConnectionError.collectAsState()
+    val isNotEnoughData by viewModel.isNotEnoughData.collectAsState()
+
+    Row(
         modifier = Modifier
-            .fillMaxSize()
+            .padding(15.dp, 0.dp)
     ) {
-        Text(
-            text = "Week View",
-            color = MaterialTheme.colorScheme.primary,
-            fontSize = MaterialTheme.typography.headlineMedium.fontSize
-        )
+        Column(
+            verticalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .fillMaxHeight()
+                .verticalScroll(rememberScrollState())
+        ) {
+            Row {
+                Mood(moodWeek, moodWeekImg, isConnectionError, isNotEnoughData)
+            }
+            Row {
+                MoodPercentages(
+                    moodWeekPercentages,
+                    isConnectionError,
+                    isNotEnoughData,
+                    "Your mood this week"
+                )
+            }
+            Row {
+                MentalHealth(isConnectionError, isNotEnoughData)
+            }
+        }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun WeekScreenPreview() {
-//    WeekScreen()
-//}
 
 
 @Composable
@@ -107,26 +112,14 @@ fun MonthScreen(
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun MonthScreenPreview() {
-//    MonthScreen()
-//}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Mood(
-    viewModel: HomeViewModel
+    mood: String,
+    moodImg: Int,
+    isConnectionError: Boolean,
+    isNotEnoughData: Boolean
 ) {
-    val mood by viewModel.mood.collectAsState()
-    val moodImg by viewModel.moodImage.collectAsState()
-    val isConnectionError by viewModel.isConnectionError.collectAsState()
-    val isNotEnoughData by viewModel.isNotEnoughData.collectAsState()
-
-
-    LaunchedEffect(Unit) {
-        viewModel.retrieveMood()
-    }
 
     ElevatedCard(
         modifier = Modifier
@@ -208,16 +201,12 @@ fun MoodPercentage(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MoodToday(
-    viewModel: HomeViewModel
+fun MoodPercentages(
+    moodPercentages: MutableMap<String, Double>,
+    isConnectionError: Boolean,
+    isNotEnoughData: Boolean,
+    title: String
 ) {
-    val moodPercentages by viewModel.emotionsPercentages.collectAsState()
-    val isConnectionError by viewModel.isConnectionError.collectAsState()
-    val isNotEnoughData by viewModel.isNotEnoughData.collectAsState()
-
-    LaunchedEffect(Unit) {
-        viewModel.retrieveMoodPercentages()
-    }
 
     Column(
         modifier = Modifier
@@ -225,7 +214,7 @@ fun MoodToday(
             .height(160.dp)
     ) {
         Text(
-            text = "Your mood today",
+            text = title,
             fontSize = MaterialTheme.typography.headlineSmall.fontSize,
             modifier = Modifier.padding(bottom = 10.dp)
         )
@@ -282,11 +271,9 @@ fun MoodToday(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MentalHealth(
-    viewModel: HomeViewModel
+    isConnectionError: Boolean,
+    isNotEnoughData: Boolean
 ) {
-    val isConnectionError by viewModel.isConnectionError.collectAsState()
-    val isNotEnoughData by viewModel.isNotEnoughData.collectAsState()
-
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
