@@ -245,7 +245,7 @@ fun ActivityCard(
         modifier = Modifier
             .size(width = 500.dp, height = 120.dp)
             .padding(start = 20.dp, end = 20.dp, top = 15.dp),
-        colors = if(!suicidalRisk) CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer) else CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer) ,
+        colors = if(!suicidalRisk) CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background) else CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer) ,
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
 
 
@@ -272,17 +272,17 @@ fun ActivityCard(
                     SuggestionChip(
                         onClick = { /* Do something! */ },
                         colors = SuggestionChipDefaults.suggestionChipColors(
-                            containerColor =  MaterialTheme.colorScheme.onPrimary
+                            containerColor =  MaterialTheme.colorScheme.secondary
                         ),
                         border = SuggestionChipDefaults.suggestionChipBorder(
-                            borderWidth = 1.dp,
-                            borderColor = MaterialTheme.colorScheme.onPrimary
+//                            borderWidth = 1.dp,
+                            borderColor = MaterialTheme.colorScheme.secondary
                         ),
                         label = {
                             Text(
                                 text = predictions["Primary"]!!,
                                 textAlign = TextAlign.Center,
-                                //color = Color.White
+                                color = MaterialTheme.colorScheme.onSecondary
                             )
                         },
                     )
@@ -299,7 +299,7 @@ fun ActivityCard(
                                 containerColor =  MaterialTheme.colorScheme.onError
                             ),
                             border = SuggestionChipDefaults.suggestionChipBorder(
-                                borderWidth = 1.dp,
+//                                borderWidth = 1.dp,
                                 borderColor = MaterialTheme.colorScheme.onError
                             ),
                             label = {
