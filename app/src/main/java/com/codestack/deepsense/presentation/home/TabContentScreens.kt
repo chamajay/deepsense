@@ -306,7 +306,7 @@ fun MentalHealth(
             modifier = Modifier.padding(bottom = 10.dp)
         )
         ElevatedCard(
-            colors = if (isDepressed) CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.errorContainer) else CardDefaults.elevatedCardColors(),
+            colors = if (isDepressed && !isToday) CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.errorContainer) else CardDefaults.elevatedCardColors(),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(70.dp)
