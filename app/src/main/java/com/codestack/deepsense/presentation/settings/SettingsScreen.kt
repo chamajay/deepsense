@@ -4,7 +4,6 @@ package com.codestack.deepsense.presentation.settings
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.AccountCircle
@@ -264,12 +263,14 @@ fun AccountUI(viewModel: ProfileViewModel) {
             }
         }
         Row(modifier = Modifier.fillMaxWidth()) {
-            OutlinedButton(
+            Button(
                 onClick = {
                     viewModel.revokeAccess() },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+//                border = BorderStroke(1.dp, MaterialTheme.colorScheme.errorContainer)
+                colors = ButtonDefaults.outlinedButtonColors(containerColor = MaterialTheme.colorScheme.errorContainer)
             ) {
-                Text(text = "Delete Account")
+                Text(text = "Delete Account", color = MaterialTheme.colorScheme.onErrorContainer)
             }
         }
     }
