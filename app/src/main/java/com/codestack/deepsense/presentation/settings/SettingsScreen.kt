@@ -56,7 +56,7 @@ fun SettingsScreen(
                             viewModel
                         )
                     }
-                    item { GeneralUI() }
+                    item { GeneralUI(navController) }
                     item { SupportUI(navController) }
                     item { AccountUI(viewModel) }
                 }
@@ -127,7 +127,9 @@ fun ProfileUI(viewModel: ProfileViewModel) {
 
 
 @Composable
-fun GeneralUI() {
+fun GeneralUI(
+    navController: NavHostController
+) {
     Column(
         modifier = Modifier
             .padding(top = 10.dp)
@@ -143,7 +145,7 @@ fun GeneralUI() {
             icon = R.drawable.contact_emergency_48px,
             mainText = "Emergency contact",
             //subText = "Contact details of ",
-            onClick = {}
+            onClick = { navController.navigate(Screens.EmergencyContact.route) }
         )
         GeneralItems(
             icon = R.drawable.backup_48px,
