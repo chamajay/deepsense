@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -14,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.codestack.deepsense.core.Utils
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -103,12 +104,15 @@ fun EmergencyContactCard(
     onContactDeleted: () -> Unit,
     onContactPriorityChanged: () -> Unit
 ) {
+
+    val context = LocalContext.current
+
     var cardState by remember { mutableStateOf(CardState.Editing) }
     val nameState = remember { mutableStateOf(contact.name) }
     val phoneState = remember { mutableStateOf(contact.number) }
 
     ElevatedCard(
-        
+
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface),
@@ -160,6 +164,8 @@ fun EmergencyContactCard(
                             contact.name = nameState.value
                             contact.number = phoneState.value
                             cardState = CardState.Viewing
+
+                            Utils.sharedPrefPutValue(context, "emergencyContact", contact.number)
                         }
                     ) {
                         Text("Save")
@@ -195,7 +201,7 @@ fun EmergencyContactCard(
                             modifier = Modifier
                                 .background(Color.Transparent),
 
-                        ) {
+                            ) {
                             Text(
                                 text = "Edit",
                                 fontSize = MaterialTheme.typography.labelLarge.fontSize
