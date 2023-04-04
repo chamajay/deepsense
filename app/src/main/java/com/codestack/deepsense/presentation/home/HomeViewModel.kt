@@ -242,7 +242,6 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-
     fun retrieveMonthMood() {
         scope.launch {
             // Reset mood before fetching
@@ -283,11 +282,54 @@ class HomeViewModel : ViewModel() {
         }
     }
 
+    fun retrieveMonthMoodPercentages() {
+        scope.launch {
+            // Reset before fetching
+            _emotionsPercentagesMonth.value = mutableMapOf()
+
+            val request = Request.Builder()
+                .url("$BASE_URL/month_mood_percentages")
+                .build()
+
+            try {
+                // Execute request
+                val response = client.newCall(request).execute()
+
+                // Simulate a delay for loading animation
+                delay(500)
+
+                val responseBodyString = response.body?.string()
+                responseBodyString?.let {
+                    val jsonObj = JSONObject(responseBodyString)
+                    val value = jsonObj.getString("mood_percentages_month")
+                    if (value != "None") {
+                        val jsonArr = JSONArray(value)
+                        for (i in 0 until jsonArr.length()) {
+                            val jsonObject = jsonArr.getJSONObject(i)
+                            val emotion = jsonObject.getString("emotion")
+                            val percentage = jsonObject.getDouble("percentage")
+                            _emotionsPercentagesMonth.value =
+                                _emotionsPercentagesMonth.value.toMutableMap().apply {
+                                    put(emotion, percentage)
+                                }
+                        }
+                    }
+                }
+
+                _isConnectionError.value = false
+
+            } catch (_: Exception) {
+                _isConnectionError.value = true
+            }
+        }
+    }
+
     fun retrieveAll() {
         retrieveMood()
         retrieveMoodPercentages()
         retrieveWeekMood()
         retrieveWeekMoodPercentages()
         retrieveMonthMood()
+        retrieveMonthMoodPercentages()
     }
 }
