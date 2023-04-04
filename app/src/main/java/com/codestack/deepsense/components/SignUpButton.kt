@@ -42,7 +42,6 @@ fun SignUpButton(
         Text(
             text = if (isSigningUp) textClicked else text,
             modifier = Modifier.padding(0.dp, 5.dp),
-            color = MaterialTheme.colorScheme.secondary
         )
         Spacer(modifier = Modifier.weight(1f))
     }
