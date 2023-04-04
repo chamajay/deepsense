@@ -89,7 +89,11 @@ fun ActivityScreen(
 
 
 @Composable
-fun LinearProgressIndicator(mood: String, percentage: Float, suicidal: Boolean, nonSuicidal : Boolean) {
+fun LinearProgressIndicator
+            (mood: String, percentage: Float,
+             suicidal: Boolean,
+             //nonSuicidal : Boolean
+) {
     var progress by remember { mutableStateOf(0.1f) }
     val size by animateFloatAsState(
         targetValue = progress,
@@ -114,7 +118,7 @@ fun LinearProgressIndicator(mood: String, percentage: Float, suicidal: Boolean, 
             LinearProgressIndicator(
                 progress = size,
                 modifier = Modifier.weight(7.9f),
-                color = if(suicidal) Color.Red else if(nonSuicidal) Color.Green else MaterialTheme.colorScheme.onSurface
+                color = if(suicidal) Color.Red else MaterialTheme.colorScheme.onSurface
             )
 
             LaunchedEffect(key1 = true) {
@@ -193,14 +197,14 @@ fun CustomPopUpDialog(
                                 mood = prediction.first,
                                 percentage = prediction.second.toFloat(),
                                 suicidal = prediction.first == "Suicidal",
-                                nonSuicidal = prediction.first == "Non-suicidal"
+                                //nonSuicidal = prediction.first == "Non-suicidal"
                             )
                             count++
                             // Add divider bellow emotions list.
                             if(count == 7){
 
                                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                                    Divider(thickness = 1.5.dp,color = Color.Gray,modifier = Modifier.fillMaxWidth(0.2f))
+                                    Divider(thickness = 1.5.dp,color = Color.Gray,modifier = Modifier.fillMaxWidth(0.1f))
                                  }
                                 Spacer(modifier = Modifier.padding(bottom = 10.dp))
                             }
