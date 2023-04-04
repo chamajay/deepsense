@@ -8,10 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,6 +18,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.codestack.deepsense.R
 import com.codestack.deepsense.navigation.Screens
 import com.codestack.deepsense.ui.theme.DeepSenseTheme
 import kotlinx.coroutines.delay
@@ -31,7 +33,10 @@ fun WelcomeContent(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(top = 10.dp)
     ) {
-        Row(modifier = Modifier.padding(10.dp)) {
+        Row(modifier = Modifier.size(200.dp)) {
+            LottieAnimation(lottieFile = R.raw.rings_lottie)
+        }
+        Row() {
             Text(
                 text = "Welcome to ",
                 fontSize = MaterialTheme.typography.headlineLarge.fontSize,
@@ -152,4 +157,18 @@ fun WelcomeScreenPreview() {
     DeepSenseTheme {
         WelcomeScreen(navController = rememberNavController())
     }
+}
+
+@Composable
+fun LottieAnimation(lottieFile: Int) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(lottieFile))
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = LottieConstants.IterateForever,
+        speed = 0.8f
+    )
+    com.airbnb.lottie.compose.LottieAnimation(
+        composition = composition,
+        progress = { progress },
+    )
 }

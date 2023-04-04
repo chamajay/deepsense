@@ -1,11 +1,11 @@
 package com.codestack.deepsense.presentation.activity
 
 
-import android.util.Log
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -75,9 +75,9 @@ fun ActivityScreen(
                                     item["predictions"] as Map<String, String>
                                 ActivityCard(text = text, predictions = predictions, suicidalRisk = predictions["SuicideRisk"] == "Suicidal")
                                 // Check SuicideRisk
-                                Log.d("Activity suicidalCheck",
-                                    (predictions["SuicideRisk"] == "Suicidal").toString()
-                                )
+//                                Log.d("Activity suicidalCheck",
+//                                    (predictions["SuicideRisk"] == "Suicidal").toString()
+//                                )
                             }
                         }
                     }
@@ -159,10 +159,10 @@ fun CustomPopUpDialog(
                 modifier = Modifier
                     .height(520.dp)
                     .background(
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.background,
                         //shape = RoundedCornerShape(25.dp, 10.dp, 25.dp, 10.dp)
                         shape = RoundedCornerShape(10.dp)
-                    )
+                    ).border(1.dp, MaterialTheme.colorScheme.secondary, RoundedCornerShape(10.dp))
             ) {
                 Column(
                     modifier = Modifier
@@ -245,7 +245,7 @@ fun ActivityCard(
         modifier = Modifier
             .size(width = 500.dp, height = 120.dp)
             .padding(start = 20.dp, end = 20.dp, top = 15.dp),
-        colors = if(!suicidalRisk) CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer) else CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer) ,
+        colors = if(!suicidalRisk) CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background) else CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer) ,
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
 
 
@@ -272,17 +272,17 @@ fun ActivityCard(
                     SuggestionChip(
                         onClick = { /* Do something! */ },
                         colors = SuggestionChipDefaults.suggestionChipColors(
-                            containerColor =  MaterialTheme.colorScheme.onPrimary
+                            containerColor =  MaterialTheme.colorScheme.secondary
                         ),
                         border = SuggestionChipDefaults.suggestionChipBorder(
-                            borderWidth = 1.dp,
-                            borderColor = MaterialTheme.colorScheme.onPrimary
+//                            borderWidth = 1.dp,
+                            borderColor = MaterialTheme.colorScheme.secondary
                         ),
                         label = {
                             Text(
                                 text = predictions["Primary"]!!,
                                 textAlign = TextAlign.Center,
-                                //color = Color.White
+                                color = MaterialTheme.colorScheme.onSecondary
                             )
                         },
                     )
@@ -299,7 +299,7 @@ fun ActivityCard(
                                 containerColor =  MaterialTheme.colorScheme.onError
                             ),
                             border = SuggestionChipDefaults.suggestionChipBorder(
-                                borderWidth = 1.dp,
+//                                borderWidth = 1.dp,
                                 borderColor = MaterialTheme.colorScheme.onError
                             ),
                             label = {

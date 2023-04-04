@@ -93,7 +93,7 @@ fun MainTopAppBar(
                 }
             }
         },
-        backgroundColor = MaterialTheme.colorScheme.background
+        backgroundColor = MaterialTheme.colorScheme.surface
     )
 
 }

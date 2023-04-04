@@ -337,7 +337,7 @@ fun MentalHealth(
                                 )
                             } else {
                                 Text(
-                                    text = if (isDepressed) "You may be Depressed!" else "You seem Healthy!",
+                                    text = if (isDepressed) "You may have Depression" else "You seem Healthy!",
                                     color = if (isDepressed) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.primary,
                                     fontSize = MaterialTheme.typography.titleLarge.fontSize,
                                     modifier = Modifier.padding(5.dp, 0.dp)

@@ -76,10 +76,14 @@ fun RowScope.AddNavItem(
                 if (currentDestination?.hierarchy?.any {
                         it.route == screen.route
                     } == true) screen.iconFilled else screen.icon
+            val iconTint = if (currentDestination?.hierarchy?.any {
+                    it.route == screen.route
+                } == true) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onPrimaryContainer
             Icon(
                 painterResource(id = id),
                 contentDescription = "Navigation Icon",
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(24.dp),
+                tint = iconTint
             )
         },
         onClick = {
