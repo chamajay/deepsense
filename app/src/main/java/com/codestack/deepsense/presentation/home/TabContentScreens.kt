@@ -48,7 +48,7 @@ fun TodayScreen(
                 )
             }
             Row {
-                MentalHealth(isConnectionError, isNotEnoughData)
+                MentalHealth(true, mood, isConnectionError, isNotEnoughData)
             }
         }
     }
@@ -87,7 +87,7 @@ fun WeekScreen(
                 )
             }
             Row {
-                MentalHealth(isConnectionError, isNotEnoughData)
+                MentalHealth(false, moodWeek, isConnectionError, isNotEnoughData)
             }
         }
     }
@@ -126,7 +126,7 @@ fun MonthScreen(
                 )
             }
             Row {
-                MentalHealth(isConnectionError, isNotEnoughData)
+                MentalHealth(false, moodMonth, isConnectionError, isNotEnoughData)
             }
         }
     }
@@ -291,9 +291,13 @@ fun MoodPercentages(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MentalHealth(
+    isToday: Boolean = false,
+    mood: String,
     isConnectionError: Boolean,
     isNotEnoughData: Boolean
 ) {
+
+    val isDepressed = mood.equals("sad", ignoreCase = true)
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
@@ -302,6 +306,7 @@ fun MentalHealth(
             modifier = Modifier.padding(bottom = 10.dp)
         )
         ElevatedCard(
+            colors = if (isDepressed) CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.errorContainer) else CardDefaults.elevatedCardColors(),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(70.dp)
@@ -320,12 +325,25 @@ fun MentalHealth(
                     if (isNotEnoughData) {
                         NotEnoughDataSm()
                     } else {
-                        Text(
-                            text = "You seem healthy!",
-                            color = MaterialTheme.colorScheme.primary,
-                            fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                            modifier = Modifier.padding(5.dp, 0.dp)
-                        )
+                        if (mood.isEmpty()) {
+                            CircularProgressIndicator(modifier = Modifier.size(30.dp))
+                        } else {
+                            if (isToday) {
+                                Text(
+                                    text = "You seem Healthy!",
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                                    modifier = Modifier.padding(5.dp, 0.dp)
+                                )
+                            } else {
+                                Text(
+                                    text = if (isDepressed) "You may be Depressed!" else "You seem Healthy!",
+                                    color = if (isDepressed) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.primary,
+                                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                                    modifier = Modifier.padding(5.dp, 0.dp)
+                                )
+                            }
+                        }
                     }
                 }
             }
