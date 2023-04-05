@@ -6,6 +6,9 @@ object Constants {
     //App
     const val TAG = "AppTag"
 
+    //App Version
+    const val APP_VER = "1.0.0"
+
     //Server
     val BASE_URL = URL("http://192.168.1.102:5000")
 
